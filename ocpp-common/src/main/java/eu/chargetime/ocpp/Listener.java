@@ -26,8 +26,32 @@ package eu.chargetime.ocpp;
  */
 
 public interface Listener {
-    void open(String hostname, int port, ListenerEvents listenerEvents);
+
+    /**
+     * register handler that reacts to the messages received via the communication layer.
+     *
+     * @param eventHandler
+     */
+    void setEventHandler(ListenerEvents eventHandler);
+
+    /**
+     * start a server and wait for clients to connect. Received messages are forwarded to the handler
+     * that was registered via {@link #setEventHandler(ListenerEvents)}
+     *
+     * @param hostname host name used to find the proper network interface that this server listens to
+     * @param port     port to listen to clients to
+     */
+    void open(String hostname, int port);
+
+    /**
+     * close / showdown server
+     */
     void close();
 
+    /**
+     * switch request processing mode between asynchronous and synchronous.
+     *
+     * @param async
+     */
     void setAsyncRequestHandler(boolean async);
 }

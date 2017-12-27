@@ -56,14 +56,11 @@ public abstract class Server extends FeatureHandler {
     }
 
     /**
-     * Start listening for clients.
-     * @param hostname Url or IP of the server as String.
-     * @param port the port number of the server.
-     * @param serverEvents Callback handler for server specific events.
+     *
+     * @param serverEvents
      */
-    public void open(String hostname, int port, ServerEvents serverEvents) {
-
-        listener.open(hostname, port, (session, information) -> {
+    public void initialize(ServerEvents serverEvents){
+        listener.setEventHandler((session, information) -> {
             session.accept(new SessionEvents() {
                 @Override
                 public Feature findFeatureByAction(String action) {
@@ -109,6 +106,26 @@ public abstract class Server extends FeatureHandler {
         });
     }
 
+    /**
+     * start listening for clients. Assumes {@link #initialize(ServerEvents)} was or will be called.
+     * @param hostname Url or IP of the server as String.
+     * @param port the port number of the server.
+     */
+    public void start(String hostname, int port){
+        listener.open(hostname, port);
+    }
+
+    /**
+     * Start listening for clients.
+     * @param hostname Url or IP of the server as String.
+     * @param port the port number of the server.
+     * @param serverEvents Callback handler for server specific events.
+     */
+    public void start(String hostname, int port, ServerEvents serverEvents) {
+        initialize(serverEvents);
+        listener.open(hostname, port);
+    }
+
     private UUID getSessionID(Session session) {
 
         if (!sessions.containsValue(session))
@@ -125,7 +142,7 @@ public abstract class Server extends FeatureHandler {
     /**
      * Close all connections and stop listening for clients.
      */
-    public void close() {
+    public void shutdown() {
         listener.close();
     }
 

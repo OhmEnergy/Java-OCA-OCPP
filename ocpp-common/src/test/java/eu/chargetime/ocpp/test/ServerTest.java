@@ -76,7 +76,7 @@ public class ServerTest extends TestUtilities {
         doReturn(request.getClass()).when(feature).getRequestType();
         doReturn(TestConfirmation.class).when(feature).getConfirmationType();
         when(feature.getAction()).thenReturn(null);
-        doAnswer(invocation -> listenerEvents = invocation.getArgumentAt(2, ListenerEvents.class)).when(listener).open(anyString(), anyInt(), any());
+        doAnswer(invocation -> listenerEvents = invocation.getArgumentAt(0, ListenerEvents.class)).when(listener).setEventHandler(any());
         doAnswer(invocation -> sessionEvents = invocation.getArgumentAt(0, SessionEvents.class)).when(session).accept(any());
         doAnswer(invocation -> sessionIndex = invocation.getArgumentAt(0, UUID.class)).when(serverEvents).newSession(any(), any());
 
@@ -90,7 +90,7 @@ public class ServerTest extends TestUtilities {
     @Test
     public void newSession_serverIsListening_sessionIsAccepted() {
         // Given
-        server.open(LOCALHOST, PORT, serverEvents);
+        server.start(LOCALHOST, PORT, serverEvents);
 
         // When
         listenerEvents.newSession(session, information);
@@ -102,7 +102,7 @@ public class ServerTest extends TestUtilities {
     @Test
     public void newSession_serverIsListening_callbackWithIndex0() {
         // Given
-        server.open(LOCALHOST, PORT, serverEvents);
+        server.start(LOCALHOST, PORT, serverEvents);
 
         // When
         listenerEvents.newSession(session, information);
@@ -114,7 +114,7 @@ public class ServerTest extends TestUtilities {
     @Test
     public void send_aMessage_isCommunicated() throws Exception {
         // Given
-        server.open(LOCALHOST, PORT, serverEvents);
+        server.start(LOCALHOST, PORT, serverEvents);
         listenerEvents.newSession(session, information);
 
         // When
@@ -127,7 +127,7 @@ public class ServerTest extends TestUtilities {
     @Test
     public void handleRequest_callsFeatureHandleRequest() {
         // Given
-        server.open(LOCALHOST, PORT, serverEvents);
+        server.start(LOCALHOST, PORT, serverEvents);
         listenerEvents.newSession(session, information);
 
         // When
@@ -140,7 +140,7 @@ public class ServerTest extends TestUtilities {
     @Test
     public void send_aMessage_validatesMessage() throws Exception {
         // Given
-        server.open(LOCALHOST, PORT, serverEvents);
+        server.start(LOCALHOST, PORT, serverEvents);
         listenerEvents.newSession(session, information);
 
         // When

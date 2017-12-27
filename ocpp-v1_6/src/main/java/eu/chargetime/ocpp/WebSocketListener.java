@@ -43,13 +43,19 @@ public class WebSocketListener implements Listener {
     private WebSocketServer server;
     private HashMap<WebSocket, WebSocketReceiver> sockets;
     private boolean handleRequestAsync;
+    private ListenerEvents handler;
 
     public WebSocketListener() {
         sockets = new HashMap<>();
     }
 
     @Override
-    public void open(String hostname, int port, ListenerEvents handler) {
+    public void setEventHandler(ListenerEvents eventHandler) {
+        this.handler = eventHandler;
+    }
+
+    @Override
+    public void open(String hostname, int port) {
         server = new WebSocketServer(new InetSocketAddress(hostname, port)) {
             @Override
             public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {

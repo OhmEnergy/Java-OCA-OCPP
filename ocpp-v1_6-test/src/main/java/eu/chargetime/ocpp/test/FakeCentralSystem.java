@@ -90,13 +90,13 @@ public class FakeCentralSystem {
             if (server instanceof JSONServer)
                 port = 8887;
 
-            server.open("localhost", port, dummyHandlers.generateServerEventsHandler());
+            server.start("localhost", port, dummyHandlers.generateServerEventsHandler());
             isStarted = true;
         }
     }
 
     public void stopped() {
-        server.close();
+        server.shutdown();
     }
 
     public boolean hasHandledAuthorizeRequest() {

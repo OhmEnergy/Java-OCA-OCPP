@@ -45,14 +45,18 @@ public class WebServiceListener implements Listener {
 	private static final String WSDL_CENTRAL_SYSTEM = "eu/chargetime/ocpp/OCPP_CentralSystemService_1.6.wsdl";
     private static final String NAMESPACE = "urn://Ocpp/Cp/2015/10";
 
-    private ListenerEvents events;
+    private ListenerEvents eventHandler;
     private String fromUrl = null;
     private HttpServer server;
     private boolean handleRequestAsync;
 
     @Override
-    public void open(String hostname, int port, ListenerEvents listenerEvents) {
-        events = listenerEvents;
+    public void setEventHandler(ListenerEvents eventHandler) {
+        this.eventHandler = eventHandler;
+    }
+
+    @Override
+    public void open(String hostname, int port) {
         fromUrl = String.format("http://%s:%d", hostname, port);
         try {
             server = HttpServer.create(new InetSocketAddress(hostname, port), 0);
@@ -108,7 +112,7 @@ public class WebServiceListener implements Listener {
                 }));
 
                 SessionInformation information = new SessionInformation.Builder().Identifier(identity).InternetAddress(messageInfo.getAddress()).build();
-                events.newSession(session, information);
+                eventHandler.newSession(session, information);
                 chargeBoxes.put(identity, webServiceReceiver);
             }
 
