@@ -83,7 +83,7 @@ public class ClientCoreProfile implements Profile
      * @see AuthorizeRequest
      * @see AuthorizeFeature
      */
-    public AuthorizeRequest createAuthorizeRequest(String idToken) throws PropertyConstraintException {
+    public AuthorizeRequest createAuthorizeRequest(IdToken idToken) throws PropertyConstraintException {
         return new AuthorizeRequest(idToken);
     }
 
@@ -187,7 +187,7 @@ public class ClientCoreProfile implements Profile
      * @see StartTransactionRequest
      * @see StartTransactionFeature
      */
-    public StartTransactionRequest createStartTransactionRequest(Integer connectorId, String idTag, Integer meterStart, Calendar timestamp) throws PropertyConstraintException {
+    public StartTransactionRequest createStartTransactionRequest(Integer connectorId, IdToken idTag, Integer meterStart, Calendar timestamp) throws PropertyConstraintException {
         StartTransactionRequest request = new StartTransactionRequest();
         request.setConnectorId(connectorId);
         request.setIdTag(idTag);

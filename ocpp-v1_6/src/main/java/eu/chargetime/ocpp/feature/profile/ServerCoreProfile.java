@@ -118,7 +118,7 @@ public class ServerCoreProfile implements Profile {
         return new GetConfigurationRequest();
     }
 
-    public RemoteStartTransactionRequest createRemoteStartTransactionRequest(String idToken) throws PropertyConstraintException {
+    public RemoteStartTransactionRequest createRemoteStartTransactionRequest(IdToken idToken) throws PropertyConstraintException {
         RemoteStartTransactionRequest request = new RemoteStartTransactionRequest();
         request.setIdTag(idToken);
         return request;

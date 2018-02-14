@@ -2,7 +2,6 @@ package eu.chargetime.ocpp.model.core;
 
 import eu.chargetime.ocpp.PropertyConstraintException;
 import eu.chargetime.ocpp.model.Request;
-import eu.chargetime.ocpp.utilities.ModelUtil;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -42,13 +41,13 @@ import javax.xml.bind.annotation.XmlType;
 public class RemoteStartTransactionRequest implements Request {
 
     private Integer connectorId;
-    private String idTag;
+    private IdToken idTag;
     private ChargingProfile chargingProfile;
 
     @Override
     public boolean validate() {
         boolean valid = true;
-        valid &= ModelUtil.validate(idTag, 20);
+        valid &= idTag != null && idTag.validate();
 
         if (chargingProfile != null) {
             valid &= chargingProfile.validate();
@@ -87,7 +86,7 @@ public class RemoteStartTransactionRequest implements Request {
      *
      * @return an IdToken.
      */
-    public String getIdTag() {
+    public IdToken getIdTag() {
         return idTag;
     }
 
@@ -98,8 +97,8 @@ public class RemoteStartTransactionRequest implements Request {
      * @throws PropertyConstraintException  field isn't filled out correct.
      */
     @XmlElement
-    public void setIdTag(String idTag) throws PropertyConstraintException {
-        if (!ModelUtil.validate(idTag, 20))
+    public void setIdTag(IdToken idTag) throws PropertyConstraintException {
+        if (idTag == null || !idTag.validate())
             throw new PropertyConstraintException("idTag", idTag, "Exceeded limit");
 
         this.idTag = idTag;

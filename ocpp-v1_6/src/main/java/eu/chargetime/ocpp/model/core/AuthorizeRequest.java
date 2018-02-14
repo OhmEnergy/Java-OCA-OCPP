@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class AuthorizeRequest implements Request
 {
-    private String idTag;
+    private IdToken idTag;
 
     public AuthorizeRequest() {}
 
@@ -50,7 +50,7 @@ public class AuthorizeRequest implements Request
      * @param idToken authorize id.
      * @throws PropertyConstraintException field isn't filled out correct.
      */
-    public AuthorizeRequest(String idToken) throws PropertyConstraintException
+    public AuthorizeRequest(IdToken idToken) throws PropertyConstraintException
     {
          setIdTag(idToken);
     }
@@ -60,7 +60,7 @@ public class AuthorizeRequest implements Request
      *
      * @return String, max 20 characters. Case insensitive.
      */
-    public String getIdTag()
+    public IdToken getIdTag()
     {
         return idTag;
     }
@@ -72,8 +72,8 @@ public class AuthorizeRequest implements Request
      * @throws PropertyConstraintException  field isn't filled out correct.
      */
     @XmlElement
-    public void setIdTag(String idTag) throws PropertyConstraintException {
-        if (!ModelUtil.validate(idTag, 20))
+    public void setIdTag(IdToken idTag) throws PropertyConstraintException {
+        if (idTag != null && !idTag.validate())
             throw new PropertyConstraintException("idTag", idTag, "Exceeded limit");
 
         this.idTag = idTag;
@@ -81,9 +81,7 @@ public class AuthorizeRequest implements Request
 
     @Override
     public boolean validate() {
-        boolean valid = true;
-        valid &= ModelUtil.validate(idTag, 20);
-        return valid;
+        return idTag!= null && idTag.validate();
     }
 
     @Override

@@ -2,6 +2,7 @@ package eu.chargetime.ocpp.model.test;
 
 import eu.chargetime.ocpp.PropertyConstraintException;
 import eu.chargetime.ocpp.model.core.AuthorizeRequest;
+import eu.chargetime.ocpp.model.core.IdToken;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class AuthorizeRequestTest {
     @Test
     public void  setIdToken_stringLength20_idTokenIsSet() throws Exception {
         // Given
-        String stringLength20 = "12345678901234567890";
+        IdToken stringLength20 = new IdToken("12345678901234567890");
 
         // When
         request.setIdTag(stringLength20);
@@ -60,7 +61,7 @@ public class AuthorizeRequestTest {
     @Test
     public void setIdToken_exceed20chars_throwsPropertyConstraintException() {
         // Given
-        String illegalValue = "1234567890123456789012";
+        IdToken illegalValue = new IdToken("1234567890123456789012");
 
         // When
         try {
@@ -87,7 +88,7 @@ public class AuthorizeRequestTest {
     @Test
     public void validate_idTagSet_returnTrue() throws Exception{
         // Given
-        request.setIdTag("42");
+        request.setIdTag(new IdToken("42"));
 
         // When
         boolean isValid = request.validate();

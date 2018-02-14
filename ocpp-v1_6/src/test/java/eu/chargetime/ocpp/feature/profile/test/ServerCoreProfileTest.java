@@ -273,7 +273,7 @@ public class ServerCoreProfileTest extends ProfileTest {
     @Test
     public void createRemoteStartTransactionRequest_withIdToken_returnsValidRemoteStartTransactionRequest() throws Exception {
         // Given
-        String idToken = "Some IdToken";
+        IdToken idToken = new IdToken("Some IdToken");
 
         // When
         RemoteStartTransactionRequest result = core.createRemoteStartTransactionRequest(idToken);

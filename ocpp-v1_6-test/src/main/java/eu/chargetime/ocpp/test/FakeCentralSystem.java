@@ -188,7 +188,7 @@ public class FakeCentralSystem {
 
     public void sendRemoteStartTransactionRequest(int connectorId, String idTag) throws Exception {
         RemoteStartTransactionRequest request = new RemoteStartTransactionRequest();
-        request.setIdTag(idTag);
+        request.setIdTag(new IdToken(idTag));
         request.setConnectorId(connectorId);
         send(request);
     }
