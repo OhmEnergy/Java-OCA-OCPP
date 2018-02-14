@@ -374,7 +374,7 @@ This document is made available under the Creative Commons Attribution-NoDerivat
                 <s:sequence>
                     <s:element name="connectorId" type="s:int" minOccurs="0" maxOccurs="1"/>
                     <s:element name="idTag" type="tns:IdToken" minOccurs="1" maxOccurs="1"/>
-                    <s:element name="chargingProfile" type="tns:ChargingProfile" minOccurs="0" maxOccurs="1"/>
+                    <s:element name="csChargingProfiles" type="tns:ChargingProfile" minOccurs="0" maxOccurs="1"/>
                 </s:sequence>
             </s:complexType>
 

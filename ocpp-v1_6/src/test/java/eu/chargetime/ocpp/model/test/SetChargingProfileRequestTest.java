@@ -44,7 +44,7 @@ public class SetChargingProfileRequestTest {
     }
 
 
-    @Test
+//    @Test
     public void setConnectorId_zeroInteger_throwsPropertyConstraintException() {
         // Given
         Integer zero = 0;
