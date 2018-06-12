@@ -63,7 +63,7 @@ public class ClientCoreProfileTest extends ProfileTest {
     @Test
     public void createAuthorizeRequest_withIdToken_returnsAuthorizeRequestWithIdTag() throws Exception {
         // Given
-        IdToken legalIdToken = new IdToken("test123");
+        String legalIdToken = "test123";
 
         // When
         AuthorizeRequest result = core.createAuthorizeRequest(legalIdToken);
@@ -107,7 +107,7 @@ public class ClientCoreProfileTest extends ProfileTest {
     @Test
     public void createStartTransactionRequest_returnsStartTransactionRequest() throws Exception {
         // When
-        Request result = core.createStartTransactionRequest(42, new IdToken("some token"), 42, Calendar.getInstance());
+        Request result = core.createStartTransactionRequest(42, "some token", 42, Calendar.getInstance());
 
         // Then
         assertThat(result, instanceOf(StartTransactionRequest.class));

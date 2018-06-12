@@ -2,37 +2,38 @@ package eu.chargetime.ocpp.model.core;
 
 import eu.chargetime.ocpp.PropertyConstraintException;
 import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.utilities.ModelUtil;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.Calendar;
 
-        /*
-         * ChargeTime.eu - Java-OCA-OCPP
-         *
-         * MIT License
-         *
-         * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
-         *
-         * Permission is hereby granted, free of charge, to any person obtaining a copy
-         * of this software and associated documentation files (the "Software"), to deal
-         * in the Software without restriction, including without limitation the rights
-         * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-         * copies of the Software, and to permit persons to whom the Software is
-         * furnished to do so, subject to the following conditions:
-         *
-         * The above copyright notice and this permission notice shall be included in all
-         * copies or substantial portions of the Software.
-         *
-         * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-         * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-         * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-         * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-         * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-         * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-         * SOFTWARE.
-         */
+/*
+ * ChargeTime.eu - Java-OCA-OCPP
+ *
+ * MIT License
+ *
+ * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 /**
  * Sent by the Charge Point to the Central System.
@@ -41,7 +42,7 @@ import java.util.Calendar;
 @XmlType(propOrder = {"connectorId", "idTag", "timestamp", "meterStart", "reservationId"})
 public class StartTransactionRequest implements Request {
     private Integer connectorId;
-    private IdToken idTag;
+    private String idTag;
     private Integer meterStart;
     private Integer reservationId;
     private Calendar timestamp;
@@ -50,7 +51,7 @@ public class StartTransactionRequest implements Request {
     public boolean validate() {
         boolean valid = true;
         valid &= connectorId != null && connectorId > 0;
-        valid &= idTag != null ? idTag.validate() : true;
+        valid &= ModelUtil.validate(idTag, 20);
         valid &= meterStart != null;
         valid &= timestamp != null;
         return valid;
@@ -84,7 +85,7 @@ public class StartTransactionRequest implements Request {
      *
      * @return the IdToken.
      */
-    public IdToken getIdTag() {
+    public String getIdTag() {
         return idTag;
     }
 
@@ -92,11 +93,11 @@ public class StartTransactionRequest implements Request {
      * Required. This contains the identifier for which a transaction has to be started.
      *
      * @param idTag a String with max length 20
-     * @throws PropertyConstraintException field isn't filled out correct.
+     * @throws PropertyConstraintException  field isn't filled out correct.
      */
     @XmlElement
-    public void setIdTag(IdToken idTag) throws PropertyConstraintException {
-        if (idTag == null || !idTag.validate())
+    public void setIdTag(String idTag) throws PropertyConstraintException {
+        if (!ModelUtil.validate(idTag, 20))
             throw new PropertyConstraintException("idTag", idTag, "Exceeded limit");
 
         this.idTag = idTag;
@@ -114,7 +115,7 @@ public class StartTransactionRequest implements Request {
     /**
      * Required. This contains the meter value in Wh for the connector at start of the transaction.
      *
-     * @param meterStart integer, Wh at start.
+     * @param meterStart    integer, Wh at start.
      */
     @XmlElement
     public void setMeterStart(Integer meterStart) {

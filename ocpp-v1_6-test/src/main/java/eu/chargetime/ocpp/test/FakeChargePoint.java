@@ -191,7 +191,7 @@ public class FakeChargePoint
     }
 
     public void sendAuthorizeRequest(String idToken) throws Exception {
-        Request request = core.createAuthorizeRequest(new IdToken(idToken));
+        Request request = core.createAuthorizeRequest(idToken);
         send(request);
     }
 
@@ -216,7 +216,7 @@ public class FakeChargePoint
 
     public void sendStartTransactionRequest() throws Exception {
         try {
-            Request request = core.createStartTransactionRequest(41, new IdToken("some id"), 42, Calendar.getInstance());
+            Request request = core.createStartTransactionRequest(41, "some id", 42, Calendar.getInstance());
             send(request);
         } catch (PropertyConstraintException ex) {
             ex.printStackTrace();

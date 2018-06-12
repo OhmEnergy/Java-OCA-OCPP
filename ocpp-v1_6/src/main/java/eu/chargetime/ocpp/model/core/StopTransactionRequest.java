@@ -2,6 +2,7 @@ package eu.chargetime.ocpp.model.core;
 
 import eu.chargetime.ocpp.PropertyConstraintException;
 import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.utilities.ModelUtil;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -40,7 +41,7 @@ import java.util.Calendar;
 @XmlRootElement
 @XmlType(propOrder = {"transactionId", "idTag", "timestamp", "meterStop", "reason", "transactionData"})
 public class StopTransactionRequest implements Request {
-    private IdToken idTag;
+    private String idTag;
     private Integer meterStop;
     private Calendar timestamp;
     private Integer transactionId;
@@ -66,7 +67,7 @@ public class StopTransactionRequest implements Request {
      *
      * @return the IdToken.
      */
-    public IdToken getIdTag() {
+    public String getIdTag() {
         return idTag;
     }
 
@@ -79,8 +80,8 @@ public class StopTransactionRequest implements Request {
      * @throws PropertyConstraintException  field isn't filled out correct.
      */
     @XmlElement
-    public void setIdTag(IdToken idTag) throws PropertyConstraintException {
-        if (idTag != null && !idTag.validate())
+    public void setIdTag(String idTag) throws PropertyConstraintException {
+        if (idTag != null && !ModelUtil.validate(idTag, 20))
             throw new PropertyConstraintException("idTag", idTag, "Exceeded limit");
 
         this.idTag = idTag;

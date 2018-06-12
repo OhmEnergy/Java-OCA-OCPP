@@ -1,7 +1,6 @@
 package eu.chargetime.ocpp.model.test;
 
 import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.core.IdToken;
 import eu.chargetime.ocpp.model.core.StartTransactionRequest;
 import eu.chargetime.ocpp.utilities.TestUtilities;
 import org.junit.Assert;
@@ -67,7 +66,7 @@ public class StartTransactionRequestTest extends TestUtilities {
     @Test
     public void setIdTag_nullValue_throwsPropertyConstraintException() {
         // Given
-        IdToken nullValue = null;
+        String nullValue = null;
 
         try {
             // When
@@ -84,7 +83,7 @@ public class StartTransactionRequestTest extends TestUtilities {
     @Test
     public void setIdTag_exceeds20Chars_throwsPropertyConstraintException() {
         // Given
-        IdToken longString = new IdToken(aString(21));
+        String longString = aString(21);
 
         try {
             // When
@@ -101,7 +100,7 @@ public class StartTransactionRequestTest extends TestUtilities {
     @Test
     public void setIdTag_string20_isSet() throws Exception {
         // Given
-        IdToken validString = new IdToken(aString(20));
+        String validString = aString(20);
 
         // When
         request.setIdTag(validString);
@@ -171,7 +170,7 @@ public class StartTransactionRequestTest extends TestUtilities {
     public void validate_requiredFieldsAreSet_returnTrue() throws Exception {
         // Given
         request.setConnectorId(42);
-        request.setIdTag(new IdToken("xxx"));
+        request.setIdTag("xxx");
         request.setMeterStart(42);
         request.setTimestamp(Calendar.getInstance());
 

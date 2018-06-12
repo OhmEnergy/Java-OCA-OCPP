@@ -2,7 +2,6 @@ package eu.chargetime.ocpp.model.test;
 
 import eu.chargetime.ocpp.PropertyConstraintException;
 import eu.chargetime.ocpp.model.core.ChargingProfile;
-import eu.chargetime.ocpp.model.core.IdToken;
 import eu.chargetime.ocpp.model.core.RemoteStartTransactionRequest;
 import eu.chargetime.ocpp.utilities.TestUtilities;
 import org.junit.Assert;
@@ -79,7 +78,7 @@ public class RemoteStartTransactionRequestTest extends TestUtilities {
     @Test
     public void setIdTag_string20_idTagIsSet() throws Exception {
         // Given
-        IdToken idTag = new IdToken(aString(20));
+        String idTag = aString(20);
 
         // When
         request.setIdTag(idTag);
@@ -91,7 +90,7 @@ public class RemoteStartTransactionRequestTest extends TestUtilities {
     @Test
     public void setIdTag_nullValue_throwsPropertyConstraintException() {
         // Given
-        IdToken nullValue = null;
+        String nullValue = null;
 
         try {
             // When
@@ -108,7 +107,7 @@ public class RemoteStartTransactionRequestTest extends TestUtilities {
     @Test
     public void setIdTag_exceeds20Chars_throwsPropertyConstraintException() {
         // Given
-        IdToken longString = new IdToken(aString(21));
+        String longString = aString(21);
 
         try {
             // When
