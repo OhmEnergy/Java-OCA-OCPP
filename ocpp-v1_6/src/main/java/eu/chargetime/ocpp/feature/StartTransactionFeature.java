@@ -1,17 +1,11 @@
 package eu.chargetime.ocpp.feature;
 
-import eu.chargetime.ocpp.feature.profile.Profile;
-import eu.chargetime.ocpp.model.Confirmation;
-import eu.chargetime.ocpp.model.Request;
-import eu.chargetime.ocpp.model.core.StartTransactionConfirmation;
-import eu.chargetime.ocpp.model.core.StartTransactionRequest;
-
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,23 +25,30 @@ import eu.chargetime.ocpp.model.core.StartTransactionRequest;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class StartTransactionFeature extends Feature {
-    public StartTransactionFeature(Profile ownerProfile) {
-        super(ownerProfile);
-    }
 
-    @Override
-    public Class<? extends Request> getRequestType() {
-        return StartTransactionRequest.class;
-    }
+import eu.chargetime.ocpp.feature.profile.Profile;
+import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.core.StartTransactionConfirmation;
+import eu.chargetime.ocpp.model.core.StartTransactionRequest;
 
-    @Override
-    public Class<? extends Confirmation> getConfirmationType() {
-        return StartTransactionConfirmation.class;
-    }
+public class StartTransactionFeature extends ProfileFeature {
+  public StartTransactionFeature(Profile ownerProfile) {
+    super(ownerProfile);
+  }
 
-    @Override
-    public String getAction() {
-        return "StartTransaction";
-    }
+  @Override
+  public Class<? extends Request> getRequestType() {
+    return StartTransactionRequest.class;
+  }
+
+  @Override
+  public Class<? extends Confirmation> getConfirmationType() {
+    return StartTransactionConfirmation.class;
+  }
+
+  @Override
+  public String getAction() {
+    return "StartTransaction";
+  }
 }

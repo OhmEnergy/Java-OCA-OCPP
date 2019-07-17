@@ -1,22 +1,10 @@
 package eu.chargetime.ocpp.model.test;
-
-import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.core.DataTransferRequest;
-import eu.chargetime.ocpp.utilities.TestUtilities;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,110 +24,121 @@ import static org.junit.Assert.assertThat;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class DataTransferRequestTest extends TestUtilities {
-    DataTransferRequest request;
 
-    @Before
-    public void setUp() throws Exception {
-        request = new DataTransferRequest();
-    }
+import static eu.chargetime.ocpp.utilities.TestUtilities.aString;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.assertThat;
 
-    @Test
-    public void setVendorId_stringLength256_throwsPropertyConstraintException() {
-        // Given
-        String aString = aString(256);
+import eu.chargetime.ocpp.PropertyConstraintException;
+import eu.chargetime.ocpp.model.core.DataTransferRequest;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
-        try {
-            // When
-            request.setVendorId(aString);
+public class DataTransferRequestTest {
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            // Then
-            assertThat(ex.getFieldKey(), equalTo("vendorId"));
-            assertThat(ex.getFieldValue(), equalTo(aString));
-        }
-    }
+  private static final String EXCEPTION_MESSAGE_TEMPLATE =
+      "Validation failed: [Exceeded limit of %s chars]. Current Value: [%s]";
 
-    @Test
-    public void setVendorId_stringLength255_vendorIdIsSet() throws Exception {
-        // Given
-        String aString = aString(255);
+  @Rule public ExpectedException thrownException = ExpectedException.none();
 
-        // When
-        request.setVendorId(aString);
+  private DataTransferRequest request;
 
-        // Then
-        assertThat(request.getVendorId(), equalTo(aString));
-    }
+  @Before
+  public void setUp() {
+    request = new DataTransferRequest();
+  }
 
-    @Test
-    public void setMessageId_stringLength51_throwsPropertyConstraintException() {
-        // given
-        String aString = aString(51);
+  @Test
+  public void setVendorId_stringLength256_throwsPropertyConstraintException() {
 
-        try {
-            // When
-            request.setMessageId(aString);
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(equalTo(createExpectedExceptionMessage(255, 256)));
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            assertThat(ex.getFieldKey(), equalTo("messageId"));
-            assertThat(ex.getFieldValue(), equalTo(aString));
-        }
-    }
+    String aString = aString(256);
 
-    @Test
-    public void setMessageId_stringLength50_messageIdIsSet() throws Exception {
-        // Given
-        String aString = aString(50);
+    request.setVendorId(aString);
+  }
 
-        // When
-        request.setMessageId(aString);
+  @Test
+  public void setVendorId_stringLength255_vendorIdIsSet() {
+    // Given
+    String aString = aString(255);
 
-        // Then
-        assertThat(request.getMessageId(), equalTo(aString));
-    }
+    // When
+    request.setVendorId(aString);
 
-    @Test
-    public void setData_aString_dataIsSet() {
-        // Given
-        String aString = "some string";
+    // Then
+    assertThat(request.getVendorId(), equalTo(aString));
+  }
 
-        // When
-        request.setData(aString);
+  @Test
+  public void setMessageId_stringLength51_throwsPropertyConstraintException() {
 
-        // Then
-        assertThat(request.getData(), equalTo(aString));
-    }
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(equalTo(createExpectedExceptionMessage(50, 51)));
 
-    @Test
-    public void validate_vendorIdIsSet_returnTrue() throws Exception {
-        // Given
-        request.setVendorId("Some vendor id");
+    String aString = aString(51);
 
-        // When
-        boolean isValid = request.validate();
+    request.setMessageId(aString);
+  }
 
-        // Then
-        assertThat(isValid, is(true));
-    }
+  @Test
+  public void setMessageId_stringLength50_messageIdIsSet() {
+    // Given
+    String aString = aString(50);
 
-    @Test
-    public void validate_returnFalse() {
-        // When
-        boolean isValid = request.validate();
+    // When
+    request.setMessageId(aString);
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+    // Then
+    assertThat(request.getMessageId(), equalTo(aString));
+  }
 
-    @Test
-    public void isTransactionRelated_returnsFalse() {
-        // When
-        boolean isTransactionRelated = request.transactionRelated();
+  @Test
+  public void setData_aString_dataIsSet() {
+    // Given
+    String aString = "some string";
 
-        // Then
-        assertThat(isTransactionRelated, is(false));
-    }
+    // When
+    request.setData(aString);
+
+    // Then
+    assertThat(request.getData(), equalTo(aString));
+  }
+
+  @Test
+  public void validate_vendorIdIsSet_returnTrue() {
+    // Given
+    request.setVendorId("Some vendor id");
+
+    // When
+    boolean isValid = request.validate();
+
+    // Then
+    assertThat(isValid, is(true));
+  }
+
+  @Test
+  public void validate_returnFalse() {
+    // When
+    boolean isValid = request.validate();
+
+    // Then
+    assertThat(isValid, is(false));
+  }
+
+  @Test
+  public void isTransactionRelated_returnsFalse() {
+    // When
+    boolean isTransactionRelated = request.transactionRelated();
+
+    // Then
+    assertThat(isTransactionRelated, is(false));
+  }
+
+  private static String createExpectedExceptionMessage(int maxAllowedLength, int currentLength) {
+    return String.format(EXCEPTION_MESSAGE_TEMPLATE, maxAllowedLength, currentLength);
+  }
 }

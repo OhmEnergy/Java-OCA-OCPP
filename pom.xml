@@ -6,7 +6,7 @@
 
     <groupId>eu.chargetime.ocpp</groupId>
     <artifactId>all</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.5-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Java-OCA-OCPP</name>
@@ -37,9 +37,23 @@
 
     <modules>
         <module>ocpp-common</module>
+        <module>OCPP-J</module>
         <module>ocpp-v1_6</module>
         <module>ocpp-v1_6-test</module>
+        <module>ocpp-v2_0</module>
+        <module>ocpp-v2_0-test</module>
     </modules>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <plugins>

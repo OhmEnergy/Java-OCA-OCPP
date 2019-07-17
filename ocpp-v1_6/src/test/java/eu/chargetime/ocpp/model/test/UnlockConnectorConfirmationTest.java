@@ -1,20 +1,20 @@
 package eu.chargetime.ocpp.model.test;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import eu.chargetime.ocpp.model.core.UnlockConnectorConfirmation;
 import eu.chargetime.ocpp.model.core.UnlockStatus;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,43 +35,43 @@ import static org.junit.Assert.assertThat;
  * SOFTWARE.
  */
 public class UnlockConnectorConfirmationTest {
-    UnlockConnectorConfirmation confirmation;
+  UnlockConnectorConfirmation confirmation;
 
-    @Before
-    public void setUp() throws Exception {
-        confirmation = new UnlockConnectorConfirmation();
-    }
+  @Before
+  public void setUp() throws Exception {
+    confirmation = new UnlockConnectorConfirmation();
+  }
 
-    @Test
-    public void setStatus_unlockStatus_statusIsSet() throws Exception {
-        // Given
-        UnlockStatus unlockStatus = UnlockStatus.Unlocked;
+  @Test
+  public void setStatus_unlockStatus_statusIsSet() throws Exception {
+    // Given
+    UnlockStatus unlockStatus = UnlockStatus.Unlocked;
 
-        // When
-        confirmation.setStatus(unlockStatus);
+    // When
+    confirmation.setStatus(unlockStatus);
 
-        // Then
-        assertThat(confirmation.objStatus(), equalTo(unlockStatus));
-    }
+    // Then
+    assertThat(confirmation.getStatus(), equalTo(unlockStatus));
+  }
 
-    @Test
-    public void validate_returnFalse() {
-        // When
-        boolean isValid = confirmation.validate();
+  @Test
+  public void validate_returnFalse() {
+    // When
+    boolean isValid = confirmation.validate();
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+    // Then
+    assertThat(isValid, is(false));
+  }
 
-    @Test
-    public void validate_statusIsSet_returnTrue() throws Exception {
-        // Given
-        confirmation.setStatus(UnlockStatus.Unlocked);
+  @Test
+  public void validate_statusIsSet_returnTrue() throws Exception {
+    // Given
+    confirmation.setStatus(UnlockStatus.Unlocked);
 
-        // When
-        boolean isValid = confirmation.validate();
+    // When
+    boolean isValid = confirmation.validate();
 
-        // Then
-        assertThat(isValid, is(true));
-    }
+    // Then
+    assertThat(isValid, is(true));
+  }
 }

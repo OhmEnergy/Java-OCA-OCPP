@@ -1,26 +1,27 @@
 package eu.chargetime.ocpp.model.test;
 
+import static eu.chargetime.ocpp.utilities.TestUtilities.aString;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import eu.chargetime.ocpp.PropertyConstraintException;
 import eu.chargetime.ocpp.model.core.ChargePointErrorCode;
 import eu.chargetime.ocpp.model.core.ChargePointStatus;
 import eu.chargetime.ocpp.model.core.StatusNotificationRequest;
-import eu.chargetime.ocpp.utilities.TestUtilities;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.util.Calendar;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,192 +41,182 @@ import static org.junit.Assert.assertThat;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class StatusNotificationRequestTest extends TestUtilities {
-    StatusNotificationRequest request;
+public class StatusNotificationRequestTest {
 
-    @Before
-    public void setUp() throws Exception {
-        request = new StatusNotificationRequest();
-    }
+  private static final String EXCEPTION_MESSAGE_TEMPLATE =
+      "Validation failed: [Exceeds limit of %s chars]. Current Value: [%s]";
 
-    @Test
-    public void setConnectorId_negativeInteger_throwsPropertyConstraintException() {
-        // Given
-        Integer negativeValue = -42;
+  @Rule public ExpectedException thrownException = ExpectedException.none();
 
-        try {
-            // When
-            request.setConnectorId(negativeValue);
+  private StatusNotificationRequest request;
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            assertThat(ex.getFieldKey(), equalTo("connectorId"));
-            assertThat(ex.getFieldValue(), equalTo(negativeValue));
-        }
-    }
+  @Before
+  public void setUp() {
+    request = new StatusNotificationRequest();
+  }
 
-    @Test
-    public void setConnectorId_zeroInteger_connectorIdIsSet() throws Exception {
-        // Given
-        Integer zeroValue = 0;
+  @Test
+  public void setConnectorId_negativeInteger_throwsPropertyConstraintException() {
 
-        // When
-        request.setConnectorId(zeroValue);
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(
+        equalTo("Validation failed: [connectorId >= 0]. Current Value: [-42]"));
 
-        // Then
-        assertThat(request.getConnectorId(), equalTo(zeroValue));
-    }
+    Integer negativeValue = -42;
 
-    @Test
-    public void setErrorCode_chargePointErrorCode_errorCodeIsSet() throws Exception {
-        // Given
-        ChargePointErrorCode chargePointErrorCode = ChargePointErrorCode.NoError;
+    request.setConnectorId(negativeValue);
+  }
 
-        // When
-        request.setErrorCode(chargePointErrorCode);
+  @Test
+  public void setConnectorId_zeroInteger_connectorIdIsSet() {
+    // Given
+    Integer zeroValue = 0;
 
-        // Then
-        assertThat(request.objErrorCode(), equalTo(chargePointErrorCode));
-    }
+    // When
+    request.setConnectorId(zeroValue);
 
-    @Test
-    public void setInfo_stringLength51_throwsPropertyConstraintException() {
-        // Given
-        String length51 = aString(51);
+    // Then
+    assertThat(request.getConnectorId(), equalTo(zeroValue));
+  }
 
-        try {
-            // When
-            request.setInfo(length51);
+  @Test
+  public void setErrorCode_chargePointErrorCode_errorCodeIsSet() {
+    // Given
+    ChargePointErrorCode chargePointErrorCode = ChargePointErrorCode.NoError;
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            assertThat(ex.getFieldKey(), equalTo("info"));
-            assertThat(ex.getFieldValue(), equalTo(length51));
-        }
-    }
+    // When
+    request.setErrorCode(chargePointErrorCode);
 
-    @Test
-    public void setInfo_stringLength50_infoIsSet() throws Exception {
-        // Given
-        String length50 = aString(50);
+    // Then
+    assertThat(request.getErrorCode(), equalTo(chargePointErrorCode));
+  }
 
-        // When
-        request.setInfo(length50);
+  @Test
+  public void setInfo_stringLength51_throwsPropertyConstraintException() {
 
-        // Then
-        assertThat(request.getInfo(), equalTo(length50));
-    }
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(equalTo(createExpectedExceptionMessage(50, 51)));
 
-    @Test
-    public void setStatus_chargePointStatus_statusIsSet() throws Exception {
-        // Given
-        ChargePointStatus chargePointStatus = ChargePointStatus.Available;
+    String length51 = aString(51);
 
-        // When
-        request.setStatus(chargePointStatus);
+    request.setInfo(length51);
+  }
 
-        // Then
-        assertThat(request.objStatus(), equalTo(chargePointStatus));
-    }
+  private static String createExpectedExceptionMessage(int maxAllowedLength, int currentLength) {
+    return String.format(EXCEPTION_MESSAGE_TEMPLATE, maxAllowedLength, currentLength);
+  }
 
-    @Test
-    public void setTimestamp_calendarNow_timestampIsSet() {
-        // Given
-        Calendar now = Calendar.getInstance();
+  @Test
+  public void setInfo_stringLength50_infoIsSet() {
+    // Given
+    String length50 = aString(50);
 
-        // When
-        request.setTimestamp(now);
+    // When
+    request.setInfo(length50);
 
-        // Then
-        assertThat(request.objTimestamp(), equalTo(now));
-    }
+    // Then
+    assertThat(request.getInfo(), equalTo(length50));
+  }
 
-    @Test
-    public void setVendorId_stringLength256_throwsPropertyConstraintException() {
-        // Given
-        String length256 = aString(256);
+  @Test
+  public void setStatus_chargePointStatus_statusIsSet() {
+    // Given
+    ChargePointStatus chargePointStatus = ChargePointStatus.Available;
 
-        try {
-            // When
-            request.setVendorId(length256);
+    // When
+    request.setStatus(chargePointStatus);
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            assertThat(ex.getFieldKey(), equalTo("vendorId"));
-            assertThat(ex.getFieldValue(), equalTo(length256));
-        }
-    }
+    // Then
+    assertThat(request.getStatus(), equalTo(chargePointStatus));
+  }
 
-    @Test
-    public void setVendorId_stringLength255_vendorIdIsSet() throws Exception {
-        // Given
-        String length255 = aString(255);
+  @Test
+  public void setTimestamp_calendarNow_timestampIsSet() {
+    // Given
+    Calendar now = Calendar.getInstance();
 
-        // When
-        request.setVendorId(length255);
+    // When
+    request.setTimestamp(now);
 
-        // Then
-        assertThat(request.getVendorId(), equalTo(length255));
-    }
+    // Then
+    assertThat(request.getTimestamp(), equalTo(now));
+  }
 
-    @Test
-    public void setVendorErrorCode_stringLength51_throwsPropertyConstraintException() {
-        // Given
-        String length51 = aString(51);
+  @Test
+  public void setVendorId_stringLength256_throwsPropertyConstraintException() {
 
-        try {
-            // When
-            request.setVendorErrorCode(length51);
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(equalTo(createExpectedExceptionMessage(255, 256)));
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            // Then
-            assertThat(ex.getFieldKey(), equalTo("vendorErrorCode"));
-            assertThat(ex.getFieldValue(), equalTo(length51));
-        }
-    }
+    String length256 = aString(256);
 
-    @Test
-    public void setVendorErrorCode_stringLength50_vendorErrorCodeIsSet() throws Exception {
-        // Given
-        String length50 = aString(50);
+    request.setVendorId(length256);
+  }
 
-        // When
-        request.setVendorErrorCode(length50);
+  @Test
+  public void setVendorId_stringLength255_vendorIdIsSet() {
+    // Given
+    String length255 = aString(255);
 
-        // Then
-        assertThat(request.getVendorErrorCode(), equalTo(length50));
-    }
+    // When
+    request.setVendorId(length255);
 
-    @Test
-    public void validate_returnFalse() {
-        // When
-        boolean isValid = request.validate();
+    // Then
+    assertThat(request.getVendorId(), equalTo(length255));
+  }
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+  @Test
+  public void setVendorErrorCode_stringLength51_throwsPropertyConstraintException() {
 
-    @Test
-    public void validate_connectorIdAndErrorCodeAndStatusIsSet_returnTrue() throws Exception {
-        // Given
-        request.setConnectorId(42);
-        request.setErrorCode(ChargePointErrorCode.NoError);
-        request.setStatus(ChargePointStatus.Available);
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(equalTo(createExpectedExceptionMessage(50, 51)));
 
-        // When
-        boolean isValid = request.validate();
+    String length51 = aString(51);
 
-        // Then
-        assertThat(isValid, is(true));
-    }
+    request.setVendorErrorCode(length51);
+  }
 
-    @Test
-    public void isTransactionRelated_returnsFalse() {
-        // When
-        boolean isTransactionRelated = request.transactionRelated();
+  @Test
+  public void setVendorErrorCode_stringLength50_vendorErrorCodeIsSet() {
+    // Given
+    String length50 = aString(50);
 
-        // Then
-        assertThat(isTransactionRelated, is(false));
-    }
+    // When
+    request.setVendorErrorCode(length50);
+
+    // Then
+    assertThat(request.getVendorErrorCode(), equalTo(length50));
+  }
+
+  @Test
+  public void validate_returnFalse() {
+    // When
+    boolean isValid = request.validate();
+
+    // Then
+    assertThat(isValid, is(false));
+  }
+
+  @Test
+  public void validate_connectorIdAndErrorCodeAndStatusIsSet_returnTrue() {
+    // Given
+    request.setConnectorId(42);
+    request.setErrorCode(ChargePointErrorCode.NoError);
+    request.setStatus(ChargePointStatus.Available);
+
+    // When
+    boolean isValid = request.validate();
+
+    // Then
+    assertThat(isValid, is(true));
+  }
+
+  @Test
+  public void isTransactionRelated_returnsFalse() {
+    // When
+    boolean isTransactionRelated = request.transactionRelated();
+
+    // Then
+    assertThat(isTransactionRelated, is(false));
+  }
 }

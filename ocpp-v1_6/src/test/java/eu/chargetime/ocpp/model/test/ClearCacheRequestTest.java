@@ -1,18 +1,18 @@
 package eu.chargetime.ocpp.model.test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import eu.chargetime.ocpp.model.core.ClearCacheRequest;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,27 +33,28 @@ import static org.junit.Assert.assertThat;
  * SOFTWARE.
  */
 public class ClearCacheRequestTest {
-    ClearCacheRequest request;
-    @Before
-    public void setUp() throws Exception {
-        request = new ClearCacheRequest();
-    }
+  ClearCacheRequest request;
 
-    @Test
-    public void validate_returnTrue() {
-        // When
-        boolean isValid = request.validate();
+  @Before
+  public void setUp() throws Exception {
+    request = new ClearCacheRequest();
+  }
 
-        // Then
-        assertThat(isValid, is(true));
-    }
+  @Test
+  public void validate_returnTrue() {
+    // When
+    boolean isValid = request.validate();
 
-    @Test
-    public void isTransactionRelated_returnsFalse() {
-        // When
-        boolean isTransactionRelated = request.transactionRelated();
+    // Then
+    assertThat(isValid, is(true));
+  }
 
-        // Then
-        assertThat(isTransactionRelated, is(false));
-    }
+  @Test
+  public void isTransactionRelated_returnsFalse() {
+    // When
+    boolean isTransactionRelated = request.transactionRelated();
+
+    // Then
+    assertThat(isTransactionRelated, is(false));
+  }
 }

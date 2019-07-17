@@ -1,9 +1,11 @@
 package eu.chargetime.ocpp.test;
 
-import eu.chargetime.ocpp.*;
-import eu.chargetime.ocpp.feature.Feature;
-import eu.chargetime.ocpp.model.TestConfirmation;
-import eu.chargetime.ocpp.model.TestRequest;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+
+import eu.chargetime.ocpp.ISession;
+import eu.chargetime.ocpp.SessionEvents;
+import eu.chargetime.ocpp.TimeoutSessionDecorator;
 import eu.chargetime.ocpp.utilities.TimeoutTimer;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,134 +13,120 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
-
 /*
-    ChargeTime.eu - Java-OCA-OCPP
-    
-    MIT License
+   ChargeTime.eu - Java-OCA-OCPP
 
-    Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+   MIT License
 
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
+   Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
 
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this software and associated documentation files (the "Software"), to deal
+   in the Software without restriction, including without limitation the rights
+   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   copies of the Software, and to permit persons to whom the Software is
+   furnished to do so, subject to the following conditions:
 
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
- */
+   The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   SOFTWARE.
+*/
 @RunWith(MockitoJUnitRunner.class)
 public class TimeoutSessionTest {
 
-    private TimeoutSession session;
-    private CommunicatorEvents eventHandler;
+  private TimeoutSessionDecorator session;
 
-    @Mock
-    private Communicator communicator;
-    @Mock
-    private Queue queue;
-    @Mock
-    private SessionEvents sessionEvents;
-    @Mock
-    private Feature feature;
-    @Mock
-    private TimeoutTimer timeoutTimer;
+  @Mock private SessionEvents sessionEvents;
+  @Mock private TimeoutTimer timeoutTimer;
+  @Mock private ISession sessionMock;
 
-    @Before
-    public void setup() throws Exception {
-        when(sessionEvents.findFeatureByAction(any())).thenReturn(feature);
-        when(sessionEvents.findFeatureByRequest(any())).thenReturn(feature);
+  @Before
+  public void setup() throws Exception {
+    session = new TimeoutSessionDecorator(timeoutTimer, sessionMock);
+    doAnswer(invocation -> sessionEvents = invocation.getArgumentAt(0, SessionEvents.class))
+        .when(sessionMock)
+        .accept(any());
+    doAnswer(invocation -> sessionEvents = invocation.getArgumentAt(1, SessionEvents.class))
+        .when(sessionMock)
+        .open(any(), any());
+  }
 
-        session = new TimeoutSession(communicator, queue, false);
-        doAnswer(invocation -> eventHandler = invocation.getArgumentAt(1, CommunicatorEvents.class)).when(communicator).connect(any(), any());
-        doAnswer(invocation -> eventHandler = invocation.getArgumentAt(0, CommunicatorEvents.class)).when(communicator).accept(any());
+  @Test
+  public void handleConnectionOpened_opened_beginTimeout() throws Exception {
+    // Given
+    session.open(null, sessionEvents);
 
-        session.setTimeoutTimer(timeoutTimer);
-    }
+    // When
+    sessionEvents.handleConnectionOpened();
 
-    @Test
-    public void onConnected_opened_beginTimeout() throws Exception {
-        // Given
-        session.open(null, sessionEvents);
+    // Then
+    verify(timeoutTimer, times(1)).begin();
+  }
 
-        // When
-        eventHandler.onConnected();
+  @Test
+  public void handleConnectionClosed_opened_endTimeout() throws Exception {
+    // Given
+    session.open(null, sessionEvents);
 
-        // Then
-        verify(timeoutTimer, times(1)).begin();
-    }
+    // When
+    sessionEvents.handleConnectionClosed();
 
-    @Test
-    public void onDisconnected_opened_endTimeout() throws Exception {
-        // Given
-        session.open(null, sessionEvents);
+    // Then
+    verify(timeoutTimer, times(1)).end();
+  }
 
-        // When
-        eventHandler.onDisconnected();
+  @Test
+  public void handleConnectionOpened_accepted_beginTimeout() throws Exception {
+    // Given
+    session.accept(sessionEvents);
 
-        // Then
-        verify(timeoutTimer, times(1)).end();
-    }
+    // When
+    sessionEvents.handleConnectionOpened();
 
-    @Test
-    public void onConnected_accepted_beginTimeout() throws Exception {
-        // Given
-        session.accept(sessionEvents);
+    // Then
+    verify(timeoutTimer, times(1)).begin();
+  }
 
-        // When
-        eventHandler.onConnected();
+  @Test
+  public void handleConnectionClosed_accepted_endTimeout() throws Exception {
+    // Given
+    session.accept(sessionEvents);
 
-        // Then
-        verify(timeoutTimer, times(1)).begin();
-    }
+    // When
+    sessionEvents.handleConnectionClosed();
 
-    @Test
-    public void onDisconnected_accepted_endTimeout() throws Exception {
-        // Given
-        session.accept(sessionEvents);
+    // Then
+    verify(timeoutTimer, times(1)).end();
+  }
 
-        // When
-        eventHandler.onDisconnected();
+  @Test
+  public void handleRequest_any_resetTimeout() throws Exception {
+    // Given
+    session.open(null, sessionEvents);
 
-        // Then
-        verify(timeoutTimer, times(1)).end();
-    }
+    // When
+    sessionEvents.handleRequest(null);
 
-    @Test
-    public void onCall_request_resetTimeout() throws Exception {
-        // Given
-        session.open(null, sessionEvents);
-        when(communicator.unpackPayload(any(), any())).thenReturn(new TestRequest());
+    // Then
+    verify(timeoutTimer, times(1)).reset();
+  }
 
-        // When
-        eventHandler.onCall("", null, null);
+  @Test
+  public void handleConfirmation_any_resetTimeout() throws Exception {
+    // Given
+    session.open(null, sessionEvents);
 
-        // Then
-        verify(timeoutTimer, times(1)).reset();
-    }
+    // When
+    sessionEvents.handleConfirmation(null, null);
 
-    @Test
-    public void onCall_confirmation_resetTimeout() throws Exception {
-        // Given
-        session.open(null, sessionEvents);
-        when(communicator.unpackPayload(any(), any())).thenReturn(new TestConfirmation());
-
-        // When
-        eventHandler.onCallResult("", null, null);
-
-        // Then
-        verify(timeoutTimer, times(1)).reset();
-    }
+    // Then
+    verify(timeoutTimer, times(1)).reset();
+  }
 }

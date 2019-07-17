@@ -5,7 +5,7 @@ package eu.chargetime.ocpp.model.core;
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,10 @@ package eu.chargetime.ocpp.model.core;
  */
 
 /**
- * Accepted values used with {@link RemoteStartTransactionConfirmation} and {@link RemoteStopTransactionConfirmation}.
+ * Accepted values used with {@link RemoteStartTransactionConfirmation} and {@link
+ * RemoteStopTransactionConfirmation}.
  */
 public enum RemoteStartStopStatus {
-    Accepted, Rejected
+  Accepted,
+  Rejected
 }

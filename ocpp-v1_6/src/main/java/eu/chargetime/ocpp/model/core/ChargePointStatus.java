@@ -5,7 +5,7 @@ package eu.chargetime.ocpp.model.core;
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,17 +26,15 @@ package eu.chargetime.ocpp.model.core;
  * SOFTWARE.
  */
 
-/**
- * Accepted values used with {@link StatusNotificationRequest}
- */
+/** Accepted values used with {@link StatusNotificationRequest} */
 public enum ChargePointStatus {
-    Available,
-    Preparing,
-    Charging,
-    SuspendedEVSE,
-    SuspendedEV,
-    Finishing,
-    Reserved,
-    Unavailable,
-    Faulted
+  Available,
+  Preparing,
+  Charging,
+  SuspendedEVSE,
+  SuspendedEV,
+  Finishing,
+  Reserved,
+  Unavailable,
+  Faulted
 }

@@ -1,21 +1,20 @@
 package eu.chargetime.ocpp.model.test;
 
-import eu.chargetime.ocpp.model.core.HeartbeatConfirmation;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Calendar;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import eu.chargetime.ocpp.model.core.HeartbeatConfirmation;
+import java.util.Calendar;
+import org.junit.Before;
+import org.junit.Test;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,43 +35,43 @@ import static org.junit.Assert.assertThat;
  * SOFTWARE.
  */
 public class HeartbeatConfirmationTest {
-    HeartbeatConfirmation confirmation;
+  HeartbeatConfirmation confirmation;
 
-    @Before
-    public void setUp() throws Exception {
-        confirmation = new HeartbeatConfirmation();
-    }
+  @Before
+  public void setUp() throws Exception {
+    confirmation = new HeartbeatConfirmation();
+  }
 
-    @Test
-    public void setCurrentTime_now_currentTimeIsSet() {
-        // Given
-        Calendar now = Calendar.getInstance();
+  @Test
+  public void setCurrentTime_now_currentTimeIsSet() {
+    // Given
+    Calendar now = Calendar.getInstance();
 
-        // When
-        confirmation.setCurrentTime(now);
+    // When
+    confirmation.setCurrentTime(now);
 
-        // Then
-        assertThat(confirmation.objCurrentTime(), equalTo(now));
-    }
+    // Then
+    assertThat(confirmation.getCurrentTime(), equalTo(now));
+  }
 
-    @Test
-    public void validate_currentTimeIsSet_returnsTrue() {
-        // Given
-        confirmation.setCurrentTime(Calendar.getInstance());
+  @Test
+  public void validate_currentTimeIsSet_returnsTrue() {
+    // Given
+    confirmation.setCurrentTime(Calendar.getInstance());
 
-        // When
-        boolean isValid = confirmation.validate();
+    // When
+    boolean isValid = confirmation.validate();
 
-        // Then
-        assertThat(isValid, is(true));
-    }
+    // Then
+    assertThat(isValid, is(true));
+  }
 
-    @Test
-    public void validate_returnFalse() {
-        // When
-        boolean isValid = confirmation.validate();
+  @Test
+  public void validate_returnFalse() {
+    // When
+    boolean isValid = confirmation.validate();
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+    // Then
+    assertThat(isValid, is(false));
+  }
 }

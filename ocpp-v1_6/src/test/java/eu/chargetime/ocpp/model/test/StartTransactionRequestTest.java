@@ -1,24 +1,25 @@
 package eu.chargetime.ocpp.model.test;
 
-import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.core.StartTransactionRequest;
-import eu.chargetime.ocpp.utilities.TestUtilities;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.Calendar;
-
+import static eu.chargetime.ocpp.utilities.TestUtilities.aString;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import eu.chargetime.ocpp.PropertyConstraintException;
+import eu.chargetime.ocpp.model.core.StartTransactionRequest;
+import java.util.Calendar;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,155 +39,139 @@ import static org.junit.Assert.assertThat;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class StartTransactionRequestTest extends TestUtilities {
-    StartTransactionRequest request;
+public class StartTransactionRequestTest {
 
-    @Before
-    public void setUp() throws Exception {
-        request = new StartTransactionRequest();
-    }
+  @Rule public ExpectedException thrownException = ExpectedException.none();
 
-    @Test
-    public void setConnectorId_zeroInteger_throwsPropertyConstraintException() {
-        // Given
-        Integer zero = 0;
+  private StartTransactionRequest request;
 
-        try {
-            // When
-            request.setConnectorId(zero);
+  @Before
+  public void setUp() {
+    request = new StartTransactionRequest();
+  }
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            // Then
-            assertThat(ex.getFieldKey(), equalTo("connectorId"));
-            assertThat(ex.getFieldValue(), equalTo(zero));
-        }
-    }
+  @Test
+  public void setConnectorId_asZeroInteger_throwsPropertyConstraintException() {
+    testConnectorIdInvalidValue(0);
+  }
 
-    @Test
-    public void setIdTag_nullValue_throwsPropertyConstraintException() {
-        // Given
-        String nullValue = null;
+  @Test
+  public void setConnectorId_asNegativeInteger_throwsPropertyConstraintException() {
+    testConnectorIdInvalidValue(-1);
+  }
 
-        try {
-            // When
-            request.setIdTag(nullValue);
+  @Test
+  public void setConnectorId_asNullInteger_throwsPropertyConstraintException() {
+    testConnectorIdInvalidValue(null);
+  }
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            // Then
-            assertThat(ex.getFieldKey(), equalTo("idTag"));
-            assertThat(ex.getFieldValue(), equalTo(nullValue));
-        }
-    }
+  private void testConnectorIdInvalidValue(Integer invalidValue) {
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(
+        equalTo(
+            "Validation failed: [connectorId must be > 0]. Current Value: [" + invalidValue + "]"));
 
-    @Test
-    public void setIdTag_exceeds20Chars_throwsPropertyConstraintException() {
-        // Given
-        String longString = aString(21);
+    request.setConnectorId(invalidValue);
+  }
 
-        try {
-            // When
-            request.setIdTag(longString);
+  @Test
+  public void setIdTag_exceeds20Chars_throwsPropertyConstraintException() {
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(
+        equalTo("Validation failed: [Exceeded limit of 20 chars]. Current Value: [21]"));
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            // Then
-            assertThat(ex.getFieldKey(), equalTo("idTag"));
-            assertThat(ex.getFieldValue(), equalTo(longString));
-        }
-    }
+    request.setIdTag(aString(21));
+  }
 
-    @Test
-    public void setIdTag_string20_isSet() throws Exception {
-        // Given
-        String validString = aString(20);
+  @Test
+  public void setIdTag_string20_isSet() {
+    // Given
+    String validString = aString(20);
 
-        // When
-        request.setIdTag(validString);
+    // When
+    request.setIdTag(validString);
 
-        // Then
-        assertThat(request.getIdTag(), equalTo(validString));
-    }
+    // Then
+    assertThat(request.getIdTag(), equalTo(validString));
+  }
 
-    @Test
-    public void setConnectorId_positiveInteger_connectorIdIsSet() throws Exception {
-        // Given
-        Integer positive = 42;
+  @Test
+  public void setConnectorId_positiveInteger_connectorIdIsSet() {
+    // Given
+    Integer positive = 42;
 
-        // When
-        request.setConnectorId(positive);
+    // When
+    request.setConnectorId(positive);
 
-        // Then
-        assertThat(request.getConnectorId(), equalTo(positive));
-    }
+    // Then
+    assertThat(request.getConnectorId(), equalTo(positive));
+  }
 
-    @Test
-    public void setMeterStart_anInteger_meterStartIsSet() {
-        // Given
-        Integer meterStart = 42;
+  @Test
+  public void setMeterStart_anInteger_meterStartIsSet() {
+    // Given
+    Integer meterStart = 42;
 
-        // When
-        request.setMeterStart(meterStart);
+    // When
+    request.setMeterStart(meterStart);
 
-        // Then
-        assertThat(request.getMeterStart(), equalTo(meterStart));
-    }
+    // Then
+    assertThat(request.getMeterStart(), equalTo(meterStart));
+  }
 
-    @Test
-    public void setReservationId_anInteger_reservationIdIsSet() {
-        // Given
-        Integer anInteger = 42;
+  @Test
+  public void setReservationId_anInteger_reservationIdIsSet() {
+    // Given
+    Integer anInteger = 42;
 
-        // When
-        request.setReservationId(anInteger);
+    // When
+    request.setReservationId(anInteger);
 
-        // Then
-        assertThat(request.getReservationId(), equalTo(anInteger));
-    }
+    // Then
+    assertThat(request.getReservationId(), equalTo(anInteger));
+  }
 
-    @Test
-    public void setTimestamp_calendarNow_timestampIsSet() {
-        // Given
-        Calendar now = Calendar.getInstance();
+  @Test
+  public void setTimestamp_calendarNow_timestampIsSet() {
+    // Given
+    Calendar now = Calendar.getInstance();
 
-        // When
-        request.setTimestamp(now);
+    // When
+    request.setTimestamp(now);
+    // Then
+    assertThat(request.getTimestamp(), equalTo(now));
+  }
 
-        // Then
-        assertThat(request.objTimestamp(), equalTo(now));
-    }
+  @Test
+  public void validate_returnFalse() {
+    // When
+    boolean isValid = request.validate();
 
-    @Test
-    public void validate_returnFalse() {
-        // When
-        boolean isValid = request.validate();
+    // Then
+    assertThat(isValid, is(false));
+  }
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+  @Test
+  public void validate_requiredFieldsAreSet_returnTrue() {
+    // Given
+    request.setConnectorId(42);
+    request.setIdTag("xxx");
+    request.setMeterStart(42);
+    request.setTimestamp(Calendar.getInstance());
 
-    @Test
-    public void validate_requiredFieldsAreSet_returnTrue() throws Exception {
-        // Given
-        request.setConnectorId(42);
-        request.setIdTag("xxx");
-        request.setMeterStart(42);
-        request.setTimestamp(Calendar.getInstance());
+    // When
+    boolean isValid = request.validate();
 
-        // When
-        boolean isValid = request.validate();
+    // Then
+    assertThat(isValid, is(true));
+  }
 
-        // Then
-        assertThat(isValid, is(true));
-    }
+  @Test
+  public void isTransactionRelated_returnsFalse() {
+    // When
+    boolean isTransactionRelated = request.transactionRelated();
 
-    @Test
-    public void isTransactionRelated_returnsFalse() {
-        // When
-        boolean isTransactionRelated = request.transactionRelated();
-
-        // Then
-        assertThat(isTransactionRelated, is(true));
-    }
+    // Then
+    assertThat(isTransactionRelated, is(true));
+  }
 }

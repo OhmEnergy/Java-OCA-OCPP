@@ -1,20 +1,20 @@
 package eu.chargetime.ocpp.model.test;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import eu.chargetime.ocpp.model.core.ResetRequest;
 import eu.chargetime.ocpp.model.core.ResetType;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,54 +35,52 @@ import static org.junit.Assert.assertThat;
  * SOFTWARE.
  */
 public class ResetRequestTest {
-    ResetRequest request;
+  ResetRequest request;
 
-    @Before
-    public void setUp() throws Exception {
-        request = new ResetRequest();
-    }
+  @Before
+  public void setUp() throws Exception {
+    request = new ResetRequest();
+  }
 
+  @Test
+  public void setType_resetType_typeIsSet() throws Exception {
+    // Given
+    ResetType resetType = ResetType.Hard;
 
-    @Test
-    public void setType_resetType_typeIsSet() throws Exception {
-        // Given
-        ResetType resetType = ResetType.Hard;
+    // When
+    request.setType(resetType);
 
-        // When
-        request.setType(resetType);
+    // Then
+    assertThat(request.getType(), equalTo(resetType));
+  }
 
-        // Then
-        assertThat(request.objType(), equalTo(resetType));
-    }
+  @Test
+  public void validate_returnFalse() {
+    // When
+    boolean isValid = request.validate();
 
+    // Then
+    assertThat(isValid, is(false));
+  }
 
-    @Test
-    public void validate_returnFalse() {
-        // When
-        boolean isValid = request.validate();
+  @Test
+  public void validate_typeIsSet_returnTrue() throws Exception {
+    // Given
+    request.setType(ResetType.Hard);
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+    // When
+    boolean isValid = request.validate();
 
-    @Test
-    public void validate_typeIsSet_returnTrue() throws Exception {
-        // Given
-        request.setType(ResetType.Hard);
+    // Then
+    assertThat(isValid, is(true));
+  }
 
-        // When
-        boolean isValid = request.validate();
+  @Test
+  public void isTransactionRelated_returnsFalse() {
+    // When
+    boolean isTransactionRelated = request.transactionRelated();
 
-        // Then
-        assertThat(isValid, is(true));
-    }
-
-    @Test
-    public void isTransactionRelated_returnsFalse() {
-        // When
-        boolean isTransactionRelated = request.transactionRelated();
-
-        // Then
-        assertThat(isTransactionRelated, is(false));
-    }
+    // Then
+    assertThat(isTransactionRelated, is(false));
+  }
 }

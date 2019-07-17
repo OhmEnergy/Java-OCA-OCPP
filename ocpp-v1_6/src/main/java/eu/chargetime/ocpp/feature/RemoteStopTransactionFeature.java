@@ -1,17 +1,11 @@
 package eu.chargetime.ocpp.feature;
 
-import eu.chargetime.ocpp.feature.profile.Profile;
-import eu.chargetime.ocpp.model.Confirmation;
-import eu.chargetime.ocpp.model.Request;
-import eu.chargetime.ocpp.model.core.RemoteStopTransactionConfirmation;
-import eu.chargetime.ocpp.model.core.RemoteStopTransactionRequest;
-
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,23 +25,30 @@ import eu.chargetime.ocpp.model.core.RemoteStopTransactionRequest;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class RemoteStopTransactionFeature extends Feature {
-    public RemoteStopTransactionFeature(Profile ownerProfile) {
-        super(ownerProfile);
-    }
 
-    @Override
-    public Class<? extends Request> getRequestType() {
-        return RemoteStopTransactionRequest.class;
-    }
+import eu.chargetime.ocpp.feature.profile.Profile;
+import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.core.RemoteStopTransactionConfirmation;
+import eu.chargetime.ocpp.model.core.RemoteStopTransactionRequest;
 
-    @Override
-    public Class<? extends Confirmation> getConfirmationType() {
-        return RemoteStopTransactionConfirmation.class;
-    }
+public class RemoteStopTransactionFeature extends ProfileFeature {
+  public RemoteStopTransactionFeature(Profile ownerProfile) {
+    super(ownerProfile);
+  }
 
-    @Override
-    public String getAction() {
-        return "RemoteStopTransaction";
-    }
+  @Override
+  public Class<? extends Request> getRequestType() {
+    return RemoteStopTransactionRequest.class;
+  }
+
+  @Override
+  public Class<? extends Confirmation> getConfirmationType() {
+    return RemoteStopTransactionConfirmation.class;
+  }
+
+  @Override
+  public String getAction() {
+    return "RemoteStopTransaction";
+  }
 }

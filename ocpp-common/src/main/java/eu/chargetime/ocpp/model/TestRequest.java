@@ -5,7 +5,7 @@ package eu.chargetime.ocpp.model;
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,18 +26,15 @@ package eu.chargetime.ocpp.model;
  * SOFTWARE.
  */
 
-/**
- * Test implementation of the Request interface.
- * Used for tests.
- */
+/** Test implementation of the Request interface. Used for tests. */
 public class TestRequest implements Request {
-    @Override
-    public boolean validate() {
-        return true;
-    }
+  @Override
+  public boolean validate() {
+    return true;
+  }
 
-    @Override
-    public boolean transactionRelated() {
-        return false;
-    }
+  @Override
+  public boolean transactionRelated() {
+    return false;
+  }
 }

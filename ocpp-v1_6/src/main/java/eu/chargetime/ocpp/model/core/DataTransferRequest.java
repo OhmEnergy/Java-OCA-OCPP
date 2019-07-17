@@ -1,19 +1,11 @@
 package eu.chargetime.ocpp.model.core;
 
-import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.Request;
-import eu.chargetime.ocpp.utilities.ModelUtil;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,108 +26,146 @@ import javax.xml.bind.annotation.XmlType;
  * SOFTWARE.
  */
 
-/**
- * Sent either by the Central System to the Charge Point or vice versa.
- */
+import eu.chargetime.ocpp.PropertyConstraintException;
+import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.utilities.ModelUtil;
+import eu.chargetime.ocpp.utilities.MoreObjects;
+import java.util.Objects;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+/** Sent either by the Central System to the Charge Point or vice versa. */
 @XmlRootElement
 @XmlType(propOrder = {"vendorId", "messageId", "data"})
 public class DataTransferRequest implements Request {
 
-    private String vendorId;
-    private String messageId;
-    private String data;
+  private static final String ERROR_MESSAGE = "Exceeded limit of %s chars";
 
-    public DataTransferRequest() {}
+  private String vendorId;
+  private String messageId;
+  private String data;
 
-    /**
-     * Set required fields.
-     *
-     * @param vendorId Vendor identification, see {@link #setVendorId(String)}.
-     */
-    public DataTransferRequest(String vendorId) {
-        this.vendorId = vendorId;
+  public DataTransferRequest() {}
+
+  /**
+   * Set required fields.
+   *
+   * @param vendorId Vendor identification, see {@link #setVendorId(String)}.
+   */
+  public DataTransferRequest(String vendorId) {
+    this.vendorId = vendorId;
+  }
+
+  @Override
+  public boolean validate() {
+    return isValidVendorId(this.vendorId);
+  }
+
+  /**
+   * This identifies the Vendor specific implementation.
+   *
+   * @return String, Vendor identification.
+   */
+  public String getVendorId() {
+    return vendorId;
+  }
+
+  /**
+   * Required. This identifies the Vendor specific implementation.
+   *
+   * @param vendorId String, max 255 characters, case insensitive.
+   */
+  @XmlElement
+  public void setVendorId(String vendorId) {
+    if (!isValidVendorId(vendorId)) {
+      throw new PropertyConstraintException(vendorId.length(), createErrorMessage(255));
     }
 
-    @Override
-    public boolean validate() {
-        return isValidVendorId(this.vendorId);
+    this.vendorId = vendorId;
+  }
+
+  private boolean isValidVendorId(String vendorId) {
+    return ModelUtil.validate(vendorId, 255);
+  }
+
+  /**
+   * Additional identification field.
+   *
+   * @return Additional identification.
+   */
+  public String getMessageId() {
+    return messageId;
+  }
+
+  /**
+   * Optional. Additional identification field.
+   *
+   * @param messageId String, max 50 characters, case insensitive.
+   */
+  @XmlElement
+  public void setMessageId(String messageId) {
+    if (!isValidMessageId(messageId)) {
+      throw new PropertyConstraintException(messageId.length(), createErrorMessage(50));
     }
 
-    /**
-     * This identifies the Vendor specific implementation.
-     *
-     * @return String, Vendor identification.
-     */
-    public String getVendorId() {
-        return vendorId;
-    }
+    this.messageId = messageId;
+  }
 
-    /**
-     * Required. This identifies the Vendor specific implementation.
-     *
-     * @param vendorId String, max 255 characters, case insensitive.
-     * @throws PropertyConstraintException Value exceeds 255 characters.
-     */
-    @XmlElement
-    public void setVendorId(String vendorId) throws PropertyConstraintException {
-        if (!isValidVendorId(vendorId))
-            throw new PropertyConstraintException("vendorId", vendorId);
+  private boolean isValidMessageId(String messageId) {
+    return ModelUtil.validate(messageId, 50);
+  }
 
-        this.vendorId = vendorId;
-    }
+  /**
+   * Data without specified length or format.
+   *
+   * @return data.
+   */
+  public String getData() {
+    return data;
+  }
 
-    private boolean isValidVendorId(String vendorId) {
-        return ModelUtil.validate(vendorId, 255);
-    }
+  /**
+   * Optional. Data without specified length or format.
+   *
+   * @param data String, data.
+   */
+  @XmlElement
+  public void setData(String data) {
+    this.data = data;
+  }
 
-    /**
-     * Additional identification field.
-     *
-     * @return Additional identification.
-     */
-    public String getMessageId() {
-        return messageId;
-    }
+  @Override
+  public boolean transactionRelated() {
+    return false;
+  }
 
-    /**
-     * Optional. Additional identification field.
-     *
-     * @param messageId                     String, max 50 characters, case insensitive.
-     * @throws PropertyConstraintException  Value exceeds 50 characters.
-     */
-    @XmlElement
-    public void setMessageId(String messageId) throws PropertyConstraintException {
-        if (!isValidMessageId(messageId))
-            throw new PropertyConstraintException("messageId", messageId);
+  private String createErrorMessage(int maxLength) {
+    return String.format(ERROR_MESSAGE, maxLength);
+  }
 
-        this.messageId = messageId;
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    DataTransferRequest that = (DataTransferRequest) o;
+    return Objects.equals(vendorId, that.vendorId)
+        && Objects.equals(messageId, that.messageId)
+        && Objects.equals(data, that.data);
+  }
 
-    private boolean isValidMessageId(String messageId) {
-        return ModelUtil.validate(messageId, 50);
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(vendorId, messageId, data);
+  }
 
-    /**
-     * Data without specified length or format.
-     *
-     * @return data.
-     */
-    public String getData() {
-        return data;
-    }
-
-    /**
-     * Optional. Data without specified length or format.
-     *
-     * @param data  String, data.
-     */
-    @XmlElement
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    @Override
-    public boolean transactionRelated() {
-        return false;
-    }
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+        .add("vendorId", vendorId)
+        .add("messageId", messageId)
+        .add("data", data)
+        .add("isValid", validate())
+        .toString();
+  }
 }

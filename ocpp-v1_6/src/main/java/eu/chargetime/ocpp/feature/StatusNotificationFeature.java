@@ -1,17 +1,11 @@
 package eu.chargetime.ocpp.feature;
 
-import eu.chargetime.ocpp.feature.profile.Profile;
-import eu.chargetime.ocpp.model.Confirmation;
-import eu.chargetime.ocpp.model.Request;
-import eu.chargetime.ocpp.model.core.StatusNotificationConfirmation;
-import eu.chargetime.ocpp.model.core.StatusNotificationRequest;
-
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,23 +25,30 @@ import eu.chargetime.ocpp.model.core.StatusNotificationRequest;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class StatusNotificationFeature extends Feature {
-    public StatusNotificationFeature(Profile ownerProfile) {
-        super(ownerProfile);
-    }
 
-    @Override
-    public Class<? extends Request> getRequestType() {
-        return StatusNotificationRequest.class;
-    }
+import eu.chargetime.ocpp.feature.profile.Profile;
+import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.core.StatusNotificationConfirmation;
+import eu.chargetime.ocpp.model.core.StatusNotificationRequest;
 
-    @Override
-    public Class<? extends Confirmation> getConfirmationType() {
-        return StatusNotificationConfirmation.class;
-    }
+public class StatusNotificationFeature extends ProfileFeature {
+  public StatusNotificationFeature(Profile ownerProfile) {
+    super(ownerProfile);
+  }
 
-    @Override
-    public String getAction() {
-        return "StatusNotification";
-    }
+  @Override
+  public Class<? extends Request> getRequestType() {
+    return StatusNotificationRequest.class;
+  }
+
+  @Override
+  public Class<? extends Confirmation> getConfirmationType() {
+    return StatusNotificationConfirmation.class;
+  }
+
+  @Override
+  public String getAction() {
+    return "StatusNotification";
+  }
 }
