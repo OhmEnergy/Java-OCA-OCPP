@@ -25,16 +25,18 @@ package eu.chargetime.ocpp;
    SOFTWARE.
 */
 
-import eu.chargetime.ocpp.feature.Feature;
-import eu.chargetime.ocpp.model.Confirmation;
-import eu.chargetime.ocpp.model.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import eu.chargetime.ocpp.feature.Feature;
+import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.model.Request;
 
 /**
  * Handles basic server logic: Holds a list of supported features. Keeps track of outgoing requests.
@@ -67,17 +69,35 @@ public class Server {
   }
 
   /**
-   * Start listening for clients.
+   * start listening for clients. Assumes {@link #initialize(ServerEvents)} was or will be called.
    *
    * @param hostname Url or IP of the server as String.
-   * @param port the port number of the server.
+   * @param port     the port number of the server.
+   */
+  public void open(String hostname, int port) {
+    listener.open(hostname, port);
+  }
+
+  /**
+   * Start listening for clients.
+   *
+   * @param hostname     Url or IP of the server as String.
+   * @param port         the port number of the server.
    * @param serverEvents Callback handler for server specific events.
    */
   public void open(String hostname, int port, ServerEvents serverEvents) {
+    initialize(serverEvents);
+    listener.open(hostname, port);
+  }
 
-    listener.open(
-        hostname,
-        port,
+  /**
+   * Start listening for clients.
+   *
+   * @param serverEvents Callback handler for server specific events.
+   */
+  public void initialize(ServerEvents serverEvents) {
+
+    listener.setEventHandler(
         (session, information) -> {
           session.accept(
               new SessionEvents() {

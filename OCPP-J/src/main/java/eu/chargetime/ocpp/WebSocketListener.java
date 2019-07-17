@@ -55,6 +55,7 @@ public class WebSocketListener implements Listener {
   private final Map<WebSocket, WebSocketReceiver> sockets;
   private volatile boolean closed = true;
   private boolean handleRequestAsync;
+  private ListenerEvents handler;
 
   public WebSocketListener(
       ISessionFactory sessionFactory, JSONConfiguration configuration, Draft... drafts) {
@@ -69,7 +70,12 @@ public class WebSocketListener implements Listener {
   }
 
   @Override
-  public void open(String hostname, int port, ListenerEvents handler) {
+  public void setEventHandler(ListenerEvents eventHandler) {
+      this.handler = eventHandler;
+  }
+
+    @Override
+  public void open(String hostname, int port) {
     server =
         new WebSocketServer(new InetSocketAddress(hostname, port), drafts) {
           @Override

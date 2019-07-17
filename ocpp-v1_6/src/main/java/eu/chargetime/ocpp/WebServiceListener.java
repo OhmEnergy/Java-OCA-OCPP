@@ -48,13 +48,19 @@ public class WebServiceListener implements Listener {
   private HttpServer server;
   private boolean handleRequestAsync;
   private volatile boolean closed = true;
+  private ListenerEvents listenerEvents;
 
   public WebServiceListener(ISessionFactory sessionFactory) {
     this.sessionFactory = sessionFactory;
   }
 
   @Override
-  public void open(String hostname, int port, ListenerEvents listenerEvents) {
+  public void setEventHandler(ListenerEvents eventHandler) {
+    this.listenerEvents = eventHandler;
+  }
+
+  @Override
+  public void open(String hostname, int port) {
     events = listenerEvents;
     fromUrl = String.format("http://%s:%d", hostname, port);
     try {

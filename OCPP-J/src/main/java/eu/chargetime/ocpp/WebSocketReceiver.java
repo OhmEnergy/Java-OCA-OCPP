@@ -40,7 +40,7 @@ public class WebSocketReceiver implements Receiver {
     handler.disconnected();
   }
 
-  void relay(String message) {
+  public void relay(String message) {
     handler.receivedMessage(message);
   }
 

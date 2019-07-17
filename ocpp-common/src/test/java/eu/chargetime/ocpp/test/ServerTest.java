@@ -67,7 +67,7 @@ public class ServerTest {
     when(session.getSessionId()).thenReturn(sessionId);
     doAnswer(invocation -> listenerEvents = invocation.getArgumentAt(2, ListenerEvents.class))
         .when(listener)
-        .open(anyString(), anyInt(), any());
+        .open(anyString(), anyInt());
     doAnswer(invocation -> sessionEvents = invocation.getArgumentAt(0, SessionEvents.class))
         .when(session)
         .accept(any());
