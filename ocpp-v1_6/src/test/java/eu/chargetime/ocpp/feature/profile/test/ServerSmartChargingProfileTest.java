@@ -88,7 +88,7 @@ public class ServerSmartChargingProfileTest extends ProfileTest {
         assertThat(result.validate(), is(true));
         assertThat(result.getConnectorId(), is(connectorId));
 
-        ChargingProfile resultProfile = result.getCsChargingProfiles();
+        ChargingProfile resultProfile = result.getChargingProfile();
         assertThat(profile, is(resultProfile));
 
     }

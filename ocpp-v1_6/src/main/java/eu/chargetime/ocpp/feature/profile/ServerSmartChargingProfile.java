@@ -59,7 +59,7 @@ public class ServerSmartChargingProfile implements Profile {
     public SetChargingProfileRequest createSetChargingProfileRequest(int connectorId, ChargingProfile profile) throws PropertyConstraintException {
         SetChargingProfileRequest request = new SetChargingProfileRequest();
         request.setConnectorId(connectorId);
-        request.setCsChargingProfiles(profile);
+        request.setChargingProfile(profile);
         return request;
     }
 }

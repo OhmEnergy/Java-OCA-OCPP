@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SetChargingProfileRequest implements Request {
     private Integer connectorId;
-    private ChargingProfile csChargingProfiles;
+    private ChargingProfile chargingProfile;
 
     /**
      * This identifies which connector of the Charge Point is used.
@@ -56,7 +56,7 @@ public class SetChargingProfileRequest implements Request {
      */
     @XmlElement
     public void setConnectorId(Integer connectorId) throws PropertyConstraintException {
-        if (connectorId < 0)
+        if (connectorId <= 0)
             throw new PropertyConstraintException("connectorId", connectorId);
 
         this.connectorId = connectorId;
@@ -67,19 +67,19 @@ public class SetChargingProfileRequest implements Request {
      *
      * @return the {@link ChargingProfile}.
      */
-    public ChargingProfile getCsChargingProfiles() {
-        return csChargingProfiles;
+    public ChargingProfile getChargingProfile() {
+        return chargingProfile;
     }
 
     /**
      * Optional. Charging Profile to be used by the Charge Point for the requested transaction.
      * {@link ChargingProfile#setChargingProfilePurpose(ChargingProfilePurposeType)} MUST be set to TxProfile.
      *
-     * @param csChargingProfiles   the {@link ChargingProfile}.
+     * @param chargingProfile   the {@link ChargingProfile}.
      */
     @XmlElement
-    public void setCsChargingProfiles(ChargingProfile csChargingProfiles) {
-        this.csChargingProfiles = csChargingProfiles;
+    public void setChargingProfile(ChargingProfile chargingProfile) {
+        this.chargingProfile = chargingProfile;
     }
 
     @Override
@@ -90,10 +90,10 @@ public class SetChargingProfileRequest implements Request {
     @Override
     public boolean validate() {
         boolean valid = true;
-        valid &= connectorId != null && connectorId >= 0;
+        valid &= connectorId != null && connectorId > 0;
 
-        if (csChargingProfiles != null) {
-            valid &= csChargingProfiles.validate();
+        if (chargingProfile != null) {
+            valid &= chargingProfile.validate();
         }
         return valid;
     }
