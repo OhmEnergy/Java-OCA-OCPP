@@ -7,6 +7,7 @@ import eu.chargetime.ocpp.model.ohme.LocationConfirmation;
 import eu.chargetime.ocpp.model.ohme.LocationRequest;
 
 public class LocationFeature extends ProfileFeature {
+
 	public LocationFeature(Profile ownerProfile) {
 		super(ownerProfile);
 	}

@@ -3,6 +3,7 @@ package eu.chargetime.ocpp;
 ChargeTime.eu - Java-OCA-OCPP
 Copyright (C) 2015-2016 Thomas Volden <tv@chargetime.eu>
 
+
 MIT License
 
 Copyright (C) 2016-2018 Thomas Volden
@@ -34,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
+
 /**
  * Abstract class. Handles basic communication: Pack and send messages. Receive and unpack messages.
  *
@@ -41,6 +43,7 @@ import org.w3c.dom.Document;
  * specific format.
  */
 public abstract class Communicator {
+
   private static final Logger logger = LoggerFactory.getLogger(Communicator.class);
 
   private RetryRunner retryRunner;
