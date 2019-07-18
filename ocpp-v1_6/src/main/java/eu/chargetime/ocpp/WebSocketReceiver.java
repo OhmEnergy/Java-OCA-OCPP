@@ -39,7 +39,7 @@ public class WebSocketReceiver implements Receiver {
 
     }
 
-    public void relay(String message) {
+    void relay(String message) {
         handler.receivedMessage(message);
     }
 
