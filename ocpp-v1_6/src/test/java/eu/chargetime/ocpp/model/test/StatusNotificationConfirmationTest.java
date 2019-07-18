@@ -1,18 +1,18 @@
 package eu.chargetime.ocpp.model.test;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import eu.chargetime.ocpp.model.core.StatusNotificationConfirmation;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,19 +33,19 @@ import static org.junit.Assert.assertThat;
  * SOFTWARE.
  */
 public class StatusNotificationConfirmationTest {
-    StatusNotificationConfirmation confirmation;
+  StatusNotificationConfirmation confirmation;
 
-    @Before
-    public void setUp() throws Exception {
-        confirmation = new StatusNotificationConfirmation();
-    }
+  @Before
+  public void setUp() throws Exception {
+    confirmation = new StatusNotificationConfirmation();
+  }
 
-    @Test
-    public void validate_returnTrue() {
-        // When
-        boolean isValid = confirmation.validate();
+  @Test
+  public void validate_returnTrue() {
+    // When
+    boolean isValid = confirmation.validate();
 
-        // Then
-        assertThat(isValid, is(true));
-    }
+    // Then
+    assertThat(isValid, is(true));
+  }
 }

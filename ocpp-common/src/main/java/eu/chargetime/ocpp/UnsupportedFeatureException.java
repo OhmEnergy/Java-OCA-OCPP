@@ -5,7 +5,7 @@ package eu.chargetime.ocpp;
  * <p>
  * MIT License
  * <p>
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,15 @@ package eu.chargetime.ocpp;
  * SOFTWARE.
  */
 
-/**
- * Exception used to signal that a feature isn't supported.
- */
+/** Exception used to signal that a feature isn't supported. */
 public class UnsupportedFeatureException extends Exception {
+  private static final long serialVersionUID = 9189571272082918907L;
+
+  public UnsupportedFeatureException() {
+    super();
+  }
+
+  public UnsupportedFeatureException(String message) {
+    super(message);
+  }
 }

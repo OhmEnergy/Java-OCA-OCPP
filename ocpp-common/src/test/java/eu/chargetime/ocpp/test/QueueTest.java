@@ -1,112 +1,111 @@
 package eu.chargetime.ocpp.test;
 
-import eu.chargetime.ocpp.Queue;
-import eu.chargetime.ocpp.model.Request;
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 
+import eu.chargetime.ocpp.Queue;
+import eu.chargetime.ocpp.model.Request;
+import java.util.Optional;
+import org.junit.Before;
+import org.junit.Test;
+
 /*
- ChargeTime.eu - Java-OCA-OCPP
- Copyright (C) 2015-2016 Thomas Volden <tv@chargetime.eu>
+ChargeTime.eu - Java-OCA-OCPP
+Copyright (C) 2015-2016 Thomas Volden <tv@chargetime.eu>
 
- MIT License
+MIT License
 
- Copyright (c) 2016 Thomas Volden
+Copyright (C) 2016-2018 Thomas Volden
 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
- */
-public class QueueTest
-{
-    private Queue queue;
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+public class QueueTest {
+  private Queue queue;
 
+  @Before
+  public void setUp() throws Exception {
+    queue = new Queue();
+  }
 
-    @Before
-    public void setUp() throws Exception
-    {
-        queue = new Queue();
-    }
+  @Test
+  public void addRequest_getTicket() {
+    // Given
+    Request request = mock(Request.class);
 
-    @Test
-    public void addRequest_getTicket()
-    {
-        // When
-        queue.store(null);
-    }
+    // When
+    String ticket = queue.store(request);
 
-    @Test
-    public void turnInTicket_getRequest()
-    {
-        // Given
-        Request request = mock(Request.class);
-        String ticket = queue.store(request);
+    // Then
+    assertThat(ticket, is(notNullValue()));
+  }
 
-        // When
-        Request result = queue.restoreRequest(ticket);
+  @Test
+  public void turnInTicket_getRequest() {
+    // Given
+    Request request = mock(Request.class);
+    String ticket = queue.store(request);
 
-        // Then
-        assertThat(result, equalTo(request));
-    }
+    // When
+    Request result = queue.restoreRequest(ticket).get();
 
-    @Test
-    public void turnInTicket_emptyQueue_getNull()
-    {
-        // Given
-        String invalidTicket = "Invalid";
+    // Then
+    assertThat(result, equalTo(request));
+  }
 
-        // When
-        Request result = queue.restoreRequest(invalidTicket);
+  @Test
+  public void turnInTicket_emptyQueue_getNull() {
+    // Given
+    String invalidTicket = "Invalid";
 
-        // Then
-        assertThat(result, is(nullValue(Request.class)));
-    }
+    // When
+    Optional<Request> result = queue.restoreRequest(invalidTicket);
 
-    @Test
-    public void turnInTicket_invalidTicket_getNull()
-    {
-        // Given
-        Request someRequest = mock(Request.class);
-        String invalidTicket = "Invalid";
+    // Then
+    assertThat(result, is(Optional.empty()));
+  }
 
-        // When
-        queue.store(someRequest);
-        Request result = queue.restoreRequest(invalidTicket);
+  @Test
+  public void turnInTicket_invalidTicket_getNull() {
+    // Given
+    Request someRequest = mock(Request.class);
+    String invalidTicket = "Invalid";
 
-        // Then
-        assertThat(result, is(nullValue(Request.class)));
-    }
+    // When
+    queue.store(someRequest);
+    Optional<Request> result = queue.restoreRequest(invalidTicket);
 
-    @Test
-    public void turnInTicket_ticketAlreadyTurnedIn_getNull()
-    {
-        // Given
-        Request someRequest = mock(Request.class);
-        String ticket = queue.store(someRequest);
+    // Then
+    assertThat(result, is(Optional.empty()));
+  }
 
-        // When
-        queue.restoreRequest(ticket);
-        Request result = queue.restoreRequest(ticket);
+  @Test
+  public void turnInTicket_ticketAlreadyTurnedIn_getNull() {
+    // Given
+    Request someRequest = mock(Request.class);
+    String ticket = queue.store(someRequest);
 
-        // Then
-        assertThat(result, is(nullValue(Request.class)));
-    }
+    // When
+    queue.restoreRequest(ticket);
+    Optional<Request> result = queue.restoreRequest(ticket);
+
+    // Then
+    assertThat(result, is(Optional.empty()));
+  }
 }

@@ -1,10 +1,5 @@
 package eu.chargetime.ocpp.model.smartcharging;
 
-import eu.chargetime.ocpp.model.Confirmation;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
@@ -31,51 +26,80 @@ import javax.xml.bind.annotation.XmlRootElement;
  * SOFTWARE.
  */
 
+import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.utilities.MoreObjects;
+import java.util.Objects;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @XmlRootElement(name = "setChargingProfileResponse")
 public class SetChargingProfileConfirmation implements Confirmation {
-    public SetChargingProfileConfirmation() {
-    }
 
-    /**
-     * Set required values.
-     *
-     * @param status the {@link ChargingProfileStatus}, see {@link #setStatus(ChargingProfileStatus)}.
-     */
-    public SetChargingProfileConfirmation(ChargingProfileStatus status) {
-        setStatus(status);
-    }
-    private ChargingProfileStatus status;
-    /**
-     * This indicates the success or failure of the change of the charging profile.
-     *
-     * @return the {@link ChargingProfileStatus}.
-     */
-    public ChargingProfileStatus getStatus() {
-        return status;
-    }
+  private ChargingProfileStatus status;
 
-    /**
-     * This indicates the success or failure of the change of the charging profile.
-     * @return the {@link ChargingProfileStatus}.
-     */
-    @Deprecated
-    public ChargingProfileStatus objStatus() {
-        return status;
-    }
+  public SetChargingProfileConfirmation() {}
 
-    /**
-     * Required. This indicates the success or failure of the change of the charging profile.
-     *
-     * @param status                        the {@link ChargingProfileStatus}.
-     */
-    @XmlElement
-    public void setStatus(ChargingProfileStatus status) {
-        this.status = status;
-    }
+  /**
+   * Set required values.
+   *
+   * @param status the {@link ChargingProfileStatus}, see {@link #setStatus(ChargingProfileStatus)}.
+   */
+  public SetChargingProfileConfirmation(ChargingProfileStatus status) {
+    setStatus(status);
+  }
 
+  /**
+   * This indicates the success or failure of the change of the charging profile.
+   *
+   * @return the {@link ChargingProfileStatus}.
+   */
+  public ChargingProfileStatus getStatus() {
+    return status;
+  }
 
-    @Override
-    public boolean validate() {
-        return this.status != null;
-    }
+  /**
+   * This indicates the success or failure of the change of the charging profile.
+   *
+   * @return the {@link ChargingProfileStatus}.
+   */
+  @Deprecated
+  public ChargingProfileStatus objStatus() {
+    return status;
+  }
+
+  /**
+   * Required. This indicates the success or failure of the change of the charging profile.
+   *
+   * @param status the {@link ChargingProfileStatus}.
+   */
+  @XmlElement
+  public void setStatus(ChargingProfileStatus status) {
+    this.status = status;
+  }
+
+  @Override
+  public boolean validate() {
+    return this.status != null;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    SetChargingProfileConfirmation that = (SetChargingProfileConfirmation) o;
+    return status == that.status;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(status);
+  }
+
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+        .add("status", status)
+        .add("isValid", validate())
+        .toString();
+  }
 }

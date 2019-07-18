@@ -2,18 +2,19 @@ package eu.chargetime.ocpp.model.core;
 
 import eu.chargetime.ocpp.PropertyConstraintException;
 import eu.chargetime.ocpp.model.Validatable;
-
+import eu.chargetime.ocpp.utilities.MoreObjects;
+import java.util.Calendar;
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import java.util.Calendar;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,139 +35,224 @@ import java.util.Calendar;
  * SOFTWARE.
  */
 @XmlRootElement
-@XmlType(propOrder = {"chargingProfileId", "transactionId", "stackLevel", "chargingProfilePurpose", "chargingProfileKind", "recurrencyKind", "validFrom", "validTo", "chargingSchedule"})
+@XmlType(
+    propOrder = {
+      "chargingProfileId",
+      "transactionId",
+      "stackLevel",
+      "chargingProfilePurpose",
+      "chargingProfileKind",
+      "recurrencyKind",
+      "validFrom",
+      "validTo",
+      "chargingSchedule"
+    })
 public class ChargingProfile implements Validatable {
-    private Integer chargingProfileId;
-    private Integer transactionId;
-    private Integer stackLevel;
-    private ChargingProfilePurposeType chargingProfilePurpose;
-    private ChargingProfileKindType chargingProfileKind;
-    private RecurrencyKindType recurrencyKind;
-    private Calendar validFrom;
-    private Calendar validTo;
-    private ChargingSchedule chargingSchedule;
+  private Integer chargingProfileId;
+  private Integer transactionId;
+  private Integer stackLevel;
+  private ChargingProfilePurposeType chargingProfilePurpose;
+  private ChargingProfileKindType chargingProfileKind;
+  private RecurrencyKindType recurrencyKind;
+  private Calendar validFrom;
+  private Calendar validTo;
+  private ChargingSchedule chargingSchedule;
 
-    @Override
-    public boolean validate() {
-        boolean valid = true;
-        valid &= chargingProfileId != null;
-        valid &= stackLevel >= 0;
-        valid &= chargingProfilePurpose != null;
-        valid &= transactionId == null || chargingProfilePurpose == ChargingProfilePurposeType.TxProfile;
-        valid &= chargingProfileKind != null;
-        valid &= chargingSchedule != null && chargingSchedule.validate();
-        return valid;
+  public ChargingProfile() {}
+
+  public ChargingProfile(
+      Integer chargingProfileId,
+      Integer stackLevel,
+      ChargingProfilePurposeType chargingProfilePurpose,
+      ChargingProfileKindType chargingProfileKind,
+      ChargingSchedule chargingSchedule) {
+    this.chargingProfileId = chargingProfileId;
+    this.stackLevel = stackLevel;
+    this.chargingProfilePurpose = chargingProfilePurpose;
+    this.chargingProfileKind = chargingProfileKind;
+    this.chargingSchedule = chargingSchedule;
+  }
+
+  public ChargingProfile(
+      Integer chargingProfileId,
+      Integer stackLevel,
+      ChargingProfilePurposeType chargingProfilePurpose,
+      ChargingProfileKindType chargingProfileKind) {
+    this.chargingProfileId = chargingProfileId;
+    this.stackLevel = stackLevel;
+    this.chargingProfilePurpose = chargingProfilePurpose;
+    this.chargingProfileKind = chargingProfileKind;
+  }
+
+  @Override
+  public boolean validate() {
+    boolean valid = chargingProfileId != null;
+    valid &= (stackLevel != null && stackLevel >= 0);
+    valid &= chargingProfilePurpose != null;
+    valid &=
+        (transactionId == null || chargingProfilePurpose == ChargingProfilePurposeType.TxProfile);
+    valid &= chargingProfileKind != null;
+    valid &= (chargingSchedule != null && chargingSchedule.validate());
+    return valid;
+  }
+
+  @XmlElement
+  public void setChargingProfileId(Integer chargingProfileId) {
+    if (chargingProfileId == null) {
+      throw new PropertyConstraintException(null, "chargingProfileId must be present");
     }
 
-    @XmlElement
-    public void setChargingProfileId(Integer chargingProfileId) throws PropertyConstraintException {
-        if (chargingProfileId == null)
-            throw new PropertyConstraintException("chargingProfileId", chargingProfileId);
+    this.chargingProfileId = chargingProfileId;
+  }
 
-        this.chargingProfileId = chargingProfileId;
+  public Integer getChargingProfileId() {
+    return chargingProfileId;
+  }
+
+  @XmlElement
+  public void setTransactionId(Integer transactionId) {
+    this.transactionId = transactionId;
+  }
+
+  public Integer getTransactionId() {
+    return transactionId;
+  }
+
+  @XmlElement
+  public void setStackLevel(Integer stackLevel) {
+    if (stackLevel == null || stackLevel < 0) {
+      throw new PropertyConstraintException(stackLevel, "stackLevel must be >= 0");
     }
 
-    public Integer getChargingProfileId() {
-        return chargingProfileId;
-    }
+    this.stackLevel = stackLevel;
+  }
 
-    @XmlElement
-    public void setTransactionId(Integer transactionId) {
-        this.transactionId = transactionId;
-    }
+  public Integer getStackLevel() {
+    return stackLevel;
+  }
 
-    public Integer getTransactionId() {
-        return transactionId;
-    }
+  @XmlElement
+  public void setChargingProfilePurpose(ChargingProfilePurposeType chargingProfilePurpose) {
+    this.chargingProfilePurpose = chargingProfilePurpose;
+  }
 
-    @XmlElement
-    public void setStackLevel(Integer stackLevel) throws PropertyConstraintException {
-        if (stackLevel < 0)
-            throw new PropertyConstraintException("stackLevel", stackLevel);
+  public ChargingProfilePurposeType getChargingProfilePurpose() {
+    return chargingProfilePurpose;
+  }
 
-        this.stackLevel = stackLevel;
-    }
+  @Deprecated
+  public ChargingProfilePurposeType objChargingProfilePurpose() {
+    return chargingProfilePurpose;
+  }
 
-    public Integer getStackLevel() {
-        return stackLevel;
-    }
+  @XmlElement
+  public void setChargingProfileKind(ChargingProfileKindType chargingProfileKind) {
+    this.chargingProfileKind = chargingProfileKind;
+  }
 
-    @XmlElement
-    public void setChargingProfilePurpose(ChargingProfilePurposeType chargingProfilePurpose) throws PropertyConstraintException {
-        this.chargingProfilePurpose = chargingProfilePurpose;
-    }
+  public ChargingProfileKindType getChargingProfileKind() {
+    return chargingProfileKind;
+  }
 
-    public ChargingProfilePurposeType getChargingProfilePurpose() {
-        return chargingProfilePurpose;
-    }
+  @Deprecated
+  public ChargingProfileKindType objChargingProfileKind() {
+    return chargingProfileKind;
+  }
 
-    @Deprecated
-    public ChargingProfilePurposeType objChargingProfilePurpose() {
-        return chargingProfilePurpose;
-    }
+  @XmlElement
+  public void setRecurrencyKind(RecurrencyKindType recurrencyKind) {
+    this.recurrencyKind = recurrencyKind;
+  }
 
-    @XmlElement
-    public void setChargingProfileKind(ChargingProfileKindType chargingProfileKind) throws PropertyConstraintException {
-        this.chargingProfileKind = chargingProfileKind;
-    }
+  public RecurrencyKindType getRecurrencyKind() {
+    return recurrencyKind;
+  }
 
-    public ChargingProfileKindType getChargingProfileKind() {
-        return chargingProfileKind;
-    }
+  @Deprecated
+  public RecurrencyKindType objRecurrencyKind() {
+    return recurrencyKind;
+  }
 
-    @Deprecated
-    public ChargingProfileKindType objChargingProfileKind() {
-        return chargingProfileKind;
-    }
+  @XmlElement
+  public void setValidFrom(Calendar validFrom) {
+    this.validFrom = validFrom;
+  }
 
-    @XmlElement
-    public void setRecurrencyKind(RecurrencyKindType recurrencyKind) throws PropertyConstraintException {
-        this.recurrencyKind = recurrencyKind;
-    }
+  public Calendar getValidFrom() {
+    return validFrom;
+  }
 
-    public RecurrencyKindType getRecurrencyKind() {
-        return recurrencyKind;
-    }
+  @Deprecated
+  public Calendar objValidFrom() {
+    return this.validFrom;
+  }
 
-    @Deprecated
-    public RecurrencyKindType objRecurrencyKind() {
-        return recurrencyKind;
-    }
+  @XmlElement
+  public void setValidTo(Calendar validTo) {
+    this.validTo = validTo;
+  }
 
-    @XmlElement
-    public void setValidFrom(Calendar validFrom) {
-        this.validFrom = validFrom;
-    }
+  public Calendar getValidTo() {
+    return validTo;
+  }
 
-    public Calendar getValidFrom() {
-        return validFrom;
-    }
+  @Deprecated
+  public Calendar objValidTo() {
+    return validTo;
+  }
 
-    @Deprecated
-    public Calendar objValidFrom() {
-        return this.validFrom;
-    }
+  @XmlElement
+  public void setChargingSchedule(ChargingSchedule chargingSchedule) {
+    this.chargingSchedule = chargingSchedule;
+  }
 
-    @XmlElement
-    public void setValidTo(Calendar validTo) {
-        this.validTo = validTo;
-    }
+  public ChargingSchedule getChargingSchedule() {
+    return chargingSchedule;
+  }
 
-    public Calendar getValidTo() {
-        return validTo;
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    ChargingProfile that = (ChargingProfile) o;
+    return Objects.equals(chargingProfileId, that.chargingProfileId)
+        && Objects.equals(transactionId, that.transactionId)
+        && Objects.equals(stackLevel, that.stackLevel)
+        && chargingProfilePurpose == that.chargingProfilePurpose
+        && chargingProfileKind == that.chargingProfileKind
+        && recurrencyKind == that.recurrencyKind
+        && Objects.equals(validFrom, that.validFrom)
+        && Objects.equals(validTo, that.validTo)
+        && Objects.equals(chargingSchedule, that.chargingSchedule);
+  }
 
-    @Deprecated
-    public Calendar objValidTo() {
-        return validTo;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(
+        chargingProfileId,
+        transactionId,
+        stackLevel,
+        chargingProfilePurpose,
+        chargingProfileKind,
+        recurrencyKind,
+        validFrom,
+        validTo,
+        chargingSchedule);
+  }
 
-    @XmlElement
-    public void setChargingSchedule(ChargingSchedule chargingSchedule) {
-        this.chargingSchedule = chargingSchedule;
-    }
-
-    public ChargingSchedule getChargingSchedule() {
-        return chargingSchedule;
-    }
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+        .add("chargingProfileId", chargingProfileId)
+        .add("transactionId", transactionId)
+        .add("stackLevel", stackLevel)
+        .add("chargingProfilePurpose", chargingProfilePurpose)
+        .add("chargingProfileKind", chargingProfileKind)
+        .add("recurrencyKind", recurrencyKind)
+        .add("validFrom", validFrom)
+        .add("validTo", validTo)
+        .add("chargingSchedule", chargingSchedule)
+        .add("isValid", validate())
+        .toString();
+  }
 }

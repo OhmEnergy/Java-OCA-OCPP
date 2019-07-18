@@ -1,5 +1,7 @@
 package eu.chargetime.ocpp.feature.profile;
 
+import eu.chargetime.ocpp.model.smartcharging.ClearChargingProfileConfirmation;
+import eu.chargetime.ocpp.model.smartcharging.ClearChargingProfileRequest;
 import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileConfirmation;
 import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
 
@@ -30,11 +32,21 @@ import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
  */
 
 public interface ClientSmartChargingEventHandler {
-    /**
-     * Handle a {@link SetChargingProfileRequest} and return a {@link SetChargingProfileConfirmation}.
-     *
-     * @param request   incoming {@link SetChargingProfileRequest} to handle.
-     * @return outgoing {@link SetChargingProfileConfirmation} to reply with.
-     */
-    SetChargingProfileConfirmation handleSetChargingProfileRequest(SetChargingProfileRequest request);
+  /**
+   * Handle a {@link SetChargingProfileRequest} and return a {@link SetChargingProfileConfirmation}.
+   *
+   * @param request incoming {@link SetChargingProfileRequest} to handle.
+   * @return outgoing {@link SetChargingProfileConfirmation} to reply with.
+   */
+  SetChargingProfileConfirmation handleSetChargingProfileRequest(SetChargingProfileRequest request);
+
+  /**
+   * Handle a {@link ClearChargingProfileRequest} and return a {@link
+   * ClearChargingProfileConfirmation}.
+   *
+   * @param request incoming {@link ClearChargingProfileRequest} to handle.
+   * @return outgoing {@link ClearChargingProfileConfirmation} to reply with.
+   */
+  ClearChargingProfileConfirmation handleClearChargingProfileRequest(
+      ClearChargingProfileRequest request);
 }

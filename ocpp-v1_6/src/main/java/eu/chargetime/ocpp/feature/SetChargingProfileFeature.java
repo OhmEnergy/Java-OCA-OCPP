@@ -1,11 +1,5 @@
 package eu.chargetime.ocpp.feature;
 
-import eu.chargetime.ocpp.feature.profile.Profile;
-import eu.chargetime.ocpp.model.Confirmation;
-import eu.chargetime.ocpp.model.Request;
-import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileConfirmation;
-import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
-
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
@@ -32,19 +26,29 @@ import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
  * SOFTWARE.
  */
 
-public class SetChargingProfileFeature extends Feature {
-    public SetChargingProfileFeature(Profile ownerProfile) {
-        super(ownerProfile);
-    }
+import eu.chargetime.ocpp.feature.profile.Profile;
+import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileConfirmation;
+import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
 
-    @Override
-    public Class<? extends Request> getRequestType() { return SetChargingProfileRequest.class; }
+public class SetChargingProfileFeature extends ProfileFeature {
+  public SetChargingProfileFeature(Profile ownerProfile) {
+    super(ownerProfile);
+  }
 
-    @Override
-    public Class<? extends Confirmation> getConfirmationType() { return SetChargingProfileConfirmation.class; }
+  @Override
+  public Class<? extends Request> getRequestType() {
+    return SetChargingProfileRequest.class;
+  }
 
-    @Override
-    public String getAction() {
-        return "SetChargingProfile";
-    }
+  @Override
+  public Class<? extends Confirmation> getConfirmationType() {
+    return SetChargingProfileConfirmation.class;
+  }
+
+  @Override
+  public String getAction() {
+    return "SetChargingProfile";
+  }
 }

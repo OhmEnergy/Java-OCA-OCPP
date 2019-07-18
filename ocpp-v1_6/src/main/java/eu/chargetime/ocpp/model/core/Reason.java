@@ -5,7 +5,7 @@ package eu.chargetime.ocpp.model.core;
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,19 +26,17 @@ package eu.chargetime.ocpp.model.core;
  * SOFTWARE.
  */
 
-/**
- * Accepted values used with {@link StopTransactionRequest}.
- */
+/** Accepted values used with {@link StopTransactionRequest}. */
 public enum Reason {
-    EmergencyStop,
-    EVDisconnected,
-    HardReset,
-    Local,
-    Other,
-    PowerLoss,
-    Reboot,
-    Remote,
-    SoftReset,
-    UnlockCommand,
-    DeAuthorized
+  EmergencyStop,
+  EVDisconnected,
+  HardReset,
+  Local,
+  Other,
+  PowerLoss,
+  Reboot,
+  Remote,
+  SoftReset,
+  UnlockCommand,
+  DeAuthorized
 }

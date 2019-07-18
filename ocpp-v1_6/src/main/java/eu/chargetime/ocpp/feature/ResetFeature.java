@@ -11,7 +11,7 @@ import eu.chargetime.ocpp.model.core.ResetRequest;
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,23 +31,24 @@ import eu.chargetime.ocpp.model.core.ResetRequest;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class ResetFeature extends Feature {
-    public ResetFeature(Profile ownerProfile) {
-        super(ownerProfile);
-    }
 
-    @Override
-    public Class<? extends Request> getRequestType() {
-        return ResetRequest.class;
-    }
+public class ResetFeature extends ProfileFeature {
+  public ResetFeature(Profile ownerProfile) {
+    super(ownerProfile);
+  }
 
-    @Override
-    public Class<? extends Confirmation> getConfirmationType() {
-        return ResetConfirmation.class;
-    }
+  @Override
+  public Class<? extends Request> getRequestType() {
+    return ResetRequest.class;
+  }
 
-    @Override
-    public String getAction() {
-        return "Reset";
-    }
+  @Override
+  public Class<? extends Confirmation> getConfirmationType() {
+    return ResetConfirmation.class;
+  }
+
+  @Override
+  public String getAction() {
+    return "Reset";
+  }
 }

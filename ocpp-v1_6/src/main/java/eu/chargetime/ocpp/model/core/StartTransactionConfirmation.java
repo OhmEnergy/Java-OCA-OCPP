@@ -5,7 +5,7 @@ package eu.chargetime.ocpp.model.core;
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,8 @@ package eu.chargetime.ocpp.model.core;
  */
 
 import eu.chargetime.ocpp.model.Confirmation;
-
+import eu.chargetime.ocpp.utilities.MoreObjects;
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -38,52 +39,75 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "startTransactionResponse")
 @XmlType(propOrder = {"transactionId", "idTagInfo"})
 public class StartTransactionConfirmation implements Confirmation {
-    private IdTagInfo idTagInfo;
-    private Integer transactionId;
+  private IdTagInfo idTagInfo;
+  private Integer transactionId;
 
-    @Override
-    public boolean validate() {
-        boolean valid = true;
-        if (valid &= idTagInfo != null)
-            valid &= idTagInfo.validate();
-        return valid;
-    }
+  @Override
+  public boolean validate() {
+    boolean valid = true;
+    if (valid &= idTagInfo != null) valid &= idTagInfo.validate();
+    valid &= transactionId != null;
+    return valid;
+  }
 
-    /**
-     * This contains information about authorization status, expiry and parent id.
-     *
-     * @return the {@link IdTagInfo}.
-     */
-    public IdTagInfo getIdTagInfo() {
-        return idTagInfo;
-    }
+  /**
+   * This contains information about authorization status, expiry and parent id.
+   *
+   * @return the {@link IdTagInfo}.
+   */
+  public IdTagInfo getIdTagInfo() {
+    return idTagInfo;
+  }
 
-    /**
-     * Required. This contains information about authorization status, expiry and parent id.
-     *
-     * @param idTagInfo the {@link IdTagInfo}.
-     */
-    @XmlElement
-    public void setIdTagInfo(IdTagInfo idTagInfo) {
-        this.idTagInfo = idTagInfo;
-    }
+  /**
+   * Required. This contains information about authorization status, expiry and parent id.
+   *
+   * @param idTagInfo the {@link IdTagInfo}.
+   */
+  @XmlElement
+  public void setIdTagInfo(IdTagInfo idTagInfo) {
+    this.idTagInfo = idTagInfo;
+  }
 
-    /**
-     * This contains the transaction id supplied by the Central System.
-     *
-     * @return transaction id.
-     */
-    public Integer getTransactionId() {
-        return transactionId;
-    }
+  /**
+   * This contains the transaction id supplied by the Central System.
+   *
+   * @return transaction id.
+   */
+  public Integer getTransactionId() {
+    return transactionId;
+  }
 
-    /**
-     * Required. This contains the transaction id supplied by the Central System.
-     *
-     * @param transactionId integer, transaction.
-     */
-    @XmlElement
-    public void setTransactionId(Integer transactionId) {
-        this.transactionId = transactionId;
-    }
+  /**
+   * Required. This contains the transaction id supplied by the Central System.
+   *
+   * @param transactionId integer, transaction.
+   */
+  @XmlElement
+  public void setTransactionId(Integer transactionId) {
+    this.transactionId = transactionId;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    StartTransactionConfirmation that = (StartTransactionConfirmation) o;
+    return Objects.equals(idTagInfo, that.idTagInfo)
+        && Objects.equals(transactionId, that.transactionId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(idTagInfo, transactionId);
+  }
+
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+        .add("idTagInfo", idTagInfo)
+        .add("transactionId", transactionId)
+        .add("isValid", validate())
+        .toString();
+  }
 }

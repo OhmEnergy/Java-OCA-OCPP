@@ -5,7 +5,7 @@ package eu.chargetime.ocpp.model.core;
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,89 +27,118 @@ package eu.chargetime.ocpp.model.core;
  */
 
 import eu.chargetime.ocpp.model.Validatable;
-
+import eu.chargetime.ocpp.utilities.MoreObjects;
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-/**
- * Class Type used with {@link ChargingSchedule}.
- */
+/** Class Type used with {@link ChargingSchedule}. */
 @XmlRootElement
 @XmlType(propOrder = {"startPeriod", "limit", "numberPhases"})
 public class ChargingSchedulePeriod implements Validatable {
-    private Integer startPeriod;
-    private Double limit;
-    private Integer numberPhases = 3;
+  private Integer startPeriod;
+  private Double limit;
+  private Integer numberPhases = 3;
 
-    @Override
-    public boolean validate() {
-        boolean valid = true;
-        valid &= startPeriod != null;
-        valid &= limit != null;
-        return valid;
-    }
+  public ChargingSchedulePeriod() {}
 
-    /**
-     * Required. Start of the period, in seconds from the start of schedule.
-     * The value of StartPeriod also defines the stop time of the previous period.
-     *
-     * @param startPeriod integer, seconds from start of schedule.
-     */
-    @XmlElement
-    public void setStartPeriod(Integer startPeriod) {
-        this.startPeriod = startPeriod;
-    }
+  public ChargingSchedulePeriod(Integer startPeriod, Double limit) {
+    this.startPeriod = startPeriod;
+    this.limit = limit;
+  }
 
-    /**
-     * Start of the period, in seconds from the start of schedule.
-     * The value of StartPeriod also defines the stop time of the previous period.
-     *
-     * @return Seconds from start of schedule.
-     */
-    public Integer getStartPeriod() {
-        return startPeriod;
-    }
+  @Override
+  public boolean validate() {
+    boolean valid = true;
+    valid &= startPeriod != null;
+    valid &= limit != null;
+    return valid;
+  }
 
-    /**
-     * Required. Power limit during the schedule period, expressed in Amperes.
-     * Accepts at most one digit fraction (e.g. 8.1).
-     *
-     * @param limit decimal, power limit.
-     */
-    @XmlElement
-    public void setLimit(Double limit) {
-        this.limit = limit;
-    }
+  /**
+   * Required. Start of the period, in seconds from the start of schedule. The value of StartPeriod
+   * also defines the stop time of the previous period.
+   *
+   * @param startPeriod integer, seconds from start of schedule.
+   */
+  @XmlElement
+  public void setStartPeriod(Integer startPeriod) {
+    this.startPeriod = startPeriod;
+  }
 
-    /**
-     * Power limit during the schedule period, expressed in Amperes.
-     * Accepts at most one digit fraction (e.g. 8.1).
-     *
-     * @return Power limit.
-     */
-    public Double getLimit() {
-        return limit;
-    }
+  /**
+   * Start of the period, in seconds from the start of schedule. The value of StartPeriod also
+   * defines the stop time of the previous period.
+   *
+   * @return Seconds from start of schedule.
+   */
+  public Integer getStartPeriod() {
+    return startPeriod;
+  }
 
-    /**
-     * Optional. The number of phases that can be used for charging.
-     * Value is set to 3 by default.
-     *
-     * @param numberPhases integer, default is 3.
-     */
-    @XmlElement
-    public void setNumberPhases(Integer numberPhases) {
-        this.numberPhases = numberPhases;
-    }
+  /**
+   * Required. Power limit during the schedule period, expressed in Amperes. Accepts at most one
+   * digit fraction (e.g. 8.1).
+   *
+   * @param limit decimal, power limit.
+   */
+  @XmlElement
+  public void setLimit(Double limit) {
+    this.limit = limit;
+  }
 
-    /**
-     * The number of phases that can be used for charging.
-     * Value is set to 3 by default.
-     *
-     * @return Number of phases.
-     */
-    public Integer getNumberPhases() {
-        return numberPhases;
-    }
+  /**
+   * Power limit during the schedule period, expressed in Amperes. Accepts at most one digit
+   * fraction (e.g. 8.1).
+   *
+   * @return Power limit.
+   */
+  public Double getLimit() {
+    return limit;
+  }
+
+  /**
+   * Optional. The number of phases that can be used for charging. Value is set to 3 by default.
+   *
+   * @param numberPhases integer, default is 3.
+   */
+  @XmlElement
+  public void setNumberPhases(Integer numberPhases) {
+    this.numberPhases = numberPhases;
+  }
+
+  /**
+   * The number of phases that can be used for charging. Value is set to 3 by default.
+   *
+   * @return Number of phases.
+   */
+  public Integer getNumberPhases() {
+    return numberPhases;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    ChargingSchedulePeriod that = (ChargingSchedulePeriod) o;
+    return Objects.equals(startPeriod, that.startPeriod)
+        && Objects.equals(limit, that.limit)
+        && Objects.equals(numberPhases, that.numberPhases);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(startPeriod, limit, numberPhases);
+  }
+
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this)
+        .add("startPeriod", startPeriod)
+        .add("limit", limit)
+        .add("numberPhases", numberPhases)
+        .add("isValid", validate())
+        .toString();
+  }
 }

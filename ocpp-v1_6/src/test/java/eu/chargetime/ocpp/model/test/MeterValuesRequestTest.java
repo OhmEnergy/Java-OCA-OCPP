@@ -1,27 +1,31 @@
 package eu.chargetime.ocpp.model.test;
 
+import static eu.chargetime.ocpp.utilities.TestUtilities.aList;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import eu.chargetime.ocpp.PropertyConstraintException;
 import eu.chargetime.ocpp.model.core.MeterValue;
 import eu.chargetime.ocpp.model.core.MeterValuesRequest;
-import eu.chargetime.ocpp.utilities.TestUtilities;
-import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,110 +46,107 @@ import static org.mockito.Mockito.*;
  * SOFTWARE.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class MeterValuesRequestTest extends TestUtilities{
-    MeterValuesRequest request;
-    @Mock
-    private MeterValue meterValueMock;
+public class MeterValuesRequestTest {
 
-    @Before
-    public void setUp() throws Exception {
-        request = new MeterValuesRequest();
-    }
+  @Rule public ExpectedException thrownException = ExpectedException.none();
 
-    @Test
-    public void setConnectorId_negativeInteger_throwsPropertyConstraintException() {
-        // Given
-        int negativeValue = -1;
+  private MeterValuesRequest request;
 
-        // When
-        try {
-            request.setConnectorId(negativeValue);
+  @Mock private MeterValue meterValueMock;
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            // Then
-            assertThat(ex.getFieldKey(), equalTo("connectorId"));
-            assertThat(ex.getFieldValue(), equalTo(negativeValue));
-        }
-    }
+  @Before
+  public void setUp() {
+    request = new MeterValuesRequest();
+  }
 
-    @Test
-    public void setConnectorId_zeroInteger_connectorIdIsSet() throws Exception {
-        // Given
-        int zeroValue = 0;
+  @Test
+  public void setConnectorId_negativeInteger_throwsPropertyConstraintException() {
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(
+        equalTo("Validation failed: [connectorId must be >= 0]. Current Value: [-1]"));
 
-        // When
-        request.setConnectorId(zeroValue);
+    int negativeValue = -1;
 
-        // Then
-        assertThat(request.getConnectorId(), equalTo(zeroValue));
-    }
+    request.setConnectorId(negativeValue);
+  }
 
-    @Test
-    public void setTransactionId_transactionIdIsSet() {
-        // Given
-        int anyValue = 42;
+  @Test
+  public void setConnectorId_zeroInteger_connectorIdIsSet() {
+    // Given
+    int zeroValue = 0;
 
-        // When
-        request.setTransactionId(anyValue);
+    // When
+    request.setConnectorId(zeroValue);
 
-        // Then
-        assertThat(request.getTransactionId(), equalTo(anyValue));
-    }
+    // Then
+    assertThat(request.getConnectorId(), equalTo(zeroValue));
+  }
 
-    @Test
-    public void setMeterValue_aMeterValueArray_meterValueIsSet() throws Exception {
-        // Given
-        MeterValue[] listOfMeterValues = aList(new MeterValue());
+  @Test
+  public void setTransactionId_transactionIdIsSet() {
+    // Given
+    int anyValue = 42;
 
-        // When
-        request.setMeterValue(listOfMeterValues);
+    // When
+    request.setTransactionId(anyValue);
 
-        // Then
-        assertThat(request.getMeterValue(), equalTo(listOfMeterValues));
-    }
+    // Then
+    assertThat(request.getTransactionId(), equalTo(anyValue));
+  }
 
-    @Test
-    public void validate_returnFalse() {
-        // When
-        boolean isValid = request.validate();
+  @Test
+  public void setMeterValue_aMeterValueArray_meterValueIsSet() {
+    // Given
+    MeterValue[] listOfMeterValues = aList(new MeterValue());
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+    // When
+    request.setMeterValue(listOfMeterValues);
 
-    @Test
-    public void validate_meterValueIsSet_validatesMeterValue() throws Exception {
-        // Given
-        request.setMeterValue(aList(meterValueMock));
+    // Then
+    assertThat(request.getMeterValue(), equalTo(listOfMeterValues));
+  }
 
-        // When
-        request.validate();
+  @Test
+  public void validate_returnFalse() {
+    // When
+    boolean isValid = request.validate();
 
-        // Then
-        verify(meterValueMock, times(1)).validate();
-    }
+    // Then
+    assertThat(isValid, is(false));
+  }
 
-    @Test
-    public void validate_connectorIdAndMeterValueIsValid_returnTrue() throws Exception {
-        // Given
-        request.setConnectorId(42);
-        request.setMeterValue(aList(meterValueMock));
-        when(meterValueMock.validate()).thenReturn(true);
+  @Test
+  public void validate_meterValueIsSet_validatesMeterValue() {
+    // Given
+    request.setMeterValue(aList(meterValueMock));
 
-        // When
-        boolean isValid = request.validate();
+    // When
+    request.validate();
 
-        // Then
-        assertThat(isValid, is(true));
-    }
+    // Then
+    verify(meterValueMock, times(1)).validate();
+  }
 
-    @Test
-    public void isTransactionRelated_returnsFalse() {
-        // When
-        boolean isTransactionRelated = request.transactionRelated();
+  @Test
+  public void validate_connectorIdAndMeterValueIsValid_returnTrue() {
+    // Given
+    request.setConnectorId(42);
+    request.setMeterValue(aList(meterValueMock));
+    when(meterValueMock.validate()).thenReturn(true);
 
-        // Then
-        assertThat(isTransactionRelated, is(true));
-    }
+    // When
+    boolean isValid = request.validate();
+
+    // Then
+    assertThat(isValid, is(true));
+  }
+
+  @Test
+  public void isTransactionRelated_returnsFalse() {
+    // When
+    boolean isTransactionRelated = request.transactionRelated();
+
+    // Then
+    assertThat(isTransactionRelated, is(true));
+  }
 }

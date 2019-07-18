@@ -5,7 +5,7 @@ package eu.chargetime.ocpp.model.core;
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,22 +27,35 @@ package eu.chargetime.ocpp.model.core;
  */
 
 import eu.chargetime.ocpp.model.Request;
-
+import eu.chargetime.ocpp.utilities.MoreObjects;
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Sent by the Charge Point to the Central System.
- * Request holds no values and is always valid.
- */
+/** Sent by the Charge Point to the Central System. Request holds no values and is always valid. */
 @XmlRootElement
 public class HeartbeatRequest implements Request {
-    @Override
-    public boolean validate() {
-        return true;
-    }
+  @Override
+  public boolean validate() {
+    return true;
+  }
 
-    @Override
-    public boolean transactionRelated() {
-        return false;
-    }
+  @Override
+  public boolean transactionRelated() {
+    return false;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    return this == o || o != null && getClass() == o.getClass();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(HeartbeatRequest.class);
+  }
+
+  @Override
+  public String toString() {
+    return MoreObjects.toStringHelper(this).add("isValid", validate()).toString();
+  }
 }

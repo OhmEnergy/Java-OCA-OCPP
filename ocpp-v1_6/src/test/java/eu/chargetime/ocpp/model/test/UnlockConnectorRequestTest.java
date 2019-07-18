@@ -1,21 +1,23 @@
 package eu.chargetime.ocpp.model.test;
 
-import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.core.UnlockConnectorRequest;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import eu.chargetime.ocpp.PropertyConstraintException;
+import eu.chargetime.ocpp.model.core.UnlockConnectorRequest;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,69 +38,79 @@ import static org.junit.Assert.assertThat;
  * SOFTWARE.
  */
 public class UnlockConnectorRequestTest {
-    UnlockConnectorRequest request;
 
-    @Before
-    public void setUp() throws Exception {
-        request = new UnlockConnectorRequest();
-    }
+  @Rule public ExpectedException thrownException = ExpectedException.none();
 
-    @Test
-    public void setConnectorId_zeroInteger_throwsPropertyConstraintException() {
-        // Given
-        Integer zero = 0;
+  private UnlockConnectorRequest request;
 
-        try {
-            // When
-            request.setConnectorId(zero);
+  @Before
+  public void setUp() {
+    request = new UnlockConnectorRequest();
+  }
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            // Then
-            assertThat(ex.getFieldKey(), equalTo("connectorId"));
-            assertThat(ex.getFieldValue(), equalTo(zero));
-        }
-    }
+  @Test
+  public void setConnectorId_zeroInteger_throwsPropertyConstraintException() {
+    testInvalidConnectorId(0);
+  }
 
-    @Test
-    public void setConnectorId_positiveInteger_connectorIdIsSet() throws Exception {
-        // Given
-        Integer positive = 42;
+  @Test
+  public void setConnectorId_negativeInteger_throwsPropertyConstraintException() {
+    testInvalidConnectorId(-42);
+  }
 
-        // When
-        request.setConnectorId(positive);
+  @Test
+  public void setConnectorId_asNull_throwsPropertyConstraintException() {
+    testInvalidConnectorId(null);
+  }
 
-        // Then
-        assertThat(request.getConnectorId(), equalTo(positive));
-    }
+  private void testInvalidConnectorId(Integer invalidValue) {
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(
+        equalTo(
+            "Validation failed: [connectorId must be > 0]. Current Value: [" + invalidValue + "]"));
 
-    @Test
-    public void validate_returnFalse() {
-        // When
-        boolean isValid = request.validate();
+    request.setConnectorId(invalidValue);
+  }
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+  @Test
+  public void setConnectorId_positiveInteger_connectorIdIsSet() {
+    // Given
+    Integer positive = 42;
 
-    @Test
-    public void validate_connectorIdIsSet_returnTrue() throws Exception {
-        // Given
-        request.setConnectorId(42);
+    // When
+    request.setConnectorId(positive);
 
-        // When
-        boolean isValid = request.validate();
+    // Then
+    assertThat(request.getConnectorId(), equalTo(positive));
+  }
 
-        // Then
-        assertThat(isValid, is(true));
-    }
+  @Test
+  public void validate_returnFalse() {
+    // When
+    boolean isValid = request.validate();
 
-    @Test
-    public void isTransactionRelated_returnsFalse() {
-        // When
-        boolean isTransactionRelated = request.transactionRelated();
+    // Then
+    assertThat(isValid, is(false));
+  }
 
-        // Then
-        assertThat(isTransactionRelated, is(false));
-    }
+  @Test
+  public void validate_connectorIdIsSet_returnTrue() {
+    // Given
+    request.setConnectorId(42);
+
+    // When
+    boolean isValid = request.validate();
+
+    // Then
+    assertThat(isValid, is(true));
+  }
+
+  @Test
+  public void isTransactionRelated_returnsFalse() {
+    // When
+    boolean isTransactionRelated = request.transactionRelated();
+
+    // Then
+    assertThat(isTransactionRelated, is(false));
+  }
 }

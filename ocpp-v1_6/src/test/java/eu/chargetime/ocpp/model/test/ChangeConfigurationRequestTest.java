@@ -1,22 +1,24 @@
 package eu.chargetime.ocpp.model.test;
 
-import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.core.ChangeConfigurationRequest;
-import eu.chargetime.ocpp.utilities.TestUtilities;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
+import static eu.chargetime.ocpp.utilities.TestUtilities.aString;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import eu.chargetime.ocpp.PropertyConstraintException;
+import eu.chargetime.ocpp.model.core.ChangeConfigurationRequest;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,125 +39,120 @@ import static org.junit.Assert.assertThat;
  * SOFTWARE.
  */
 
-public class ChangeConfigurationRequestTest extends TestUtilities {
-    ChangeConfigurationRequest request;
+public class ChangeConfigurationRequestTest {
 
-    @Before
-    public void setUp() throws Exception {
+  private static final String EXCEPTION_MESSAGE_TEMPLATE =
+      "Validation failed: [Exceeded limit of %s chars]. Current Value: [%s]";
 
-        request = new ChangeConfigurationRequest();
-    }
+  @Rule public ExpectedException thrownException = ExpectedException.none();
 
-    @Test
-    public void setKey_stringLength51_throwsPropertyConstraintException() {
-        // Given
-        String stringLength51 = aString(51);
+  private ChangeConfigurationRequest request;
 
-        try {
-            // When
-            request.setKey(stringLength51);
+  @Before
+  public void setUp() {
+    request = new ChangeConfigurationRequest();
+  }
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            // Then
-            assertThat(ex.getFieldKey(), equalTo("key"));
-            assertThat(ex.getFieldValue(), equalTo(stringLength51));
-        }
-    }
+  @Test
+  public void setKey_stringLength51_throwsPropertyConstraintException() {
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(equalTo(createExpectedExceptionMessage(50, 51)));
 
-    @Test
-    public void setKey_stringLength50_keyIsSet() throws Exception{
-        // Given
-        String stringLength50 = aString(50);
+    String stringLength51 = aString(51);
 
-        // When
-        request.setKey(stringLength50);
+    request.setKey(stringLength51);
+  }
 
-        // Then
-        assertThat(request.getKey(), equalTo(stringLength50));
-    }
+  @Test
+  public void setKey_stringLength50_keyIsSet() {
+    // Given
+    String stringLength50 = aString(50);
 
-    @Test
-    public void setValue_stringLength501_throwsPropertyConstraintException() {
-        // Given
-        String stringLength501 = aString(501);
+    // When
+    request.setKey(stringLength50);
 
-        try {
-            // When
-            request.setValue(stringLength501);
+    // Then
+    assertThat(request.getKey(), equalTo(stringLength50));
+  }
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            // Then
-            assertThat(ex.getFieldKey(), equalTo("value"));
-            assertThat(ex.getFieldValue(), equalTo(stringLength501));
-        }
-    }
+  @Test
+  public void setValue_stringLength501_throwsPropertyConstraintException() {
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage(equalTo(createExpectedExceptionMessage(500, 501)));
 
-    @Test
-    public void setValue_stringLength500_valueIsSet() throws Exception {
-        // Given
-        String stringLength500 = aString(500);
+    String stringLength501 = aString(501);
 
-        // When
-        request.setValue(stringLength500);
+    request.setValue(stringLength501);
+  }
 
-        // Then
-        assertThat(request.getValue(), equalTo(stringLength500));
-    }
+  @Test
+  public void setValue_stringLength500_valueIsSet() {
+    // Given
+    String stringLength500 = aString(500);
 
-    @Test
-    public void validate_keyAndValueIsSet_returnTrue() throws Exception {
-        // Given
-        request.setKey("some key");
-        request.setValue("some value");
+    // When
+    request.setValue(stringLength500);
 
-        // When
-        boolean isValid = request.validate();
+    // Then
+    assertThat(request.getValue(), equalTo(stringLength500));
+  }
 
-        // Given
-        assertThat(isValid, is(true));
-    }
+  @Test
+  public void validate_keyAndValueIsSet_returnTrue() {
+    // Given
+    request.setKey("some key");
+    request.setValue("some value");
 
-    @Test
-    public void validate_returnFalse() {
-        // When
-        boolean isValid = request.validate();
+    // When
+    boolean isValid = request.validate();
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+    // Given
+    assertThat(isValid, is(true));
+  }
 
-    @Test
-    public void validate_onlyKeyIsSet_returnFalse() throws Exception{
-        // Given
-        request.setKey("some key");
+  @Test
+  public void validate_returnFalse() {
+    // When
+    boolean isValid = request.validate();
 
-        // When
-        boolean isValid = request.validate();
+    // Then
+    assertThat(isValid, is(false));
+  }
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+  @Test
+  public void validate_onlyKeyIsSet_returnFalse() {
+    // Given
+    request.setKey("some key");
 
-    @Test
-    public void validate_onlyValueIsSet_returnFalse() throws Exception{
-        // Given
-        request.setValue("some value");
+    // When
+    boolean isValid = request.validate();
 
-        // When
-        boolean isValid = request.validate();
+    // Then
+    assertThat(isValid, is(false));
+  }
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+  @Test
+  public void validate_onlyValueIsSet_returnFalse() {
+    // Given
+    request.setValue("some value");
 
-    @Test
-    public void isTransactionRelated_returnsFalse() {
-        // When
-        boolean isTransactionRelated = request.transactionRelated();
+    // When
+    boolean isValid = request.validate();
 
-        // Then
-        assertThat(isTransactionRelated, is(false));
-    }
+    // Then
+    assertThat(isValid, is(false));
+  }
+
+  @Test
+  public void isTransactionRelated_returnsFalse() {
+    // When
+    boolean isTransactionRelated = request.transactionRelated();
+
+    // Then
+    assertThat(isTransactionRelated, is(false));
+  }
+
+  private static String createExpectedExceptionMessage(int maxAllowedLength, int currentLength) {
+    return String.format(EXCEPTION_MESSAGE_TEMPLATE, maxAllowedLength, currentLength);
+  }
 }

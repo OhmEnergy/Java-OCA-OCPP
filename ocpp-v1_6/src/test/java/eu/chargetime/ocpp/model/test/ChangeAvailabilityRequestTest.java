@@ -1,22 +1,24 @@
 package eu.chargetime.ocpp.model.test;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import eu.chargetime.ocpp.PropertyConstraintException;
 import eu.chargetime.ocpp.model.core.AvailabilityType;
 import eu.chargetime.ocpp.model.core.ChangeAvailabilityRequest;
-import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import org.junit.rules.ExpectedException;
 
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,119 +39,116 @@ import static org.junit.Assert.assertThat;
  * SOFTWARE.
  */
 public class ChangeAvailabilityRequestTest {
-    private ChangeAvailabilityRequest request;
 
-    @Before
-    public void setUp() throws Exception {
+  @Rule public ExpectedException thrownException = ExpectedException.none();
 
-        request = new ChangeAvailabilityRequest();
-    }
+  private ChangeAvailabilityRequest request;
 
-    @Test
-    public void setConnectorId_negativeValue_throwsPropertyConstraintException() {
-        // Given
-        int aNegativeValue = -1;
+  @Before
+  public void setUp() {
 
-        // When
-        try {
-            request.setConnectorId(aNegativeValue);
+    request = new ChangeAvailabilityRequest();
+  }
 
-            Assert.fail("Expected PropertyConstraintException");
-        } catch (PropertyConstraintException ex) {
-            // Then
-            assertThat(ex.getFieldKey(), equalTo("connectorId"));
-            assertThat(ex.getFieldValue(), equalTo(aNegativeValue));
-        }
-    }
+  @Test
+  public void setConnectorId_negativeValue_throwsPropertyConstraintException() {
 
-    @Test
-    public void setConnectorId_zero_connectorIdIsSet() throws Exception {
-        // Given
-        int zero = 0;
+    thrownException.expect(instanceOf(PropertyConstraintException.class));
+    thrownException.expectMessage("");
 
-        // When
-        request.setConnectorId(zero);
+    int aNegativeValue = -1;
 
-        // Then
-        assertThat(request.getConnectorId(), is(zero));
-    }
+    request.setConnectorId(aNegativeValue);
+  }
 
-    @Test
-    public void setConnectorId_positiveValue_connectorIdIsSet() throws Exception {
-        // Given
-        int aPositiveValue = 42;
+  @Test
+  public void setConnectorId_zero_connectorIdIsSet() {
+    // Given
+    int zero = 0;
 
-        // When
-        request.setConnectorId(aPositiveValue);
+    // When
+    request.setConnectorId(zero);
 
-        // Then
-        assertThat(request.getConnectorId(), is(aPositiveValue));
-    }
+    // Then
+    assertThat(request.getConnectorId(), is(zero));
+  }
 
-    @Test
-    public void setType_availabilityType_typeIsSet() throws Exception {
-        // Given
-        AvailabilityType availabilityType = AvailabilityType.Operative;
+  @Test
+  public void setConnectorId_positiveValue_connectorIdIsSet() {
+    // Given
+    int aPositiveValue = 42;
 
-        // When
-        request.setType(availabilityType);
+    // When
+    request.setConnectorId(aPositiveValue);
 
-        // Then
-        assertThat(request.objType(), equalTo(availabilityType));
-    }
+    // Then
+    assertThat(request.getConnectorId(), is(aPositiveValue));
+  }
 
-    @Test
-    public void validate_typeAndConnectorIdIsSet_returnsTrue() throws Exception {
-        // Given
-        request.setType(AvailabilityType.Operative);
-        request.setConnectorId(0);
+  @Test
+  public void setType_availabilityType_typeIsSet() {
+    // Given
+    AvailabilityType availabilityType = AvailabilityType.Operative;
 
-        // When
-        boolean isValid = request.validate();
+    // When
+    request.setType(availabilityType);
 
-        // Then
-        assertThat(isValid, is(true));
-    }
+    // Then
+    assertThat(request.getType(), equalTo(availabilityType));
+  }
 
-    @Test
-    public void validate_onlyTypeIsSet_returnsFalse() throws Exception {
-        // Given
-        request.setType(AvailabilityType.Operative);
+  @Test
+  public void validate_typeAndConnectorIdIsSet_returnsTrue() {
+    // Given
+    request.setType(AvailabilityType.Operative);
+    request.setConnectorId(0);
 
-        // When
-        boolean isValid = request.validate();
+    // When
+    boolean isValid = request.validate();
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+    // Then
+    assertThat(isValid, is(true));
+  }
 
-    @Test
-    public void validate_connectorIdIsSet_returnsFalse() throws Exception {
-        // Given
-        request.setConnectorId(0);
+  @Test
+  public void validate_onlyTypeIsSet_returnsFalse() {
+    // Given
+    request.setType(AvailabilityType.Operative);
 
-        // When
-        boolean isValid = request.validate();
+    // When
+    boolean isValid = request.validate();
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+    // Then
+    assertThat(isValid, is(false));
+  }
 
-    @Test
-    public void validate_typeIsNull_returnFalse() {
-        // When
-        boolean isValid = request.validate();
+  @Test
+  public void validate_connectorIdIsSet_returnsFalse() {
+    // Given
+    request.setConnectorId(0);
 
-        // Then
-        assertThat(isValid, is(false));
-    }
+    // When
+    boolean isValid = request.validate();
 
-    @Test
-    public void isTransactionRelated_returnsFalse() {
-        // When
-        boolean isTransactionRelated = request.transactionRelated();
+    // Then
+    assertThat(isValid, is(false));
+  }
 
-        // Then
-        assertThat(isTransactionRelated, is(false));
-    }
+  @Test
+  public void validate_typeIsNull_returnFalse() {
+    // When
+    boolean isValid = request.validate();
+
+    // Then
+    assertThat(isValid, is(false));
+  }
+
+  @Test
+  public void isTransactionRelated_returnsFalse() {
+    // When
+    boolean isTransactionRelated = request.transactionRelated();
+
+    // Then
+    assertThat(isTransactionRelated, is(false));
+  }
 }

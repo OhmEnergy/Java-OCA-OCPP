@@ -1,17 +1,10 @@
 package eu.chargetime.ocpp.feature;
-
-import eu.chargetime.ocpp.feature.profile.Profile;
-import eu.chargetime.ocpp.model.Confirmation;
-import eu.chargetime.ocpp.model.Request;
-import eu.chargetime.ocpp.model.core.DataTransferConfirmation;
-import eu.chargetime.ocpp.model.core.DataTransferRequest;
-
 /*
  * ChargeTime.eu - Java-OCA-OCPP
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,24 +24,31 @@ import eu.chargetime.ocpp.model.core.DataTransferRequest;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class DataTransferFeature extends Feature {
 
-    public DataTransferFeature(Profile ownerProfile) {
-        super(ownerProfile);
-    }
+import eu.chargetime.ocpp.feature.profile.Profile;
+import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.core.DataTransferConfirmation;
+import eu.chargetime.ocpp.model.core.DataTransferRequest;
 
-    @Override
-    public Class<? extends Request> getRequestType() {
-        return DataTransferRequest.class;
-    }
+public class DataTransferFeature extends ProfileFeature {
 
-    @Override
-    public Class<? extends Confirmation> getConfirmationType() {
-        return DataTransferConfirmation.class;
-    }
+  public DataTransferFeature(Profile ownerProfile) {
+    super(ownerProfile);
+  }
 
-    @Override
-    public String getAction() {
-        return "DataTransfer";
-    }
+  @Override
+  public Class<? extends Request> getRequestType() {
+    return DataTransferRequest.class;
+  }
+
+  @Override
+  public Class<? extends Confirmation> getConfirmationType() {
+    return DataTransferConfirmation.class;
+  }
+
+  @Override
+  public String getAction() {
+    return "DataTransfer";
+  }
 }

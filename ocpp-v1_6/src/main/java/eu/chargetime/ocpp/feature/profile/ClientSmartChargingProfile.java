@@ -1,11 +1,13 @@
 package eu.chargetime.ocpp.feature.profile;
 
+import eu.chargetime.ocpp.feature.ClearChargingProfileFeature;
 import eu.chargetime.ocpp.feature.Feature;
+import eu.chargetime.ocpp.feature.ProfileFeature;
 import eu.chargetime.ocpp.feature.SetChargingProfileFeature;
 import eu.chargetime.ocpp.model.Confirmation;
 import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.smartcharging.ClearChargingProfileRequest;
 import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
-
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -35,33 +37,35 @@ import java.util.UUID;
  * SOFTWARE.
  */
 
-/**
- * Callback handler for client events of the Smart Charging feature profile.
- */
+/** Callback handler for client events of the Smart Charging feature profile. */
 public class ClientSmartChargingProfile implements Profile {
-    ClientSmartChargingEventHandler eventHandler;
-    ArrayList<Feature> features;
+  private ClientSmartChargingEventHandler eventHandler;
+  private ArrayList<Feature> features;
 
-    public ClientSmartChargingProfile(ClientSmartChargingEventHandler handler) {
-        features = new ArrayList<>();
-        eventHandler = handler;
+  public ClientSmartChargingProfile(ClientSmartChargingEventHandler handler) {
+    features = new ArrayList<>();
+    eventHandler = handler;
 
-        features.add(new SetChargingProfileFeature(this));
+    features.add(new SetChargingProfileFeature(this));
+    features.add(new ClearChargingProfileFeature(this));
+  }
+
+  @Override
+  public ProfileFeature[] getFeatureList() {
+    return features.toArray(new ProfileFeature[0]);
+  }
+
+  @Override
+  public Confirmation handleRequest(UUID sessionIndex, Request request) {
+    Confirmation result = null;
+
+    if (request instanceof SetChargingProfileRequest) {
+      result = eventHandler.handleSetChargingProfileRequest((SetChargingProfileRequest) request);
+    } else if (request instanceof ClearChargingProfileRequest) {
+      result =
+          eventHandler.handleClearChargingProfileRequest((ClearChargingProfileRequest) request);
     }
 
-    @Override
-    public Feature[] getFeatureList() {
-        return features.toArray(new Feature[0]);
-    }
-
-    @Override
-    public Confirmation handleRequest(UUID sessionIndex, Request request) {
-        Confirmation result = null;
-
-        if (request instanceof SetChargingProfileRequest) {
-            result = eventHandler.handleSetChargingProfileRequest((SetChargingProfileRequest) request);
-        }
-
-        return  result;
-    }
+    return result;
+  }
 }

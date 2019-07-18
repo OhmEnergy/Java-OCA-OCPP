@@ -1,7 +1,7 @@
 package core_features;
 
+import eu.chargetime.ocpp.IServerAPI;
 import eu.chargetime.ocpp.SOAPServer;
-import eu.chargetime.ocpp.Server;
 import eu.chargetime.ocpp.ServerEvents;
 import eu.chargetime.ocpp.feature.profile.ServerCoreEventHandler;
 import eu.chargetime.ocpp.feature.profile.ServerCoreProfile;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
  MIT License
 
- Copyright (c) 2016 Thomas Volden
+ Copyright (C) 2016-2018 Thomas Volden
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ import java.util.UUID;
  SOFTWARE.
  */
 public class SOAPServerSample {
-    private Server server;
+    private IServerAPI server;
     private ServerCoreProfile core;
 
     public void started() throws Exception

@@ -5,7 +5,7 @@ package eu.chargetime.ocpp.utilities;
  *
  * MIT License
  *
- * Copyright (C) 2016 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,56 +26,53 @@ package eu.chargetime.ocpp.utilities;
  * SOFTWARE.
  */
 
-/**
- * Utilities for tests. Used to quickly create usefull objects.
- */
-public class TestUtilities {
+/** Utilities for tests. Used to quickly create usefull objects. */
+public final class TestUtilities {
 
-    /**
-     * Create a string of a given length.
-     *
-     * @param length the desired length.
-     * @return A string of the desired length.
-     */
-    protected String aString(int length) {
-        String lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus bibendum eros vitae sapien metusa.";
+  /**
+   * Create a string of a given length.
+   *
+   * @param length the desired length.
+   * @return A string of the desired length.
+   */
+  public static String aString(int length) {
+    String lorem =
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus bibendum eros vitae sapien metusa.";
 
-        if (lorem.length() < length) {
-            StringBuilder extender = new StringBuilder(lorem);
-            while (extender.length() < length) {
-                extender.append(lorem);
-            }
-            lorem = extender.toString();
-        }
-
-        return lorem.substring(0, length);
+    if (lorem.length() < length) {
+      StringBuilder extender = new StringBuilder(lorem);
+      while (extender.length() < length) {
+        extender.append(lorem);
+      }
+      lorem = extender.toString();
     }
 
-    /**
-     * Create an array of elements.
-     *
-     * @param objects   Params of elements to add to the list.
-     * @param <T>       The type of the elements.
-     * @return An array of the given elements.
-     */
-    protected <T> T[] aList(T... objects) {
-        return objects;
-    }
+    return lorem.substring(0, length);
+  }
 
-    /**
-     * Create a String from an Array.
-     *
-     * @param delimiter Used to split the values.
-     * @param array     The array to print.
-     * @return Formatted string, with array values.
-     */
-    protected String join(String delimiter, Object[] array) {
-        StringBuilder output = new StringBuilder();
+  /**
+   * Create an array of elements.
+   *
+   * @param objects Params of elements to add to the list.
+   * @param <T> The type of the elements.
+   * @return An array of the given elements.
+   */
+  public static <T> T[] aList(T... objects) {
+    return objects;
+  }
 
-        for (Object current: array)
-            output.append(String.format("%s%s", delimiter, current));
+  /**
+   * Create a String from an Array.
+   *
+   * @param delimiter Used to split the values.
+   * @param array The array to print.
+   * @return Formatted string, with array values.
+   */
+  public static String join(String delimiter, Object[] array) {
+    StringBuilder output = new StringBuilder();
 
-        return output.toString().substring(1);
-    }
+    for (Object current : array) output.append(String.format("%s%s", delimiter, current));
 
+    return output.toString().substring(1);
+  }
 }
