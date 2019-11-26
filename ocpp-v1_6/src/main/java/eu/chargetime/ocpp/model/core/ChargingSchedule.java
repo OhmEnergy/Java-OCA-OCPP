@@ -43,7 +43,8 @@ import javax.xml.bind.annotation.XmlType;
       "startSchedule",
       "chargingRateUnit",
       "chargingSchedulePeriod",
-      "minChargingRate"
+      "minChargingRate",
+      "maxIdleSeconds"
     })
 public class ChargingSchedule implements Validatable {
   private Integer duration;
@@ -51,6 +52,7 @@ public class ChargingSchedule implements Validatable {
   private ChargingRateUnitType chargingRateUnit;
   private ChargingSchedulePeriod[] chargingSchedulePeriod;
   private Double minChargingRate;
+  private Integer maxIdleSeconds;
 
   public ChargingSchedule() {}
 
@@ -67,6 +69,14 @@ public class ChargingSchedule implements Validatable {
       for (ChargingSchedulePeriod period : chargingSchedulePeriod) valid &= period.validate();
     }
     return valid;
+  }
+
+  public Integer getMaxIdleSeconds() {
+    return maxIdleSeconds;
+  }
+
+  public void setMaxIdleSeconds(Integer maxIdleSeconds) {
+    this.maxIdleSeconds = maxIdleSeconds;
   }
 
   /**
