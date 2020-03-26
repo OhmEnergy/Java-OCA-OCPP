@@ -53,6 +53,7 @@ public class ChargingSchedule implements Validatable {
   private ChargingSchedulePeriod[] chargingSchedulePeriod;
   private Double minChargingRate;
   private Integer maxIdleSeconds;
+  private Boolean zeroAmpCutsCP;
 
   public ChargingSchedule() {}
 
@@ -78,6 +79,12 @@ public class ChargingSchedule implements Validatable {
   public void setMaxIdleSeconds(Integer maxIdleSeconds) {
     this.maxIdleSeconds = maxIdleSeconds;
   }
+
+  public Boolean getZeroAmpCutsCP() {
+    return zeroAmpCutsCP;
+  }
+
+  public void setZeroAmpCutsCP(Boolean zeroAmpCutsCP) { this.zeroAmpCutsCP = zeroAmpCutsCP; }
 
   /**
    * Duration of the charging schedule in seconds.
