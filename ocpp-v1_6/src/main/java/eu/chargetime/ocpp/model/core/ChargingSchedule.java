@@ -44,7 +44,8 @@ import javax.xml.bind.annotation.XmlType;
       "chargingRateUnit",
       "chargingSchedulePeriod",
       "minChargingRate",
-      "maxIdleSeconds"
+      "maxIdleSeconds",
+      "zeroAmpCutsCP"
     })
 public class ChargingSchedule implements Validatable {
   private Integer duration;
