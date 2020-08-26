@@ -303,8 +303,10 @@ public class BootNotificationRequest implements Request {
 
   @Override
   public boolean validate() {
-    return ModelUtil.validate(chargePointModel, STRING_20_CHAR_MAX_LENGTH)
-        && ModelUtil.validate(chargePointVendor, STRING_20_CHAR_MAX_LENGTH);
+    // some charge point vendors do not obey these limits
+    return true;
+//    return ModelUtil.validate(chargePointModel, STRING_20_CHAR_MAX_LENGTH)
+//        && ModelUtil.validate(chargePointVendor, STRING_20_CHAR_MAX_LENGTH);
   }
 
   @Override
