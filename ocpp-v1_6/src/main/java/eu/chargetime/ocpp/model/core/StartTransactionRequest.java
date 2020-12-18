@@ -26,15 +26,17 @@ package eu.chargetime.ocpp.model.core;
  * SOFTWARE.
  */
 
+import java.util.Calendar;
+import java.util.Objects;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import eu.chargetime.ocpp.PropertyConstraintException;
 import eu.chargetime.ocpp.model.Request;
 import eu.chargetime.ocpp.utilities.ModelUtil;
 import eu.chargetime.ocpp.utilities.MoreObjects;
-import java.util.Calendar;
-import java.util.Objects;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /** Sent by the Charge Point to the Central System. */
 @XmlRootElement
@@ -57,7 +59,11 @@ public class StartTransactionRequest implements Request {
     valid &= ModelUtil.validate(idTag, 20);
     valid &= meterStart != null;
     valid &= timestamp != null;
-    return valid;
+
+    if (!valid) {
+      System.out.println("Processing bad StartTransactionRequest anyways!");
+    }
+    return true;
   }
 
   /**
