@@ -5,6 +5,7 @@ package eu.chargetime.ocpp.model.core;
  * MIT License
  *
  * Copyright (C) 2016-2018 Thomas Volden <tv@chargetime.eu>
+ * Copyright (C) 2019 Kevin Raddatz <kevin.raddatz@valtech-mobility.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,8 +51,28 @@ public class SampledValue implements Validatable {
   private Location location;
   private String unit;
 
+  /** @deprecated use {@link #SampledValue(String)} to be sure to set required fields */
+  @Deprecated
   public SampledValue() {
     try {
+      setContext("Sample.Periodic");
+      setFormat(ValueFormat.Raw);
+      setMeasurand("Energy.Active.Import.Register");
+      setLocation(Location.Outlet);
+      setUnit("Wh");
+    } catch (PropertyConstraintException ex) {
+      logger.error("constructor of SampledValue failed", ex);
+    }
+  }
+
+  /**
+   * Handle required fields.
+   *
+   * @param value String, the value, see {@link #setValue(String)}
+   */
+  public SampledValue(String value) {
+    try {
+      setValue(value);
       setContext("Sample.Periodic");
       setFormat(ValueFormat.Raw);
       setMeasurand("Energy.Active.Import.Register");
@@ -142,16 +163,6 @@ public class SampledValue implements Validatable {
   }
 
   /**
-   * Raw or signed data.
-   *
-   * @return the {@link ValueFormat}.
-   */
-  @Deprecated
-  public ValueFormat objFormat() {
-    return format;
-  }
-
-  /**
    * Optional. Raw or signed data. Default = {@code Raw}.
    *
    * @param format the {@link ValueFormat}.
@@ -159,6 +170,16 @@ public class SampledValue implements Validatable {
   @XmlElement
   public void setFormat(ValueFormat format) {
     this.format = format;
+  }
+
+  /**
+   * Raw or signed data.
+   *
+   * @return the {@link ValueFormat}.
+   */
+  @Deprecated
+  public ValueFormat objFormat() {
+    return format;
   }
 
   /**
@@ -266,16 +287,6 @@ public class SampledValue implements Validatable {
   }
 
   /**
-   * Location of measurement.
-   *
-   * @return the {@link Location}.
-   */
-  @Deprecated
-  public Location objLocation() {
-    return location;
-  }
-
-  /**
    * Optional. Location of measurement. Default={@code Outlet}
    *
    * @param location the {@link Location}.
@@ -283,6 +294,16 @@ public class SampledValue implements Validatable {
   @XmlElement
   public void setLocation(Location location) {
     this.location = location;
+  }
+
+  /**
+   * Location of measurement.
+   *
+   * @return the {@link Location}.
+   */
+  @Deprecated
+  public Location objLocation() {
+    return location;
   }
 
   /**
