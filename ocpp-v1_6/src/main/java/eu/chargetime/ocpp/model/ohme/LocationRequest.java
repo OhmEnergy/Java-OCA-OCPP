@@ -1,5 +1,7 @@
 package eu.chargetime.ocpp.model.ohme;
 
+import java.util.Collection;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -15,6 +17,16 @@ public class LocationRequest implements Request {
 	private String location_long;
 
 	private String location_prec;
+
+	private Collection<CellTower> cellTowers;
+
+	public Collection<CellTower> getCellTowers() {
+		return cellTowers;
+	}
+
+	public void setCellTowers(Collection<CellTower> cellTowers) {
+		this.cellTowers = cellTowers;
+	}
 
 	@Override
 	public boolean transactionRelated() {
