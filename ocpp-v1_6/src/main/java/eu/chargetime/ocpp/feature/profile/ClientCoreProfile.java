@@ -227,7 +227,7 @@ public class ClientCoreProfile implements Profile {
    * @see StartTransactionRequest
    * @see StartTransactionFeature
    */
-  public StartTransactionRequest createSolarStartTransactionRequest(
+  public StartTransactionRequest createExtendedStartTransactionRequest(
           Integer connectorId, String idTag, Integer meterStart, Integer inletExportStart, Integer inletImportStart, Calendar timestamp) {
     StartTransactionRequest request = new StartTransactionRequest();
     request.setConnectorId(connectorId);
@@ -285,7 +285,7 @@ public class ClientCoreProfile implements Profile {
    * @param transactionId required. The identification of the transaction.
    * @return an instance of {@link StopTransactionRequest}.
    */
-  public StopTransactionRequest createSolarStopTransactionRequest(
+  public StopTransactionRequest createExtendedStopTransactionRequest(
           int meterStop, int inletExportStop, int inletImportStop, Calendar timestamp, int transactionId) {
     StopTransactionRequest request = new StopTransactionRequest();
     request.setMeterStop(meterStop);
