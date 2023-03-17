@@ -51,19 +51,10 @@ public class StopTransactionRequest implements Request {
   private Reason reason;
   private MeterValue[] transactionData;
 
-  private Integer inletExportStop;
-
-  private Integer inletImportStop;
-
   @Override
   public boolean validate() {
     boolean valid = meterStop != null;
     valid &= timestamp != null;
-
-    // If inlet values are present in meter request, both must be present
-    valid &= ((inletExportStop == null && inletImportStop == null) ||
-              (inletExportStop != null && inletImportStop != null));
-
     valid &= transactionId != null;
     if (transactionData != null) {
       for (MeterValue meterValue : transactionData) {
@@ -118,44 +109,6 @@ public class StopTransactionRequest implements Request {
   @XmlElement
   public void setMeterStop(Integer meterStop) {
     this.meterStop = meterStop;
-  }
-
-  /**
-   * This contains the inlet export value in Wh for the connector at end of the transaction.
-   *
-   * @return Export Wh at end.
-   */
-  public Integer getInletExportStop() {
-    return inletExportStop;
-  }
-
-  /**
-   * Optional. This contains the inlet export value in Wh for the connector at end of the transaction.
-   *
-   * @param inletExportStop integer, export value in Wh.
-   */
-  @XmlElement
-  public void setInletExportStop(Integer inletExportStop) {
-    this.inletExportStop = inletExportStop;
-  }
-
-  /**
-   * This contains the inlet import value in Wh for the connector at end of the transaction.
-   *
-   * @return Import Wh at end.
-   */
-  public Integer getInletImportStop() {
-    return inletImportStop;
-  }
-
-  /**
-   * Optional. This contains the inlet import value in Wh for the connector at end of the transaction.
-   *
-   * @param inletImportStop integer, import value in Wh.
-   */
-  @XmlElement
-  public void setInletImportStop(Integer inletImportStop) {
-    this.inletImportStop = inletImportStop;
   }
 
   /**
@@ -271,9 +224,7 @@ public class StopTransactionRequest implements Request {
         && Objects.equals(timestamp, that.timestamp)
         && Objects.equals(transactionId, that.transactionId)
         && reason == that.reason
-        && Arrays.equals(transactionData, that.transactionData)
-        && Objects.equals(inletExportStop, that.inletExportStop)
-        && Objects.equals(inletImportStop, that.inletImportStop);
+        && Arrays.equals(transactionData, that.transactionData);
   }
 
   @Override
@@ -291,8 +242,6 @@ public class StopTransactionRequest implements Request {
         .add("reason", reason)
         .add("transactionData", transactionData)
         .add("isValid", validate())
-        .add("inletExportStop", inletExportStop)
-        .add("inletImportStop", inletImportStop)
         .toString();
   }
 }
