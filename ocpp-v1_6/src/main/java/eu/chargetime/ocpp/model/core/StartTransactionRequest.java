@@ -52,8 +52,6 @@ public class StartTransactionRequest implements Request {
   private Integer meterStart;
   private Integer reservationId;
   private Calendar timestamp;
-  private Integer inletExportStart;
-  private Integer inletImportStart;
 
   @Override
   public boolean validate() {
@@ -61,10 +59,6 @@ public class StartTransactionRequest implements Request {
     valid &= ModelUtil.validate(idTag, 20);
     valid &= meterStart != null;
     valid &= timestamp != null;
-
-    // If inlet values are present in meter request, both must be present
-    valid &= ((inletExportStart == null && inletImportStart == null) ||
-              (inletExportStart != null && inletImportStart != null));
 
     if (!valid) {
       System.out.println("Processing bad StartTransactionRequest anyways!");
@@ -138,44 +132,6 @@ public class StartTransactionRequest implements Request {
   }
 
   /**
-   * This contains the inlet export value in Wh for the supply at start of the transaction.
-   *
-   * @return Export Wh at start.
-   */
-  public Integer getInletExportStart() {
-    return inletExportStart;
-  }
-
-  /**
-   * Optional. This contains the inlet export value in Wh for the supply at start of the transaction.
-   *
-   * @param inletExportStart integer, export Wh at start.
-   */
-  @XmlElement
-  public void setInletExportStart(Integer inletExportStart) {
-    this.inletExportStart = inletExportStart;
-  }
-
-  /**
-   * This contains the inlet import value in Wh for the supply at start of the transaction.
-   *
-   * @return Import Wh at start.
-   */
-  public Integer getInletImportStart() {
-    return inletImportStart;
-  }
-
-  /**
-   * Optional. This contains the inlet import value in Wh for the supply at start of the transaction.
-   *
-   * @param inletImportStart integer, import Wh at start.
-   */
-  @XmlElement
-  public void setInletImportStart(Integer inletImportStart) {
-    this.inletImportStart = inletImportStart;
-  }
-
-  /**
    * This contains the id of the reservation that terminates as a result of this transaction.
    *
    * @return reservation.
@@ -238,9 +194,7 @@ public class StartTransactionRequest implements Request {
         && Objects.equals(idTag, that.idTag)
         && Objects.equals(meterStart, that.meterStart)
         && Objects.equals(reservationId, that.reservationId)
-        && Objects.equals(timestamp, that.timestamp)
-        && Objects.equals(inletExportStart, that.inletExportStart)
-        && Objects.equals(inletImportStart, that.inletImportStart);
+        && Objects.equals(timestamp, that.timestamp);
   }
 
   @Override
@@ -257,8 +211,6 @@ public class StartTransactionRequest implements Request {
         .add("reservationId", reservationId)
         .add("timestamp", timestamp)
         .add("isValid", validate())
-        .add("inletExportStart", inletExportStart)
-        .add("inletImportStart", inletImportStart)
         .toString();
   }
 }
