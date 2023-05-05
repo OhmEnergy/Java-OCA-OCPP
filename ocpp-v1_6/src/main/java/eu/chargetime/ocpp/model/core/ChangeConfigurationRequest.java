@@ -51,6 +51,20 @@ public class ChangeConfigurationRequest implements Request {
 
   private String key;
   private String value;
+  /**
+   * The unique identifier of the request that was used when the request was transmitted over the network.
+   */
+  private String requestId;
+
+  @Override
+  public void setRequestId(String requestId) {
+    this.requestId = requestId;
+  }
+
+  @Override
+  public String getRequestId() {
+    return requestId;
+  }
 
   /**
    * The name of the configuration setting to change.

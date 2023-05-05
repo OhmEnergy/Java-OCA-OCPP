@@ -50,6 +50,20 @@ public class StopTransactionRequest implements Request {
   private Integer transactionId;
   private Reason reason;
   private MeterValue[] transactionData;
+  /**
+   * The unique identifier of the request that was used when the request was transmitted over the network.
+   */
+  private String requestId;
+
+  @Override
+  public void setRequestId(String requestId) {
+    this.requestId = requestId;
+  }
+
+  @Override
+  public String getRequestId() {
+    return requestId;
+  }
 
   @Override
   public boolean validate() {

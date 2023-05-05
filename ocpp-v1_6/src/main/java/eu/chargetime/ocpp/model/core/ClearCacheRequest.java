@@ -35,6 +35,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 /** Sent by the Central System to the Charge Point. Request holds no values and is always valid. */
 @XmlRootElement
 public class ClearCacheRequest implements Request {
+  /**
+   * The unique identifier of the request that was used when the request was transmitted over the network.
+   */
+  private String requestId;
+
+  @Override
+  public void setRequestId(String requestId) {
+    this.requestId = requestId;
+  }
+
+  @Override
+  public String getRequestId() {
+    return requestId;
+  }
+
   @Override
   public boolean validate() {
     return true;

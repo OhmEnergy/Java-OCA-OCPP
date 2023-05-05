@@ -87,6 +87,12 @@ public class SessionTest {
     Request someRequest =
         new Request() {
           @Override
+          public void setRequestId(String requestId) { }
+
+          @Override
+          public String getRequestId(){ return null; }
+
+          @Override
           public boolean transactionRelated() {
             return false;
           }

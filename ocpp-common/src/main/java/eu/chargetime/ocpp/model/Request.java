@@ -30,4 +30,14 @@ SOFTWARE.
 /** Interface used to flag a model as Request payload. */
 public interface Request extends Validatable {
   boolean transactionRelated();
+
+  /**
+   * Set the unique identifier of the request that was used when the request was transmitted over the network.
+   */
+  void setRequestId(String requestId);
+
+  /**
+   * @return the unique identifier of the request that was used when it was transmitted over the network.
+   */
+  String getRequestId();
 }

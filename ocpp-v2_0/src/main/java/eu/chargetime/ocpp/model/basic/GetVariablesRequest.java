@@ -34,6 +34,19 @@ import java.util.Objects;
 public class GetVariablesRequest implements Request {
 
   private GetVariableDataType[] getVariableData;
+  /**
+   * The unique identifier of the request that was used when the request was transmitted over the network.
+   */
+  private String requestId;
+
+  @Override
+  public void setRequestId(String requestId) {
+    this.requestId = requestId;
+  }
+
+  public String getRequestId() {
+    return requestId;
+  }
 
   /**
    * List of requested variables.
