@@ -41,6 +41,20 @@ public class ClearChargingProfileRequest implements Request {
   private Integer connectorId;
   private ChargingProfilePurposeType chargingProfilePurpose;
   private Integer stackLevel;
+  /**
+   * The unique identifier of the request that was used when the request was transmitted over the network.
+   */
+  private String requestId;
+
+  @Override
+  public void setRequestId(String requestId) {
+    this.requestId = requestId;
+  }
+
+  @Override
+  public String getRequestId() {
+    return requestId;
+  }
 
   /**
    * The ID of the charging profile to clear.

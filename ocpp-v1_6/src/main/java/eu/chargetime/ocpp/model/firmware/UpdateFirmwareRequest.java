@@ -44,6 +44,20 @@ public class UpdateFirmwareRequest implements Request {
   private Integer retries;
   private Calendar retrieveDate;
   private Integer retryInterval;
+  /**
+   * The unique identifier of the request that was used when the request was transmitted over the network.
+   */
+  private String requestId;
+
+  @Override
+  public void setRequestId(String requestId) {
+    this.requestId = requestId;
+  }
+
+  @Override
+  public String getRequestId() {
+    return requestId;
+  }
 
   public UpdateFirmwareRequest() {}
 

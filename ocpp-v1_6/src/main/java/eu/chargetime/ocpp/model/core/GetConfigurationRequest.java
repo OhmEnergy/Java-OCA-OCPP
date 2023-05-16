@@ -40,6 +40,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class GetConfigurationRequest implements Request {
 
   private String[] key;
+  /**
+   * The unique identifier of the request that was used when the request was transmitted over the network.
+   */
+  private String requestId;
+
+  @Override
+  public void setRequestId(String requestId) {
+    this.requestId = requestId;
+  }
+
+  @Override
+  public String getRequestId() {
+    return requestId;
+  }
 
   /**
    * List of keys for which the configuration value is requested.

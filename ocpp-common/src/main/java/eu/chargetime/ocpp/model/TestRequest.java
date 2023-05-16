@@ -29,6 +29,12 @@ package eu.chargetime.ocpp.model;
 /** Test implementation of the Request interface. Used for tests. */
 public class TestRequest implements Request {
   @Override
+  public void setRequestId(String requestId) { }
+
+  @Override
+  public String getRequestId(){ return null; }
+
+  @Override
   public boolean validate() {
     return true;
   }
