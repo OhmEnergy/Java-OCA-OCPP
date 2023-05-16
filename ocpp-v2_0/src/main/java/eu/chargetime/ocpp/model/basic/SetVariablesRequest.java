@@ -50,6 +50,7 @@ public class SetVariablesRequest implements Request {
     this.requestId = requestId;
   }
 
+  @Override
   public String getRequestId() {
     return requestId;
   }

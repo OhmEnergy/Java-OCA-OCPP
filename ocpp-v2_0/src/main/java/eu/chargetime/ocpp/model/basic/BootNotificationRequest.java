@@ -47,6 +47,7 @@ public class BootNotificationRequest implements Request {
     this.requestId = requestId;
   }
 
+  @Override
   public String getRequestId() {
     return requestId;
   }
