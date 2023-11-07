@@ -37,6 +37,20 @@ public class SendLocalListRequest implements Request {
   private int listVersion = 0;
   private AuthorizationData[] localAuthorizationList = null;
   private UpdateType updateType = null;
+  /**
+   * The unique identifier of the request that was used when the request was transmitted over the network.
+   */
+  private String requestId;
+
+  @Override
+  public void setRequestId(String requestId) {
+    this.requestId = requestId;
+  }
+
+  @Override
+  public String getRequestId() {
+    return requestId;
+  }
 
   public SendLocalListRequest() {}
 

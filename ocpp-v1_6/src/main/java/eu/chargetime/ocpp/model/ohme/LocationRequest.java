@@ -19,6 +19,20 @@ public class LocationRequest implements Request {
 	private String location_prec;
 
 	private Collection<CellTower> cellTowers;
+	/**
+	 * The unique identifier of the request that was used when the request was transmitted over the network.
+	 */
+	private String requestId;
+
+	@Override
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
+	}
+
+	@Override
+	public String getRequestId() {
+		return requestId;
+	}
 
 	public Collection<CellTower> getCellTowers() {
 		return cellTowers;

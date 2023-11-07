@@ -40,6 +40,20 @@ import java.util.Objects;
 public class SetVariablesRequest implements Request {
   private transient Validator<Object> requiredValidator = new RequiredValidator();
   private SetVariableDataType[] setVariableData;
+  /**
+   * The unique identifier of the request that was used when the request was transmitted over the network.
+   */
+  private String requestId;
+
+  @Override
+  public void setRequestId(String requestId) {
+    this.requestId = requestId;
+  }
+
+  @Override
+  public String getRequestId() {
+    return requestId;
+  }
 
   @Override
   public boolean transactionRelated() {
