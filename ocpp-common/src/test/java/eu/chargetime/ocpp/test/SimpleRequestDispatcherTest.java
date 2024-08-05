@@ -62,7 +62,7 @@ public class SimpleRequestDispatcherTest {
     promise.whenComplete((confirmation, throwable) -> result[0] = throwable);
 
     // When
-    sut.fulfill(promise, eventsMock, null);
+    sut.fulfill(promise, eventsMock, null, null);
 
     // Then
     assertThat(result[0], is(expectedException));

@@ -27,6 +27,8 @@ package eu.chargetime.ocpp;
 
 import eu.chargetime.ocpp.model.Confirmation;
 import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.RequestDetails;
+
 import java.util.concurrent.CompletableFuture;
 
 public class RequestDispatcher implements IRequestDispactcher {
@@ -38,9 +40,9 @@ public class RequestDispatcher implements IRequestDispactcher {
     this.fulfiller = fulfiller;
   }
 
-  public CompletableFuture<Confirmation> handleRequest(Request request) {
+  public CompletableFuture<Confirmation> handleRequest(Request request, RequestDetails details) {
     CompletableFuture<Confirmation> promise = new CompletableFuture<>();
-    fulfiller.fulfill(promise, eventHandler, request);
+    fulfiller.fulfill(promise, eventHandler, request, details);
     return promise;
   }
 

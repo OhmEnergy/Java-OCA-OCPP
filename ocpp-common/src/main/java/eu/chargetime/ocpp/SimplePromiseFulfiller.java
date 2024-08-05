@@ -26,6 +26,7 @@ package eu.chargetime.ocpp;
 */
 
 import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.model.RequestDetails;
 import eu.chargetime.ocpp.model.Request;
 import java.util.concurrent.CompletableFuture;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class SimplePromiseFulfiller implements PromiseFulfiller {
 
   @Override
   public void fulfill(
-      CompletableFuture<Confirmation> promise, SessionEvents eventHandler, Request request) {
+      CompletableFuture<Confirmation> promise, SessionEvents eventHandler, Request request, RequestDetails details) {
     try {
       Confirmation conf = eventHandler.handleRequest(request);
       promise.complete(conf);

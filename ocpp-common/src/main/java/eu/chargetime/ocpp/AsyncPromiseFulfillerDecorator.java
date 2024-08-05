@@ -26,6 +26,7 @@ package eu.chargetime.ocpp;
 */
 
 import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.model.RequestDetails;
 import eu.chargetime.ocpp.model.Request;
 import java.util.concurrent.CompletableFuture;
 
@@ -35,8 +36,8 @@ public class AsyncPromiseFulfillerDecorator implements PromiseFulfiller {
 
   @Override
   public void fulfill(
-      CompletableFuture<Confirmation> promise, SessionEvents eventHandler, Request request) {
-    new Thread(() -> promiseFulfiller.fulfill(promise, eventHandler, request)).start();
+      CompletableFuture<Confirmation> promise, SessionEvents eventHandler, Request request, RequestDetails details) {
+    new Thread(() -> promiseFulfiller.fulfill(promise, eventHandler, request, details)).start();
   }
 
   public AsyncPromiseFulfillerDecorator(PromiseFulfiller promiseFulfiller) {

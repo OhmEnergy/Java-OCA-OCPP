@@ -154,11 +154,11 @@ public class SessionTest {
     String someId = "Some id";
     doAnswer(invocation -> invocation.getArgumentAt(0, CompletableFuture.class).complete(null))
         .when(fulfiller)
-        .fulfill(any(), any(), any());
+        .fulfill(any(), any(), any(), any());
     when(communicator.unpackPayload(any(), any())).thenReturn(new TestRequest());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // then
     verify(communicator, times(1)).sendCallError(eq(someId), anyString(), anyString(), anyString());
@@ -173,11 +173,11 @@ public class SessionTest {
             invocation ->
                 invocation.getArgumentAt(0, CompletableFuture.class).complete(aConfirmation))
         .when(fulfiller)
-        .fulfill(any(), any(), any());
+        .fulfill(any(), any(), any(), any());
     when(communicator.unpackPayload(any(), any())).thenReturn(new TestRequest());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // then
     verify(communicator, times(1)).sendCallResult(anyString(), anyString(), eq(aConfirmation));
@@ -193,11 +193,11 @@ public class SessionTest {
                     .getArgumentAt(0, CompletableFuture.class)
                     .completeExceptionally(new Exception()))
         .when(fulfiller)
-        .fulfill(any(), any(), any());
+        .fulfill(any(), any(), any(), any());
     when(communicator.unpackPayload(any(), any())).thenReturn(new TestRequest());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // then
     verify(communicator, times(1)).sendCallError(eq(someId), anyString(), anyString(), anyString());
@@ -219,7 +219,7 @@ public class SessionTest {
     when(featureRepository.findFeature(any())).thenReturn(Optional.empty());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // Then
     verify(communicator, times(1)).sendCallError(eq(someId), anyString(), anyString(), anyString());

@@ -5,6 +5,8 @@ import eu.chargetime.ocpp.model.CallErrorMessage;
 import eu.chargetime.ocpp.model.CallMessage;
 import eu.chargetime.ocpp.model.CallResultMessage;
 import eu.chargetime.ocpp.model.Message;
+import eu.chargetime.ocpp.model.RequestDetails;
+
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
@@ -51,6 +53,7 @@ public class JSONCommunicator extends Communicator {
   private static final int TYPENUMBER_CALL = 2;
   private static final int INDEX_CALL_ACTION = 2;
   private static final int INDEX_CALL_PAYLOAD = 3;
+  private static final int INDEX_CALL_DETAILS = 4;
 
   private static final int TYPENUMBER_CALLRESULT = 3;
   private static final int INDEX_CALLRESULT_PAYLOAD = 2;
@@ -80,7 +83,7 @@ public class JSONCommunicator extends Communicator {
   }
 
   @Override
-  public <T> T unpackPayload(Object payload, Class<T> type) throws Exception {
+  public <T> T unpackPayload(Object payload, Class<T> type) {
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(Calendar.class, new CalendarDeserializer());
     Gson gson = builder.create();
@@ -142,6 +145,15 @@ public class JSONCommunicator extends Communicator {
       message = new CallMessage();
       message.setAction(array.get(INDEX_CALL_ACTION).getAsString());
       message.setPayload(array.get(INDEX_CALL_PAYLOAD).toString());
+
+      RequestDetails detailsObject = null;
+      // another object exists at the next index and it should be the request details
+      if(array.size() > INDEX_CALL_PAYLOAD + 1){
+        String details = array.get(INDEX_CALL_DETAILS).toString();
+        detailsObject = unpackPayload(details, RequestDetails.class);
+      }
+      message.setDetails(detailsObject);
+
     } else if (array.get(INDEX_MESSAGEID).getAsInt() == TYPENUMBER_CALLRESULT) {
       message = new CallResultMessage();
       message.setPayload(array.get(INDEX_CALLRESULT_PAYLOAD).toString());

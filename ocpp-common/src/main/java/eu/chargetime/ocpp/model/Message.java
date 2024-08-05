@@ -34,6 +34,13 @@ public class Message {
   private String action;
 
   /**
+   * Sent through from the firmware (from roughly August 2024) to state whether a message was invalidated from within
+   * the device e.g. something went wrong with the flash etc. This field should default to null for all firmware
+   * versions before this point.
+   */
+  private RequestDetails details;
+
+  /**
    * Get unique id for message.
    *
    * @return message id.
@@ -86,4 +93,13 @@ public class Message {
   public void setAction(String action) {
     this.action = action;
   }
+
+  public void setDetails(RequestDetails details){
+    this.details = details;
+  }
+
+  public RequestDetails getDetails(){
+    return details;
+  }
+
 }

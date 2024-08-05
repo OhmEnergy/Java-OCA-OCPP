@@ -290,7 +290,7 @@ public abstract class Communicator {
             call.getId(), call.getErrorCode(), call.getErrorDescription(), call.getRawPayload());
       } else if (message instanceof CallMessage) {
         CallMessage call = (CallMessage) message;
-        events.onCall(call.getId(), call.getAction(), call.getPayload());
+        events.onCall(call.getId(), call.getAction(), call.getPayload(), call.getDetails());
       }
     }
 

@@ -26,10 +26,11 @@ package eu.chargetime.ocpp;
 */
 
 import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.model.RequestDetails;
 import eu.chargetime.ocpp.model.Request;
 import java.util.concurrent.CompletableFuture;
 
 public interface PromiseFulfiller {
   void fulfill(
-      CompletableFuture<Confirmation> promise, SessionEvents eventHandler, Request request);
+      CompletableFuture<Confirmation> promise, SessionEvents eventHandler, Request request, RequestDetails details);
 }
