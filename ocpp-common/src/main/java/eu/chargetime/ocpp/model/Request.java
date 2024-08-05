@@ -40,4 +40,8 @@ public interface Request extends Validatable {
    * @return the unique identifier of the request that was used when it was transmitted over the network.
    */
   String getRequestId();
+
+  void setDetails(RequestDetails details);
+
+  RequestDetails getDetails();
 }

@@ -135,7 +135,7 @@ public class WebSocketListener implements Listener {
 
           @Override
           public void onMessage(WebSocket webSocket, String message) {
-            sockets.get(webSocket).relay(message);
+            sockets.get(webSocket).relay(message, null);
           }
 
           @Override

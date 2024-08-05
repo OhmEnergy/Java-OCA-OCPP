@@ -73,7 +73,7 @@ public class WebSocketTransmitter implements Transmitter {
 
           @Override
           public void onMessage(String message) {
-            events.receivedMessage(message);
+            events.receivedMessage(message, null);
           }
 
           @Override

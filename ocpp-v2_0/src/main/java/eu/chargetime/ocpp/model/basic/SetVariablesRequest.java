@@ -25,35 +25,22 @@ package eu.chargetime.ocpp.model.basic;
    SOFTWARE.
 */
 
-import eu.chargetime.ocpp.model.Request;
+import java.util.Arrays;
+import java.util.Objects;
+
+import eu.chargetime.ocpp.model.DetailedRequest;
 import eu.chargetime.ocpp.model.basic.types.SetVariableDataType;
 import eu.chargetime.ocpp.model.validation.RequiredValidator;
 import eu.chargetime.ocpp.model.validation.Validator;
 import eu.chargetime.ocpp.utilities.MoreObjects;
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * This contains the field definition of the SetVariablesRequest PDU sent by the CSMS to the
  * Charging Station.
  */
-public class SetVariablesRequest implements Request {
+public class SetVariablesRequest extends DetailedRequest {
   private transient Validator<Object> requiredValidator = new RequiredValidator();
   private SetVariableDataType[] setVariableData;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   @Override
   public boolean transactionRelated() {

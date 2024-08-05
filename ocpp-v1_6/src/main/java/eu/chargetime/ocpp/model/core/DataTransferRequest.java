@@ -27,7 +27,7 @@ package eu.chargetime.ocpp.model.core;
  */
 
 import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.DetailedRequest;
 import eu.chargetime.ocpp.utilities.ModelUtil;
 import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Objects;
@@ -38,27 +38,13 @@ import javax.xml.bind.annotation.XmlType;
 /** Sent either by the Central System to the Charge Point or vice versa. */
 @XmlRootElement
 @XmlType(propOrder = {"vendorId", "messageId", "data"})
-public class DataTransferRequest implements Request {
+public class DataTransferRequest extends DetailedRequest {
 
   private static final String ERROR_MESSAGE = "Exceeded limit of %s chars";
 
   private String vendorId;
   private String messageId;
   private String data;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   public DataTransferRequest() {}
 

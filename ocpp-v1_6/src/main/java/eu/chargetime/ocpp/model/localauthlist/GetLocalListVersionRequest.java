@@ -26,26 +26,12 @@ package eu.chargetime.ocpp.model.localauthlist;
  * SOFTWARE.
  */
 
-import eu.chargetime.ocpp.model.Request;
-import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Objects;
 
-public class GetLocalListVersionRequest implements Request {
+import eu.chargetime.ocpp.model.DetailedRequest;
+import eu.chargetime.ocpp.utilities.MoreObjects;
 
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
+public class GetLocalListVersionRequest extends DetailedRequest {
 
   @Override
   public boolean validate() {

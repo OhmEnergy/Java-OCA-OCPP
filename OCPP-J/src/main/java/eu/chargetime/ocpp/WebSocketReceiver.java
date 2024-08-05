@@ -25,6 +25,8 @@ package eu.chargetime.ocpp;
    SOFTWARE.
 */
 
+import eu.chargetime.ocpp.model.RequestDetails;
+
 public class WebSocketReceiver implements Receiver {
 
   private RadioEvents handler;
@@ -40,8 +42,8 @@ public class WebSocketReceiver implements Receiver {
     handler.disconnected();
   }
 
-  public void relay(String message) {
-    handler.receivedMessage(message);
+  public void relay(String message, RequestDetails details) {
+    handler.receivedMessage(message, details);
   }
 
   @Override

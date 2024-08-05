@@ -8,6 +8,6 @@ java-docs
 
 # Should be ignored when using IDE-independent build system such as Maven or Gradle
 .idea/
-*.iml
+../**/*.iml
 /.gradle
 */build

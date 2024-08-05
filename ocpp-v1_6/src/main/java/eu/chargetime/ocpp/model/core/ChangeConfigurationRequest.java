@@ -26,14 +26,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.Request;
-import eu.chargetime.ocpp.utilities.ModelUtil;
-import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import eu.chargetime.ocpp.PropertyConstraintException;
+import eu.chargetime.ocpp.model.DetailedRequest;
+import eu.chargetime.ocpp.utilities.ModelUtil;
+import eu.chargetime.ocpp.utilities.MoreObjects;
 
 /**
  * Sent by Central System to Charge Point.
@@ -43,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement
 @XmlType(propOrder = {"key", "value"})
-public class ChangeConfigurationRequest implements Request {
+public class ChangeConfigurationRequest extends DetailedRequest {
 
   private static final String ERROR_MESSAGE = "Exceeded limit of %s chars";
   private static final int KEY_MAX_LENGTH = 50;
@@ -51,20 +53,6 @@ public class ChangeConfigurationRequest implements Request {
 
   private String key;
   private String value;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   /**
    * The name of the configuration setting to change.

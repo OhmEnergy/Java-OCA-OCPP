@@ -85,7 +85,7 @@ public class WebServiceTransmitter extends SOAPSyncHelper implements Transmitter
             () -> {
               try {
                 SOAPMessage response = soapConnection.call(message, url);
-                events.receivedMessage(response);
+                events.receivedMessage(response, null);
               } catch (SOAPException e) {
                 logger.warn("sendRequest() failed", e);
                 disconnect();
@@ -96,6 +96,6 @@ public class WebServiceTransmitter extends SOAPSyncHelper implements Transmitter
 
   @Override
   protected void forwardMessage(SOAPMessage message) {
-    events.receivedMessage(message);
+    events.receivedMessage(message, null);
   }
 }

@@ -26,28 +26,14 @@ package eu.chargetime.ocpp.model.core;
  * SOFTWARE.
  */
 
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.DetailedRequest;
 import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /** Sent by the Charge Point to the Central System. Request holds no values and is always valid. */
 @XmlRootElement
-public class HeartbeatRequest implements Request {
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
+public class HeartbeatRequest extends DetailedRequest {
 
   @Override
   public boolean validate() {

@@ -81,7 +81,7 @@ public class WebServiceReceiver extends SOAPSyncHelper implements Receiver {
 
   @Override
   void forwardMessage(SOAPMessage message) {
-    events.receivedMessage(message);
+    events.receivedMessage(message, null);
   }
 
   @Override
@@ -91,7 +91,7 @@ public class WebServiceReceiver extends SOAPSyncHelper implements Receiver {
     new Thread(
             () -> {
               try {
-                events.receivedMessage(soapConnection.call(message, url));
+                events.receivedMessage(soapConnection.call(message, url), null);
               } catch (SOAPException e) {
                 disconnect();
               }

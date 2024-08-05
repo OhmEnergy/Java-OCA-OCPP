@@ -27,6 +27,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+import eu.chargetime.ocpp.model.RequestDetails;
+
 /** Call back handler for communicator events. */
 public interface CommunicatorEvents {
   /**
@@ -51,7 +53,7 @@ public interface CommunicatorEvents {
    * @param action action name used to identify the feature.
    * @param payload raw payload.
    */
-  void onCall(String id, String action, Object payload);
+  void onCall(String id, String action, Object payload, RequestDetails details);
 
   /**
    * Handle call error.

@@ -27,33 +27,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.Request;
-import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import eu.chargetime.ocpp.PropertyConstraintException;
+import eu.chargetime.ocpp.model.DetailedRequest;
+import eu.chargetime.ocpp.utilities.MoreObjects;
+
 /** Sent by the Central System to the Charge Point. */
 @XmlRootElement
-public class ChangeAvailabilityRequest implements Request {
+public class ChangeAvailabilityRequest extends DetailedRequest {
 
   private int connectorId = -1;
   private AvailabilityType type;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   /**
    * The id of the connector for which availability needs to change. Id '0' (zero) is used if the

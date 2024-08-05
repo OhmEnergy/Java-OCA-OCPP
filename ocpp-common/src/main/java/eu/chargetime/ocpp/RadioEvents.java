@@ -27,6 +27,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+import eu.chargetime.ocpp.model.RequestDetails;
+
 /** Transmitter related events. */
 public interface RadioEvents {
   /** Connection established. */
@@ -37,7 +39,7 @@ public interface RadioEvents {
    *
    * @param message message object.
    */
-  void receivedMessage(Object message);
+  void receivedMessage(Object message, RequestDetails details);
 
   /** Disconnected from node. */
   void disconnected();

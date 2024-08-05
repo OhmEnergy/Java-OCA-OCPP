@@ -8,6 +8,7 @@ import eu.chargetime.ocpp.*;
 import eu.chargetime.ocpp.feature.Feature;
 import eu.chargetime.ocpp.model.Confirmation;
 import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.RequestDetails;
 import eu.chargetime.ocpp.model.TestRequest;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -93,6 +94,12 @@ public class SessionTest {
           public String getRequestId(){ return null; }
 
           @Override
+          public void setDetails(RequestDetails details) { }
+
+          @Override
+          public RequestDetails getDetails() { return null; }
+
+          @Override
           public boolean transactionRelated() {
             return false;
           }
@@ -158,7 +165,7 @@ public class SessionTest {
     when(communicator.unpackPayload(any(), any())).thenReturn(new TestRequest());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // then
     verify(communicator, times(1)).sendCallError(eq(someId), anyString(), anyString(), anyString());
@@ -177,7 +184,7 @@ public class SessionTest {
     when(communicator.unpackPayload(any(), any())).thenReturn(new TestRequest());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // then
     verify(communicator, times(1)).sendCallResult(anyString(), anyString(), eq(aConfirmation));
@@ -197,7 +204,7 @@ public class SessionTest {
     when(communicator.unpackPayload(any(), any())).thenReturn(new TestRequest());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // then
     verify(communicator, times(1)).sendCallError(eq(someId), anyString(), anyString(), anyString());
@@ -219,7 +226,7 @@ public class SessionTest {
     when(featureRepository.findFeature(any())).thenReturn(Optional.empty());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // Then
     verify(communicator, times(1)).sendCallError(eq(someId), anyString(), anyString(), anyString());
