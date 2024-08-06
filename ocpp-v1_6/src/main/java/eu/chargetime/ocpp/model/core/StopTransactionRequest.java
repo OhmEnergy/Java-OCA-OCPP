@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.DetailedRequest;
 import eu.chargetime.ocpp.utilities.ModelUtil;
 import eu.chargetime.ocpp.utilities.MoreObjects;
 
@@ -43,7 +43,7 @@ import eu.chargetime.ocpp.utilities.MoreObjects;
 @XmlRootElement
 @XmlType(
     propOrder = {"transactionId", "idTag", "timestamp", "meterStop", "reason", "transactionData"})
-public class StopTransactionRequest implements Request {
+public class StopTransactionRequest extends DetailedRequest {
   private String idTag;
   private Integer meterStop;
   private Calendar timestamp;

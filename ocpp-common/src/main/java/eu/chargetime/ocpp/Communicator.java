@@ -290,7 +290,15 @@ public abstract class Communicator {
             call.getId(), call.getErrorCode(), call.getErrorDescription(), call.getRawPayload());
       } else if (message instanceof CallMessage) {
         CallMessage call = (CallMessage) message;
-        events.onCall(call.getId(), call.getAction(), call.getPayload(), call.getDetails());
+
+        RequestDetails details = call.getDetails();
+        // if details are populated, we know the message is sent from a device with a specific firmware version. We also
+        // want to set the raw json in the details object
+        if(details != null){
+          details.setRawJson(input.toString());
+        }
+
+        events.onCall(call.getId(), call.getAction(), call.getPayload(), details);
       }
     }
 

@@ -27,7 +27,7 @@ package eu.chargetime.ocpp.model.core;
  */
 
 import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.DetailedRequest;
 import eu.chargetime.ocpp.utilities.ModelUtil;
 import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Calendar;
@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlType;
       "vendorId",
       "vendorErrorCode"
     })
-public class StatusNotificationRequest implements Request {
+public class StatusNotificationRequest extends DetailedRequest {
 
   private static final String ERROR_MESSAGE = "Exceeds limit of %s chars";
 

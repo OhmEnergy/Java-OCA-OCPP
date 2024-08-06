@@ -28,6 +28,7 @@ SOFTWARE.
 
 import eu.chargetime.ocpp.feature.Feature;
 import eu.chargetime.ocpp.model.Confirmation;
+import eu.chargetime.ocpp.model.DetailedRequest;
 import eu.chargetime.ocpp.model.Request;
 import eu.chargetime.ocpp.model.RequestDetails;
 import eu.chargetime.ocpp.utilities.MoreObjects;
@@ -190,7 +191,7 @@ public class Session implements ISession {
     }
 
     @Override
-    public synchronized void onCall(String id, String action, Object payload, RequestDetails detailsPayload) {
+    public synchronized void onCall(String id, String action, Object payload, RequestDetails details) {
       Optional<Feature> featureOptional = featureRepository.findFeature(action);
       if (!featureOptional.isPresent()) {
         communicator.sendCallError(
@@ -200,8 +201,11 @@ public class Session implements ISession {
           Request request =
               communicator.unpackPayload(payload, featureOptional.get().getRequestType());
           request.setRequestId(id);
+          if(request instanceof DetailedRequest){
+            ((DetailedRequest) request).setDetails(details);
+          }
           if (request.validate()) {
-            CompletableFuture<Confirmation> promise = dispatcher.handleRequest(request, detailsPayload);
+            CompletableFuture<Confirmation> promise = dispatcher.handleRequest(request, details);
             promise.whenComplete(new ConfirmationHandler(id, action, communicator));
           } else {
             communicator.sendCallError(
