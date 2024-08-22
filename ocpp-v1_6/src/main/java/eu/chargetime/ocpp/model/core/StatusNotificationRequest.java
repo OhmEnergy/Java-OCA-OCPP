@@ -27,7 +27,7 @@ package eu.chargetime.ocpp.model.core;
  */
 
 import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.OcppRequest;
 import eu.chargetime.ocpp.utilities.ModelUtil;
 import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Calendar;
@@ -48,7 +48,7 @@ import javax.xml.bind.annotation.XmlType;
       "vendorId",
       "vendorErrorCode"
     })
-public class StatusNotificationRequest implements Request {
+public class StatusNotificationRequest extends OcppRequest {
 
   private static final String ERROR_MESSAGE = "Exceeds limit of %s chars";
 
@@ -59,20 +59,6 @@ public class StatusNotificationRequest implements Request {
   private Calendar timestamp;
   private String vendorId;
   private String vendorErrorCode;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   @Override
   public boolean validate() {

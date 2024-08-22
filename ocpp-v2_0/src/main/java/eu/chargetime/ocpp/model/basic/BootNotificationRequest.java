@@ -25,7 +25,7 @@ package eu.chargetime.ocpp.model.basic;
    SOFTWARE.
 */
 
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.OcppRequest;
 import eu.chargetime.ocpp.model.basic.types.BootReasonEnumType;
 import eu.chargetime.ocpp.model.basic.types.ChargingStationType;
 import eu.chargetime.ocpp.model.validation.RequiredValidator;
@@ -33,24 +33,11 @@ import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Objects;
 
 /** Sent by the Charging Station to the CSMS. */
-public class BootNotificationRequest implements Request {
+public class BootNotificationRequest extends OcppRequest {
   private transient RequiredValidator validator = new RequiredValidator();
 
   private BootReasonEnumType reason;
   private ChargingStationType chargingStation;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   public BootNotificationRequest() {}
 

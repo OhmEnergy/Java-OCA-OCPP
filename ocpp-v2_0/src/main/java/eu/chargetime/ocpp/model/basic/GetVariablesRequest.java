@@ -25,29 +25,15 @@ package eu.chargetime.ocpp.model.basic;
    SOFTWARE.
 */
 
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.OcppRequest;
 import eu.chargetime.ocpp.model.basic.types.GetVariableDataType;
 import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class GetVariablesRequest implements Request {
+public class GetVariablesRequest extends OcppRequest {
 
   private GetVariableDataType[] getVariableData;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   /**
    * List of requested variables.

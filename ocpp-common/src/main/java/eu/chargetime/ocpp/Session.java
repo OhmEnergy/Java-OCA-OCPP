@@ -189,7 +189,7 @@ public class Session implements ISession {
     }
 
     @Override
-    public synchronized void onCall(String id, String action, Object payload) {
+    public synchronized void onCall(String id, String action, Object payload, String rawMessageJson) {
       Optional<Feature> featureOptional = featureRepository.findFeature(action);
       if (!featureOptional.isPresent()) {
         communicator.sendCallError(
@@ -198,7 +198,7 @@ public class Session implements ISession {
         try {
           Request request =
               communicator.unpackPayload(payload, featureOptional.get().getRequestType());
-          request.setRequestId(id);
+          request.setRawMessageJson(rawMessageJson);
           if (request.validate()) {
             CompletableFuture<Confirmation> promise = dispatcher.handleRequest(request);
             promise.whenComplete(new ConfirmationHandler(id, action, communicator));

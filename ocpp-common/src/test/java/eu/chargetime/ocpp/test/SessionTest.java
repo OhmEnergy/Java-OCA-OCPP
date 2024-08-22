@@ -87,10 +87,15 @@ public class SessionTest {
     Request someRequest =
         new Request() {
           @Override
-          public void setRequestId(String requestId) { }
+          public void setRawMessageJson(String rawMessageJson) { }
 
           @Override
-          public String getRequestId(){ return null; }
+          public String getRawMessageJson(){ return null; }
+
+          @Override
+          public String getRequestId() {
+            return null;
+          }
 
           @Override
           public boolean transactionRelated() {
@@ -158,7 +163,7 @@ public class SessionTest {
     when(communicator.unpackPayload(any(), any())).thenReturn(new TestRequest());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // then
     verify(communicator, times(1)).sendCallError(eq(someId), anyString(), anyString(), anyString());
@@ -177,7 +182,7 @@ public class SessionTest {
     when(communicator.unpackPayload(any(), any())).thenReturn(new TestRequest());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // then
     verify(communicator, times(1)).sendCallResult(anyString(), anyString(), eq(aConfirmation));
@@ -197,7 +202,7 @@ public class SessionTest {
     when(communicator.unpackPayload(any(), any())).thenReturn(new TestRequest());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // then
     verify(communicator, times(1)).sendCallError(eq(someId), anyString(), anyString(), anyString());
@@ -219,7 +224,7 @@ public class SessionTest {
     when(featureRepository.findFeature(any())).thenReturn(Optional.empty());
 
     // When
-    eventHandler.onCall(someId, null, null);
+    eventHandler.onCall(someId, null, null, null);
 
     // Then
     verify(communicator, times(1)).sendCallError(eq(someId), anyString(), anyString(), anyString());

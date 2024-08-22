@@ -28,7 +28,7 @@ SOFTWARE.
 */
 
 import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.OcppRequest;
 import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlElement;
@@ -36,24 +36,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /** Sent by the Central System to the Charge Point. */
 @XmlRootElement
-public class ChangeAvailabilityRequest implements Request {
+public class ChangeAvailabilityRequest extends OcppRequest {
 
   private int connectorId = -1;
   private AvailabilityType type;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   /**
    * The id of the connector for which availability needs to change. Id '0' (zero) is used if the

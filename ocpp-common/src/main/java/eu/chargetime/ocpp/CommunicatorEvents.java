@@ -51,7 +51,7 @@ public interface CommunicatorEvents {
    * @param action action name used to identify the feature.
    * @param payload raw payload.
    */
-  void onCall(String id, String action, Object payload);
+  void onCall(String id, String action, Object payload, String rawMessageJson);
 
   /**
    * Handle call error.

@@ -31,13 +31,10 @@ SOFTWARE.
 public interface Request extends Validatable {
   boolean transactionRelated();
 
-  /**
-   * Set the unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  void setRequestId(String requestId);
+  void setRawMessageJson(String rawMessageJson);
 
-  /**
-   * @return the unique identifier of the request that was used when it was transmitted over the network.
-   */
+  String getRawMessageJson();
+
   String getRequestId();
+
 }
