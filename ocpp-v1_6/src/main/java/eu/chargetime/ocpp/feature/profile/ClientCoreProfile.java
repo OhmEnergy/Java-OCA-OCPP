@@ -215,6 +215,27 @@ public class ClientCoreProfile implements Profile {
   }
 
   /**
+   * Create a client {@link StartTransactionRequest} with required values.
+   *
+   * @param connectorId required. Identification of the connector.
+   * @param idTag required. Authorization identification tag.
+   * @param meterStart required. The initial value of the meter.
+   * @param timestamp required. Time of start.
+   * @return an instance of {@link StartTransactionRequest}.
+   * @see StartTransactionRequest
+   * @see StartTransactionFeature
+   */
+  public StartTransactionRequest createExtendedStartTransactionRequest(
+          Integer connectorId, String idTag, Integer meterStart, Integer inletExportStart, Integer inletImportStart, Calendar timestamp) {
+    StartTransactionRequest request = new StartTransactionRequest();
+    request.setConnectorId(connectorId);
+    request.setIdTag(idTag);
+    request.setMeterStart(meterStart);
+    request.setTimestamp(timestamp);
+    return request;
+  }
+
+  /**
    * Create a client {@link StatusNotificationRequest} with required values.
    *
    * @param connectorId required. Identification of the connector.
@@ -243,6 +264,23 @@ public class ClientCoreProfile implements Profile {
    */
   public StopTransactionRequest createStopTransactionRequest(
       int meterStop, Calendar timestamp, int transactionId) {
+    StopTransactionRequest request = new StopTransactionRequest();
+    request.setMeterStop(meterStop);
+    request.setTimestamp(timestamp);
+    request.setTransactionId(transactionId);
+    return request;
+  }
+
+  /**
+   * Create a client {@link StopTransactionRequest} with required values.
+   *
+   * @param meterStop required. The final value of the meter.
+   * @param timestamp required. Time of stop.
+   * @param transactionId required. The identification of the transaction.
+   * @return an instance of {@link StopTransactionRequest}.
+   */
+  public StopTransactionRequest createExtendedStopTransactionRequest(
+          int meterStop, int inletExportStop, int inletImportStop, Calendar timestamp, int transactionId) {
     StopTransactionRequest request = new StopTransactionRequest();
     request.setMeterStop(meterStop);
     request.setTimestamp(timestamp);

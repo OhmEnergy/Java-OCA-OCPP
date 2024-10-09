@@ -73,7 +73,6 @@ public class StartTransactionRequest implements Request {
     valid &= ModelUtil.validate(idTag, 20);
     valid &= meterStart != null;
     valid &= timestamp != null;
-
     if (!valid) {
       System.out.println("Processing bad StartTransactionRequest anyways!");
     }
