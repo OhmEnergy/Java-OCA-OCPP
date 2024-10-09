@@ -27,7 +27,7 @@ package eu.chargetime.ocpp.model.core;
  */
 
 import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.OcppRequest;
 import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlElement;
@@ -35,22 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /** Sent by the Central System to the Charge Point. */
 @XmlRootElement
-public class UnlockConnectorRequest implements Request {
+public class UnlockConnectorRequest extends OcppRequest {
   private Integer connectorId;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   @Override
   public boolean validate() {

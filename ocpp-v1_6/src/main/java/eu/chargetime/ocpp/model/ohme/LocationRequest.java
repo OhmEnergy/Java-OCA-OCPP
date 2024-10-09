@@ -6,11 +6,12 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.OcppRequest;
+import eu.chargetime.ocpp.utilities.MoreObjects;
 
 @XmlRootElement
 @XmlType(propOrder = {"location_lat", "location_long", "location_prec"})
-public class LocationRequest implements Request {
+public class LocationRequest extends OcppRequest {
 
 	private String location_lat;
 
@@ -19,20 +20,6 @@ public class LocationRequest implements Request {
 	private String location_prec;
 
 	private Collection<CellTower> cellTowers;
-	/**
-	 * The unique identifier of the request that was used when the request was transmitted over the network.
-	 */
-	private String requestId;
-
-	@Override
-	public void setRequestId(String requestId) {
-		this.requestId = requestId;
-	}
-
-	@Override
-	public String getRequestId() {
-		return requestId;
-	}
 
 	public Collection<CellTower> getCellTowers() {
 		return cellTowers;
@@ -79,4 +66,16 @@ public class LocationRequest implements Request {
 	public void setLocation_prec(String location_prec) {
 		this.location_prec = location_prec;
 	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("location_lat", location_lat)
+				.add("location_long", location_long)
+				.add("location_prec", location_prec)
+				.add("cellTowers", cellTowers)
+				.add("isValid", validate())
+				.toString();
+	}
+
 }

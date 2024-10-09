@@ -34,14 +34,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.OcppRequest;
 import eu.chargetime.ocpp.utilities.ModelUtil;
 import eu.chargetime.ocpp.utilities.MoreObjects;
 
 /** Sent by the Charge Point to the Central System. */
 @XmlRootElement
 @XmlType(propOrder = {"connectorId", "idTag", "timestamp", "meterStart", "reservationId"})
-public class StartTransactionRequest implements Request {
+public class StartTransactionRequest extends OcppRequest {
 
   private static final int IDTAG_MAX_LENGTH = 20;
   private static final String IDTAG_ERROR_MESSAGE =
@@ -52,20 +52,6 @@ public class StartTransactionRequest implements Request {
   private Integer meterStart;
   private Integer reservationId;
   private Calendar timestamp;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   @Override
   public boolean validate() {

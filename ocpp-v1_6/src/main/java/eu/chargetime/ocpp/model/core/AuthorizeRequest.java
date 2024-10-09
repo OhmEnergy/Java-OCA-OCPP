@@ -1,7 +1,7 @@
 package eu.chargetime.ocpp.model.core;
 
 import eu.chargetime.ocpp.PropertyConstraintException;
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.OcppRequest;
 import eu.chargetime.ocpp.utilities.ModelUtil;
 import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Objects;
@@ -37,26 +37,12 @@ SOFTWARE.
 
 /** Sent by the Charge Point to the Central System. */
 @XmlRootElement
-public class AuthorizeRequest implements Request {
+public class AuthorizeRequest extends OcppRequest {
 
   private static final int IDTAG_MAX_LENGTH = 20;
   private static final String ERROR_MESSAGE = "Exceeded limit of " + IDTAG_MAX_LENGTH + " chars";
 
   private String idTag;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   public AuthorizeRequest() {}
 

@@ -24,7 +24,7 @@ package eu.chargetime.ocpp.model.firmware; /*
                                               SOFTWARE.
                                            */
 
-import eu.chargetime.ocpp.model.Request;
+import eu.chargetime.ocpp.model.OcppRequest;
 import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Calendar;
 import java.util.Objects;
@@ -34,27 +34,13 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement
 @XmlType(propOrder = {"location", "startTime", "stopTime", "retries", "retryInterval"})
-public class GetDiagnosticsRequest implements Request {
+public class GetDiagnosticsRequest extends OcppRequest {
 
   private String location;
   private int retries;
   private int retryInterval;
   private Calendar startTime;
   private Calendar stopTime;
-  /**
-   * The unique identifier of the request that was used when the request was transmitted over the network.
-   */
-  private String requestId;
-
-  @Override
-  public void setRequestId(String requestId) {
-    this.requestId = requestId;
-  }
-
-  @Override
-  public String getRequestId() {
-    return requestId;
-  }
 
   @Override
   public boolean transactionRelated() {
