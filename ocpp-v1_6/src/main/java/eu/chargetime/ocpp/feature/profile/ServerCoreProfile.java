@@ -104,6 +104,10 @@ public class ServerCoreProfile implements Profile {
               sessionIndex, (StatusNotificationRequest) request);
     } else if (request instanceof StopTransactionRequest) {
       result = handler.handleStopTransactionRequest(sessionIndex, (StopTransactionRequest) request);
+    } else if (request instanceof RemoteStartTransactionRequest) {
+      result = handler.handleRemoteStartTransactionRequest(sessionIndex, (RemoteStartTransactionRequest) request);
+    } else if (request instanceof RemoteStopTransactionRequest) {
+      result = handler.handleRemoteStopTransactionRequest(sessionIndex, (RemoteStopTransactionRequest) request);
     }
 
     return result;
