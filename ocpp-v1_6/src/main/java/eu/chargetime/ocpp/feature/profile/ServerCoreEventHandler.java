@@ -43,9 +43,16 @@ public interface ServerCoreEventHandler {
   StartTransactionConfirmation handleStartTransactionRequest(
       UUID sessionIndex, StartTransactionRequest request);
 
+  RemoteStartTransactionConfirmation handleRemoteStartTransactionRequest(
+      UUID sessionIndex, RemoteStartTransactionRequest request);
+
   StatusNotificationConfirmation handleStatusNotificationRequest(
       UUID sessionIndex, StatusNotificationRequest request);
 
   StopTransactionConfirmation handleStopTransactionRequest(
       UUID sessionIndex, StopTransactionRequest request);
+
+  RemoteStopTransactionConfirmation handleRemoteStopTransactionRequest(
+      UUID sessionIndex, RemoteStopTransactionRequest request);
+
 }
