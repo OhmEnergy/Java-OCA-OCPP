@@ -15,6 +15,13 @@ public abstract class OcppRequest implements Request {
 	@Override
 	public void setRawMessageJson(String rawMessageJson){
 		this.rawMessageJson = rawMessageJson;
+
+		// align setting and getting of rawMessageJson field with the requestId field
+		if(rawMessageJson == null){
+			requestId = null;
+		} else {
+			setRequestIdFromRawMessageJson();
+		}
 	}
 
 	@Override
@@ -25,16 +32,20 @@ public abstract class OcppRequest implements Request {
 	@Override
 	public String getRequestId() {
 		if (requestId == null && rawMessageJson != null) {
-			/*
-			 * a raw message JSON has this format: [2,"THE_ID_WE_CARE_ABOUT",StatusNotification,{}].
-			 * This is a quick and dirty way to extract the ID without parsing the whose JSON message.
-			 */
-			String[] messageParts = rawMessageJson.split("\"");
-			if (messageParts.length > 1) {
-				requestId = messageParts[1];
-			}
+			setRequestIdFromRawMessageJson();
 		}
 		return requestId;
+	}
+
+	private void setRequestIdFromRawMessageJson(){
+		/*
+		 * a raw message JSON has this format: [2,"THE_ID_WE_CARE_ABOUT",StatusNotification,{}].
+		 * This is a quick and dirty way to extract the ID without parsing the whose JSON message.
+		 */
+		String[] messageParts = rawMessageJson.split("\"");
+		if (messageParts.length > 1) {
+			requestId = messageParts[1];
+		}
 	}
 
 }
