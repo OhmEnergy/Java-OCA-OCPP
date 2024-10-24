@@ -14,6 +14,7 @@ public abstract class OcppRequest implements Request {
 
 	@Override
 	public void setRawMessageJson(String rawMessageJson){
+		requestId = null;
 		this.rawMessageJson = rawMessageJson;
 	}
 
