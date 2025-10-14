@@ -25,8 +25,7 @@ package eu.chargetime.ocpp;
    SOFTWARE.
 */
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 import java.util.Map;
 import java.util.Optional;
@@ -44,7 +43,7 @@ import eu.chargetime.ocpp.model.Request;
  */
 public class Server {
 
-  private static final Logger logger = LoggerFactory.getLogger(Server.class);
+  private static final Logger logger = Logger.getLogger(Server.class.getName());
 
   public static final int INITIAL_SESSIONS_NUMBER = 1000;
 
@@ -103,29 +102,31 @@ public class Server {
               new SessionEvents() {
                 @Override
                 public void handleConfirmation(String uniqueId, Confirmation confirmation) {
-
+				  logger.info(String.format("Confirmation received on Server: %s", confirmation));
                   Optional<CompletableFuture<Confirmation>> promiseOptional =
                       promiseRepository.getPromise(uniqueId);
                   if (promiseOptional.isPresent()) {
                     promiseOptional.get().complete(confirmation);
                     promiseRepository.removePromise(uniqueId);
                   } else {
-                    logger.debug("Promise not found for confirmation {}", confirmation);
+                    logger.fine(String.format("Promise not found for confirmation %s", confirmation));
                   }
                 }
 
                 @Override
                 public Confirmation handleRequest(Request request)
                     throws UnsupportedFeatureException {
+				  logger.info(String.format("Request received on Server: %s", request));
                   Optional<Feature> featureOptional = featureRepository.findFeature(request);
                   if (featureOptional.isPresent()) {
                     Optional<UUID> sessionIdOptional = getSessionID(session);
                     if (sessionIdOptional.isPresent()) {
                       return featureOptional.get().handleRequest(sessionIdOptional.get(), request);
                     } else {
-                      logger.error(
-                          "Unable to handle request ({}), the active session was not found.",
-                          request);
+                      logger.severe(
+                          String.format("Unable to handle request (%s), the active session was not found.",
+                          request
+					  ));
                       throw new IllegalStateException("Active session not found");
                     }
                   } else {
@@ -136,6 +137,7 @@ public class Server {
                 @Override
                 public void handleError(
                     String uniqueId, String errorCode, String errorDescription, Object payload) {
+				  logger.info(String.format("Error received on Server: %s, %s, %s", errorCode, errorDescription, payload));
                   Optional<CompletableFuture<Confirmation>> promiseOptional =
                       promiseRepository.getPromise(uniqueId);
                   if (promiseOptional.isPresent()) {
@@ -145,7 +147,7 @@ public class Server {
                             new CallErrorException(errorCode, errorCode, payload));
                     promiseRepository.removePromise(uniqueId);
                   } else {
-                    logger.debug("Promise not found for error {}", errorDescription);
+                    logger.fine(String.format("Promise not found for error %s", errorDescription));
                   }
                 }
 
@@ -156,7 +158,7 @@ public class Server {
                     serverEvents.lostSession(sessionIdOptional.get());
                     sessions.remove(sessionIdOptional.get());
                   } else {
-                    logger.warn("Active session not found");
+                    logger.warning("Active session not found");
                   }
                 }
 
@@ -169,7 +171,7 @@ public class Server {
           Optional<UUID> sessionIdOptional = getSessionID(session);
           if (sessionIdOptional.isPresent()) {
             serverEvents.newSession(sessionIdOptional.get(), information);
-            logger.debug("Session created: {}", session.getSessionId());
+            logger.fine(String.format("Session created: %s", session.getSessionId()));
           } else {
             throw new IllegalStateException("Failed to create a session");
           }
@@ -201,6 +203,7 @@ public class Server {
    */
   public CompletableFuture<Confirmation> send(UUID sessionIndex, Request request)
       throws UnsupportedFeatureException, OccurenceConstraintException, NotConnectedException {
+  	logger.info(String.format("Sending request from Server: %s", request));
     Optional<Feature> featureOptional = featureRepository.findFeature(request);
     if (!featureOptional.isPresent()) {
       throw new UnsupportedFeatureException();
@@ -213,7 +216,7 @@ public class Server {
     ISession session = sessions.get(sessionIndex);
 
     if (session == null) {
-      logger.warn("Session not found by index: {}", sessionIndex);
+      logger.warning(String.format("Session not found by index: %s", sessionIndex));
 
       // No session found means client disconnected and request should be cancelled
       throw new NotConnectedException();

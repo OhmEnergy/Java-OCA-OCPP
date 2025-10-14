@@ -4,8 +4,7 @@ import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 /*
    ChargeTime.eu - Java-OCA-OCPP
@@ -34,7 +33,7 @@ import org.slf4j.LoggerFactory;
 */
 
 public class WebServiceTransmitter extends SOAPSyncHelper implements Transmitter {
-  private static final Logger logger = LoggerFactory.getLogger(WebServiceTransmitter.class);
+  private static final Logger logger = Logger.getLogger(WebServiceTransmitter.class.getName());
 
   private SOAPConnection soapConnection;
   private String url;
@@ -52,7 +51,7 @@ public class WebServiceTransmitter extends SOAPSyncHelper implements Transmitter
         soapConnection.close();
         connected = false;
       } catch (SOAPException e) {
-        logger.info("disconnect() failed", e);
+        logger.info(String.format("disconnect() failed: %s", e));
       }
     }
     events.disconnected();
@@ -73,7 +72,7 @@ public class WebServiceTransmitter extends SOAPSyncHelper implements Transmitter
       connected = true;
       events.connected();
     } catch (SOAPException e) {
-      logger.warn("connect() failed", e);
+      logger.warning(String.format("connect() failed: %s", e));
     }
   }
 
@@ -87,7 +86,7 @@ public class WebServiceTransmitter extends SOAPSyncHelper implements Transmitter
                 SOAPMessage response = soapConnection.call(message, url);
                 events.receivedMessage(response);
               } catch (SOAPException e) {
-                logger.warn("sendRequest() failed", e);
+                logger.warning(String.format("sendRequest() failed: %s", e));
                 disconnect();
               }
             });

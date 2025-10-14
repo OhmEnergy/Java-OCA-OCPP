@@ -12,8 +12,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 /*
 ChargeTime.eu - Java-OCA-OCPP
@@ -45,7 +44,7 @@ SOFTWARE.
 /** Communicator for JSON messages */
 public class JSONCommunicator extends Communicator {
 
-  private static final Logger logger = LoggerFactory.getLogger(JSONCommunicator.class);
+  private static final Logger logger = Logger.getLogger(JSONCommunicator.class.getName());
 
   private static final int INDEX_MESSAGEID = 0;
   private static final int TYPENUMBER_CALL = 2;
@@ -152,7 +151,7 @@ public class JSONCommunicator extends Communicator {
           .setErrorDescription(array.get(INDEX_CALLERROR_DESCRIPTION).getAsString());
       ((CallErrorMessage) message).setRawPayload(array.get(INDEX_CALLERROR_PAYLOAD).toString());
     } else {
-      logger.error("Unknown message type of message: {}", json.toString());
+      logger.severe(String.format("Unknown message type of message: %s", json.toString()));
       throw new IllegalArgumentException("Unknown message type");
     }
 

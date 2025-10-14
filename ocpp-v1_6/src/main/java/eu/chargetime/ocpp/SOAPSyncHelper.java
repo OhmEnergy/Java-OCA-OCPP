@@ -29,12 +29,11 @@ import java.util.concurrent.CompletableFuture;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 import org.w3c.dom.NodeList;
 
 public abstract class SOAPSyncHelper {
-  private static final Logger logger = LoggerFactory.getLogger(SOAPSyncHelper.class);
+  private static final Logger logger = Logger.getLogger(SOAPSyncHelper.class.getName());
 
   private HashMap<String, CompletableFuture<SOAPMessage>> promises;
 
@@ -51,7 +50,7 @@ public abstract class SOAPSyncHelper {
         value = elements.item(0).getChildNodes().item(0).getTextContent();
       }
     } catch (SOAPException e) {
-      logger.warn("getHeaderValue() failed", e);
+      logger.warning(String.format("getHeaderValue() failed: %s", e));
     }
     return value;
   }

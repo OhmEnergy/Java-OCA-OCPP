@@ -28,11 +28,10 @@ package eu.chargetime.ocpp;
 import eu.chargetime.ocpp.model.Confirmation;
 import eu.chargetime.ocpp.model.Request;
 import java.util.concurrent.CompletableFuture;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 public class SimplePromiseFulfiller implements PromiseFulfiller {
-  private static final Logger logger = LoggerFactory.getLogger(SimplePromiseFulfiller.class);
+  private static final Logger logger = Logger.getLogger(SimplePromiseFulfiller.class.getName());
 
   @Override
   public void fulfill(
@@ -41,7 +40,7 @@ public class SimplePromiseFulfiller implements PromiseFulfiller {
       Confirmation conf = eventHandler.handleRequest(request);
       promise.complete(conf);
     } catch (Exception ex) {
-      logger.warn("fulfillPromis() failed", ex);
+      logger.warning(String.format("fulfillPromis() failed : %s", ex));
       promise.completeExceptionally(ex);
     }
   }

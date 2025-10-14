@@ -31,8 +31,7 @@ import eu.chargetime.ocpp.model.Confirmation;
 import eu.chargetime.ocpp.model.Request;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 /**
  * Handles basic client logic: Holds a list of supported features. Keeps track of outgoing request.
@@ -41,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * <p>Must be overloaded in order to support specific protocols and formats.
  */
 public class Client {
-  private static final Logger logger = LoggerFactory.getLogger(Client.class);
+  private static final Logger logger = Logger.getLogger(Client.class.getName());
 
   private ISession session;
   private final IFeatureRepository featureRepository;
@@ -75,18 +74,20 @@ public class Client {
 
           @Override
           public void handleConfirmation(String uniqueId, Confirmation confirmation) {
+		  	logger.info(String.format("Confirmation received on Client: %s", confirmation));
             Optional<CompletableFuture<Confirmation>> promiseOptional =
                 promiseRepository.getPromise(uniqueId);
             if (promiseOptional.isPresent()) {
               promiseOptional.get().complete(confirmation);
               promiseRepository.removePromise(uniqueId);
             } else {
-              logger.debug("Promise not found for confirmation {}", confirmation);
+              logger.fine(String.format("Promise not found for confirmation %s", confirmation));
             }
           }
 
           @Override
           public Confirmation handleRequest(Request request) throws UnsupportedFeatureException {
+		  	logger.info(String.format("Request received on Client: %s", request));
             Optional<Feature> featureOptional = featureRepository.findFeature(request);
             if (featureOptional.isPresent()) {
               return featureOptional.get().handleRequest(null, request);
@@ -98,6 +99,7 @@ public class Client {
           @Override
           public void handleError(
               String uniqueId, String errorCode, String errorDescription, Object payload) {
+		  	logger.info(String.format("Error received on Client: %s", errorDescription));
             Optional<CompletableFuture<Confirmation>> promiseOptional =
                 promiseRepository.getPromise(uniqueId);
             if (promiseOptional.isPresent()) {
@@ -106,7 +108,7 @@ public class Client {
                   .completeExceptionally(new CallErrorException(errorCode, errorCode, payload));
               promiseRepository.removePromise(uniqueId);
             } else {
-              logger.debug("Promise not found for error {}", errorDescription);
+              logger.fine(String.format("Promise not found for error %s", errorDescription));
             }
           }
 
@@ -127,7 +129,7 @@ public class Client {
     try {
       session.close();
     } catch (Exception ex) {
-      logger.info("session.close() failed", ex);
+      logger.info(String.format("session.close() failed : %s", ex));
     }
   }
 
@@ -142,14 +144,15 @@ public class Client {
    */
   public CompletableFuture<Confirmation> send(Request request)
       throws UnsupportedFeatureException, OccurenceConstraintException {
+  	logger.info(String.format("Sending request from Client: %s", request));
     Optional<Feature> featureOptional = featureRepository.findFeature(request);
     if (!featureOptional.isPresent()) {
-      logger.error("Can't send request: unsupported feature. Payload: {}", request);
+      logger.severe(String.format("Can't send request: unsupported feature. Payload: %s", request));
       throw new UnsupportedFeatureException();
     }
 
     if (!request.validate()) {
-      logger.error("Can't send request: not validated. Payload {}: ", request);
+      logger.severe(String.format("Can't send request: not validated. Payload %s: ", request));
       throw new OccurenceConstraintException();
     }
 

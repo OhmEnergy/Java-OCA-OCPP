@@ -37,13 +37,12 @@ import javax.net.ssl.SSLContext;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.protocols.Protocol;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 /** OCA OCPP version 2.0 JSON Web Socket implementation of the client. */
 public class JSONClient implements IClientAPI {
 
-  private static final Logger logger = LoggerFactory.getLogger(JSONClient.class);
+  private static final Logger logger = Logger.getLogger(JSONClient.class.getName());
 
   public final Draft draftOcppOnly;
   private final WebSocketTransmitter transmitter;
@@ -134,7 +133,7 @@ public class JSONClient implements IClientAPI {
 
   @Override
   public void connect(String url, ClientEvents clientEvents) {
-    logger.debug("Feature repository: {}", featureRepository);
+    logger.fine(String.format("Feature repository: %s", featureRepository));
 
     String identityUrl = (identity != null) ? String.format("%s/%s", url, identity) : url;
     client.connect(identityUrl, clientEvents);

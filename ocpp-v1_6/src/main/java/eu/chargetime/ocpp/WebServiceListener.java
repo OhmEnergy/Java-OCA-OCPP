@@ -34,11 +34,10 @@ import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 public class WebServiceListener implements Listener {
-  private static final Logger logger = LoggerFactory.getLogger(WebServiceListener.class);
+  private static final Logger logger = Logger.getLogger(WebServiceListener.class.getName());
   private static final String WSDL_CENTRAL_SYSTEM =
       "eu/chargetime/ocpp/OCPP_CentralSystemService_1.6.wsdl";
   private final ISessionFactory sessionFactory;
@@ -72,7 +71,7 @@ public class WebServiceListener implements Listener {
 
       closed = false;
     } catch (IOException e) {
-      logger.warn("open() failed", e);
+      logger.warning(String.format("open() failed: %s", e));
     }
   }
 
@@ -149,7 +148,7 @@ public class WebServiceListener implements Listener {
       try {
         confirmation = chargeBoxes.get(identity).relay(message).get();
       } catch (InterruptedException | ExecutionException e) {
-        logger.warn("incomingRequest() chargeBoxes.relay failed", e);
+        logger.warning(String.format("incomingRequest() chargeBoxes.relay failed: %s", e));
       }
 
       return confirmation;

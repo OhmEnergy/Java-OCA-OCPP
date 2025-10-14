@@ -44,11 +44,10 @@ import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileConfirmation;
 import eu.chargetime.ocpp.model.smartcharging.SetChargingProfileRequest;
 import eu.chargetime.ocpp.test.FakeCentral.serverType;
 import java.util.Calendar;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 public class FakeCentralSystem {
-  private static final Logger logger = LoggerFactory.getLogger(FakeCentralSystem.class);
+  private static final Logger logger = Logger.getLogger(FakeCentralSystem.class.getName());
 
   private IServerAPI server;
 
@@ -114,7 +113,7 @@ public class FakeCentralSystem {
       }
 
       server.open(host, port, dummyHandlers.generateServerEventsHandler());
-      logger.info("Server started on host: {}, port: {}", host, port);
+      logger.info(String.format("Server started on host: %s, port: %s", host, port));
       isStarted = true;
     }
   }

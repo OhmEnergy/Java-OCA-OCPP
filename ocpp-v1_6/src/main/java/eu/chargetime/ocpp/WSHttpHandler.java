@@ -31,11 +31,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.xml.soap.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 public class WSHttpHandler implements HttpHandler {
-  private static final Logger logger = LoggerFactory.getLogger(WSHttpHandler.class);
+  private static final Logger logger = Logger.getLogger(WSHttpHandler.class.getName());
 
   private String wsdlResourceName;
   private WSHttpHandlerEvents events;
@@ -62,7 +61,7 @@ public class WSHttpHandler implements HttpHandler {
         confirmation.writeTo(responseStream);
       } catch (SOAPException e) {
         httpExchange.sendResponseHeaders(500, 0);
-        logger.warn("handle() confirmation.writeTo failed", e);
+        logger.warning(String.format("handle() confirmation.writeTo failed: %s", e));
       }
       responseStream.close();
     }
@@ -74,7 +73,7 @@ public class WSHttpHandler implements HttpHandler {
       MessageFactory messageFactory = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
       message = messageFactory.createMessage(new MimeHeaders(), request);
     } catch (SOAPException e) {
-      logger.warn("parse() failed", e);
+      logger.warning(String.format("parse() failed: %s", e));
     }
     return message;
   }

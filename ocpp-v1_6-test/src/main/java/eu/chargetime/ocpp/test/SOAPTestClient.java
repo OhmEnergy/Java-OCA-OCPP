@@ -40,11 +40,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 public class SOAPTestClient implements IClientAPI {
-  private static final Logger logger = LoggerFactory.getLogger(SOAPTestClient.class);
+  private static final Logger logger = Logger.getLogger(SOAPTestClient.class.getName());
   private static final String WSDL_CHARGE_POINT =
       "eu/chargetime/ocpp/OCPP_ChargePointService_1.6.wsdl";
 
@@ -132,9 +131,9 @@ public class SOAPTestClient implements IClientAPI {
                 try {
                   soapMessage = transmitter.relay(message.getMessage()).get();
                 } catch (InterruptedException e) {
-                  logger.warn("openWS() transmitter.relay failed", e);
+                  logger.warning(String.format("openWS() transmitter.relay failed: %s", e));
                 } catch (ExecutionException e) {
-                  logger.warn("openWS() transmitter.relay failed", e);
+                  logger.warning(String.format("openWS() transmitter.relay failed: %s", e));
                 }
                 return soapMessage;
               }));
@@ -142,7 +141,7 @@ public class SOAPTestClient implements IClientAPI {
       server.setExecutor(threadPool);
       server.start();
     } catch (IOException e) {
-      logger.warn("openWS() failed", e);
+      logger.warning(String.format("openWS() failed: %s", e));
     }
   }
 }

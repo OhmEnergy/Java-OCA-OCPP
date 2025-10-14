@@ -38,11 +38,10 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 public class WebSocketListener implements Listener {
-  private static final Logger logger = LoggerFactory.getLogger(WebSocketListener.class);
+  private static final Logger logger = Logger.getLogger(WebSocketListener.class.getName());
 
   private static final int TIMEOUT_IN_MILLIS = 10000;
 
@@ -80,9 +79,9 @@ public class WebSocketListener implements Listener {
         new WebSocketServer(new InetSocketAddress(hostname, port), drafts) {
           @Override
           public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-            logger.debug(
-                "On connection open (resource descriptor: {})",
-                clientHandshake.getResourceDescriptor());
+            logger.fine(
+                String.format("On connection open (resource descriptor: %s)",
+                clientHandshake.getResourceDescriptor()));
 
             WebSocketReceiver receiver =
                 new WebSocketReceiver(
@@ -117,19 +116,19 @@ public class WebSocketListener implements Listener {
 
           @Override
           public void onClose(WebSocket webSocket, int code, String reason, boolean remote) {
-            logger.debug(
-                "On connection close (resource descriptor: {}, code: {}, reason: {}, remote: {})",
+            logger.fine(
+                String.format("On connection close (resource descriptor: %s, code: %s, reason: %s, remote: %s)",
                 webSocket.getResourceDescriptor(),
                 code,
                 reason,
-                remote);
+                remote));
 
             WebSocketReceiver receiver = sockets.get(webSocket);
             if (receiver != null) {
               receiver.disconnect();
               sockets.remove(webSocket);
             } else {
-              logger.debug("Receiver for socket not found: {}", webSocket);
+              logger.fine(String.format("Receiver for socket not found: %s", webSocket));
             }
           }
 
@@ -146,18 +145,19 @@ public class WebSocketListener implements Listener {
                     : "not defined (webSocket is null)";
 
             if (ex instanceof ConnectException) {
-              logger.error(
-                  "On error (resource descriptor: " + resourceDescriptor + ") triggered caused by:",
-                  ex);
+              logger.severe(String.format(
+                  "On error (resource descriptor: %s) triggered caused by: %s",
+                  resourceDescriptor, ex));
             } else {
-              logger.error(
-                  "On error (resource descriptor: " + resourceDescriptor + ") triggered:", ex);
+              logger.severe(String.format(
+                  "On error (resource descriptor: %s) triggered: %s",
+                  resourceDescriptor, ex));
             }
           }
 
           @Override
           public void onStart() {
-            logger.debug("Server socket bound");
+            logger.fine("Server socket bound");
           }
         };
 
@@ -201,7 +201,7 @@ public class WebSocketListener implements Listener {
       try {
         server.stop();
       } catch (IOException | InterruptedException ex) {
-        logger.error("Failed to close listener", ex);
+        logger.severe(String.format("Failed to close listener: %s", ex));
       }
     } finally {
       closed = true;

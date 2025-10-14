@@ -32,11 +32,10 @@ import eu.chargetime.ocpp.model.Request;
 import eu.chargetime.ocpp.model.SessionInformation;
 import java.util.UUID;
 import java.util.concurrent.CompletionStage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 public class FakeCentralSystem {
-  private static final Logger logger = LoggerFactory.getLogger(FakeCentralSystem.class);
+  private static final Logger logger = Logger.getLogger(FakeCentralSystem.class.getName());
   private final int port = 8887;
   private final String host = "127.0.0.1";
 
@@ -75,7 +74,7 @@ public class FakeCentralSystem {
               currentSession = null;
             }
           });
-      logger.info("Server started on host: {}, port: {}", host, port);
+      logger.info(String.format("Server started on host: %s, port: %s", host, port));
       isStarted = true;
     }
   }

@@ -29,11 +29,10 @@ import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 public class WebServiceReceiver extends SOAPSyncHelper implements Receiver {
-  private static final Logger logger = LoggerFactory.getLogger(WebServiceReceiver.class);
+  private static final Logger logger = Logger.getLogger(WebServiceReceiver.class.getName());
 
   private RadioEvents events;
   private SOAPConnection soapConnection;
@@ -54,7 +53,7 @@ public class WebServiceReceiver extends SOAPSyncHelper implements Receiver {
         soapConnection.close();
         connected = false;
       } catch (SOAPException e) {
-        logger.info("disconnect() failed", e);
+        logger.info(String.format("disconnect() failed: %s", e));
       }
     }
     events.disconnected();
@@ -75,7 +74,7 @@ public class WebServiceReceiver extends SOAPSyncHelper implements Receiver {
       connected = true;
       events.connected();
     } catch (SOAPException e) {
-      logger.warn("accept() failed", e);
+      logger.warning(String.format("accept() failed: %s", e));
     }
   }
 

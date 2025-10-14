@@ -33,8 +33,7 @@ import eu.chargetime.ocpp.utilities.MoreObjects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 /**
  * Unites outgoing {@link Request} with incoming {@link Confirmation}s or errors. Catches errors and
@@ -42,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Session implements ISession {
 
-  private static final Logger logger = LoggerFactory.getLogger(Session.class);
+  private static final Logger logger = Logger.getLogger(Session.class.getName());
 
   private final UUID sessionId = UUID.randomUUID();
   private final Communicator communicator;
@@ -117,12 +116,12 @@ public class Session implements ISession {
       if (featureOptional.isPresent()) {
         return Optional.of(featureOptional.get().getConfirmationType());
       } else {
-        logger.debug("Feature for request with id: {} not found in session: {}", uniqueId, this);
+        logger.fine(String.format("Feature for request with id: %s not found in session: %s", uniqueId, this));
         throw new UnsupportedFeatureException(
             "Error with getting confirmation type by request id = " + uniqueId);
       }
     } else {
-      logger.debug("Request with id: {} not found in session: {}", uniqueId, this);
+      logger.fine(String.format("Request with id: %s not found in session: %s", uniqueId, this));
     }
 
     return Optional.empty();
@@ -173,17 +172,17 @@ public class Session implements ISession {
                 id, action, "OccurenceConstraintViolation", OCCURENCE_CONSTRAINT_VIOLATION);
           }
         } else {
-          logger.warn(INTERNAL_ERROR);
+          logger.warning(INTERNAL_ERROR);
           communicator.sendCallError(id, action, "InternalError", INTERNAL_ERROR);
         }
       } catch (PropertyConstraintException ex) {
-        logger.warn(ex.getMessage(), ex);
+        logger.warning(ex.getMessage() + " : " + ex);
         communicator.sendCallError(id, action, "TypeConstraintViolation", ex.getMessage());
       } catch (UnsupportedFeatureException ex) {
-        logger.warn(INTERNAL_ERROR, ex);
+        logger.warning(INTERNAL_ERROR + " : " + ex);
         communicator.sendCallError(id, action, "InternalError", INTERNAL_ERROR);
       } catch (Exception ex) {
-        logger.warn(UNABLE_TO_PROCESS, ex);
+        logger.warning(UNABLE_TO_PROCESS + " : " + ex);
         communicator.sendCallError(id, action, "FormationViolation", UNABLE_TO_PROCESS);
       }
     }
@@ -207,10 +206,10 @@ public class Session implements ISession {
                 id, action, "OccurenceConstraintViolation", OCCURENCE_CONSTRAINT_VIOLATION);
           }
         } catch (PropertyConstraintException ex) {
-          logger.warn(ex.getMessage(), ex);
+          logger.warning(ex.getMessage() + " : " + ex);
           communicator.sendCallError(id, action, "TypeConstraintViolation", ex.getMessage());
         } catch (Exception ex) {
-          logger.warn(UNABLE_TO_PROCESS, ex);
+          logger.warning(UNABLE_TO_PROCESS + " : " + ex);
           communicator.sendCallError(id, action, "FormationViolation", UNABLE_TO_PROCESS);
         }
       }

@@ -7,8 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 /*
 ChargeTime.eu - Java-OCA-OCPP
@@ -39,7 +38,7 @@ SOFTWARE.
 
 /** Class to store and restore requests based on a unique id. */
 public class Queue {
-  private static final Logger logger = LoggerFactory.getLogger(Queue.class);
+  private static final Logger logger = Logger.getLogger(Queue.class.getName());
 
   public static final int REQUEST_QUEUE_INITIAL_CAPACITY = 1000;
 
@@ -61,7 +60,7 @@ public class Queue {
     String ticket = UUID.randomUUID().toString();
     requestQueue.put(ticket, request);
 
-    logger.debug("Queue size: {}, store time: {}", requestQueue.size(), stopwatch.stop());
+    logger.fine(String.format("Queue size: %s, store time: %s", requestQueue.size(), stopwatch.stop()));
 
     return ticket;
   }
@@ -80,11 +79,11 @@ public class Queue {
       Request request = requestQueue.get(ticket);
       requestQueue.remove(ticket);
 
-      logger.debug("Queue size: {}, store time: {}", requestQueue.size(), stopwatch.stop());
+      logger.fine(String.format("Queue size: %s, store time: %s", requestQueue.size(), stopwatch.stop()));
 
       return Optional.ofNullable(request);
     } catch (Exception ex) {
-      logger.warn("restoreRequest({}) failed", ticket, ex);
+      logger.warning(String.format("restoreRequest(%s) failed", ticket, ex));
     }
     return Optional.empty();
   }

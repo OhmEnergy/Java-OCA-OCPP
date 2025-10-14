@@ -31,8 +31,7 @@ import eu.chargetime.ocpp.model.*;
 import eu.chargetime.ocpp.utilities.SugarUtil;
 import java.util.ArrayDeque;
 import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 import org.w3c.dom.Document;
 
 
@@ -44,7 +43,7 @@ import org.w3c.dom.Document;
  */
 public abstract class Communicator {
 
-  private static final Logger logger = LoggerFactory.getLogger(Communicator.class);
+  private static final Logger logger = Logger.getLogger(Communicator.class.getName());
 
   private RetryRunner retryRunner;
   protected Radio radio;
@@ -158,19 +157,19 @@ public abstract class Communicator {
 
     if (call != null) {
       if (call instanceof SOAPMessage) {
-        logger.trace("Send a message: {}", SugarUtil.soapMessageToString((SOAPMessage) call));
+        logger.finest(String.format("Send a message: %s", SugarUtil.soapMessageToString((SOAPMessage) call)));
       } else {
-        logger.trace("Send a message: {}", call);
+        logger.finest("Send a message: " + call);
       }
     }
 
     try {
       if (radio.isClosed()) {
         if (request.transactionRelated()) {
-          logger.warn("Not connected: storing request to queue: {}", request);
+          logger.warning("Not connected: storing request to queue: " + request);
           transactionQueue.add(call);
         } else {
-          logger.warn("Not connected: can't send request: {}", request);
+          logger.warning("Not connected: can't send request: " + request);
           events.onError(
               uniqueId,
               "Not connected",
@@ -184,7 +183,7 @@ public abstract class Communicator {
         radio.send(call);
       }
     } catch (NotConnectedException ex) {
-      logger.warn("sendCall() failed: not connected");
+      logger.warning("sendCall() failed: not connected");
       if (request.transactionRelated()) {
         transactionQueue.add(call);
       } else {
@@ -207,7 +206,7 @@ public abstract class Communicator {
     try {
       radio.send(makeCallResult(uniqueId, action, packPayload(confirmation)));
     } catch (NotConnectedException ex) {
-      logger.warn("sendCallResult() failed", ex);
+      logger.warning("sendCallResult() failed" + " : " + ex);
       events.onError(
           uniqueId,
           "Not connected",
@@ -225,16 +224,19 @@ public abstract class Communicator {
    */
   public void sendCallError(
       String uniqueId, String action, String errorCode, String errorDescription) {
-    logger.error(
-        "An error occurred. Sending this information: uniqueId {}: action: {}, errorCore: {}, errorDescription: {}",
-        uniqueId,
-        action,
-        errorCode,
-        errorDescription);
+    logger.severe(
+        String.format(
+			"An error occurred. Sending this information: uniqueId %s: action: %s, errorCore: %s, errorDescription: %s",
+			uniqueId,
+			action,
+			errorCode,
+			errorDescription
+		)
+	);
     try {
       radio.send(makeCallError(uniqueId, action, errorCode, errorDescription));
     } catch (NotConnectedException ex) {
-      logger.warn("sendCallError() failed", ex);
+      logger.warning(String.format("sendCallError() failed : %s", ex));
       events.onError(
           uniqueId,
           "Not connected",
@@ -276,9 +278,9 @@ public abstract class Communicator {
       if (message != null) {
         Object payload = message.getPayload();
         if (payload instanceof Document) {
-          logger.trace("Receive a message: {}", SugarUtil.docToString((Document) payload));
+          logger.finest(String.format("Receive a message: %s", SugarUtil.docToString((Document) payload)));
         } else {
-          logger.trace("Receive a message: {}", message);
+          logger.finest(String.format("Receive a message: %s", message));
         }
       }
       if (message instanceof CallResultMessage) {
@@ -338,7 +340,7 @@ public abstract class Communicator {
           if (!hasFailed()) popRetryMessage();
         }
       } catch (Exception ex) {
-        logger.warn("RetryRunner::run() failed", ex);
+        logger.warning(String.format("RetryRunner::run() failed : %s", ex));
       }
     }
   }

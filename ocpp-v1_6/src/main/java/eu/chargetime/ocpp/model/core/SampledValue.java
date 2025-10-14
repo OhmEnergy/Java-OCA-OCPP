@@ -33,14 +33,14 @@ import java.util.Objects;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /** Single sampled value in {@link MeterValue}. Each value can be accompanied by optional fields. */
 @XmlRootElement
 @XmlType(propOrder = {"value", "context", "format", "measurand", "phase", "location", "unit"})
 public class SampledValue implements Validatable {
-  private static final Logger logger = LoggerFactory.getLogger(SampledValue.class);
+  private static final Logger logger = Logger.getLogger(SampledValue.class.getName());
 
   private String value;
   private String context;
@@ -58,7 +58,7 @@ public class SampledValue implements Validatable {
       setLocation(Location.Outlet);
       setUnit("Wh");
     } catch (PropertyConstraintException ex) {
-      logger.error("constructor of SampledValue failed", ex);
+      logger.log(Level.SEVERE, "constructor of SampledValue failed", ex);
     }
   }
 

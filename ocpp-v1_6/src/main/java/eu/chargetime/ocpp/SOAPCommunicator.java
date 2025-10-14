@@ -32,15 +32,14 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class SOAPCommunicator extends Communicator {
-  private static final Logger logger = LoggerFactory.getLogger(SOAPCommunicator.class);
+  private static final Logger logger = Logger.getLogger(SOAPCommunicator.class.getName());
 
   private static final String HEADER_ACTION = "Action";
   private static final String HEADER_MESSAGEID = "MessageID";
@@ -69,7 +68,7 @@ public class SOAPCommunicator extends Communicator {
       JAXBElement<T> jaxbElement = unmarshaller.unmarshal(input, type);
       output = jaxbElement.getValue();
     } catch (JAXBException e) {
-      logger.warn("unpackPayload() failed", e);
+      logger.warning(String.format("unpackPayload() failed: %s", e));
     }
     return output;
   }
@@ -85,7 +84,7 @@ public class SOAPCommunicator extends Communicator {
       marshaller.marshal(payload, document);
       setNamespace(document, hostInfo.getNamespace());
     } catch (JAXBException | ParserConfigurationException e) {
-      logger.warn("packPayload() failed", e);
+      logger.warning(String.format("packPayload() failed: %s", e));
     }
     return document;
   }
@@ -156,7 +155,7 @@ public class SOAPCommunicator extends Communicator {
       soapFault.appendFaultSubcode(new QName(hostInfo.getNamespace(), errorCode));
 
     } catch (SOAPException e) {
-      logger.warn("makeCallError() failed", e);
+      logger.warning(String.format("makeCallError() failed: %s", e));
     }
     return message;
   }
@@ -183,7 +182,7 @@ public class SOAPCommunicator extends Communicator {
 
       message.getSOAPBody().addDocument(payload);
     } catch (Exception e) {
-      logger.warn("createMessage() failed", e);
+      logger.warning(String.format("createMessage() failed: %s", e));
     }
 
     return message;
@@ -265,7 +264,7 @@ public class SOAPCommunicator extends Communicator {
         soapMessage = message;
         soapHeader = message.getSOAPPart().getEnvelope().getHeader();
       } catch (SOAPException e) {
-        logger.error("SOAPParser() failed", e);
+        logger.severe(String.format("SOAPParser() failed: %s", e));
       }
     }
 
@@ -292,7 +291,7 @@ public class SOAPCommunicator extends Communicator {
           output.setPayload(soapMessage.getSOAPBody().extractContentAsDocument());
 
       } catch (SOAPException e) {
-        logger.warn("parseMessage() failed", e);
+        logger.warning(String.format("parseMessage() failed: %s", e));
       }
       return output;
     }
@@ -318,7 +317,7 @@ public class SOAPCommunicator extends Communicator {
           message.setErrorDescription(fault.getFaultReasonTexts().next().toString());
 
       } catch (SOAPException e) {
-        logger.error("Parse error", e);
+        logger.severe(String.format("Parse error: %s", e));
       }
 
       return message;

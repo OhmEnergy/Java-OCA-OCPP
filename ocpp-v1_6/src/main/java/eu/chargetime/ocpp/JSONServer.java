@@ -41,12 +41,11 @@ import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.protocols.IProtocol;
 import org.java_websocket.protocols.Protocol;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 public class JSONServer implements IServerAPI {
 
-  private static final Logger logger = LoggerFactory.getLogger(JSONServer.class);
+  private static final Logger logger = Logger.getLogger(JSONServer.class.getName());
 
   public final Draft draftOcppOnly;
   private final WebSocketListener listener;
@@ -144,7 +143,7 @@ public class JSONServer implements IServerAPI {
 
   @Override
   public void open(String host, int port, ServerEvents serverEvents) {
-    logger.info("Feature repository: {}", featureRepository);
+    logger.info(String.format("Feature repository: %s", featureRepository));
     server.open(host, port, serverEvents);
   }
 

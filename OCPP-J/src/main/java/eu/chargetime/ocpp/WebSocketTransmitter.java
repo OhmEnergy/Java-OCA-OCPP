@@ -35,12 +35,11 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ServerHandshake;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 /** Web Socket implementation of the Transmitter. */
 public class WebSocketTransmitter implements Transmitter {
-  private static final Logger logger = LoggerFactory.getLogger(WebSocketTransmitter.class);
+  private static final Logger logger = Logger.getLogger(WebSocketTransmitter.class.getName());
 
   public static final String WSS_SCHEME = "wss";
   private final Draft draft;
@@ -67,7 +66,7 @@ public class WebSocketTransmitter implements Transmitter {
         new WebSocketClient(resource, draft) {
           @Override
           public void onOpen(ServerHandshake serverHandshake) {
-            logger.debug("On connection open (HTTP status: {})", serverHandshake.getHttpStatus());
+            logger.fine(String.format("On connection open (HTTP status: %s)", serverHandshake.getHttpStatus()));
             events.connected();
           }
 
@@ -78,8 +77,8 @@ public class WebSocketTransmitter implements Transmitter {
 
           @Override
           public void onClose(int code, String reason, boolean remote) {
-            logger.debug(
-                "On connection close (code: {}, reason: {}, remote: {})", code, reason, remote);
+            logger.info(
+                String.format("On connection close (code: %s, reason: %s, remote: %s)", code, reason, remote));
 
             events.disconnected();
           }
@@ -87,9 +86,9 @@ public class WebSocketTransmitter implements Transmitter {
           @Override
           public void onError(Exception ex) {
             if (ex instanceof ConnectException) {
-              logger.error("On error triggered caused by:", ex);
+              logger.severe(String.format("On error triggered caused by: %s", ex));
             } else {
-              logger.error("On error triggered:", ex);
+              logger.severe(String.format("On error triggered: %s", ex));
             }
           }
         };
@@ -104,19 +103,19 @@ public class WebSocketTransmitter implements Transmitter {
       try {
         client.setSocket(wssSocketBuilder.uri(resource).build());
       } catch (IOException ex) {
-        logger.error("SSL socket creation failed", ex);
+        logger.severe(String.format("SSL socket creation failed: %s", ex));
       }
     }
 
     configure();
 
-    logger.debug("Trying to connect to: {}", resource);
+    logger.fine(String.format("Trying to connect to: %s", resource));
 
     try {
       client.connectBlocking();
       closed = false;
     } catch (Exception ex) {
-      logger.warn("client.connectBlocking() failed", ex);
+      logger.warning(String.format("client.connectBlocking() failed: %s", ex));
     }
   }
 
@@ -144,7 +143,7 @@ public class WebSocketTransmitter implements Transmitter {
     try {
       client.closeBlocking();
     } catch (Exception ex) {
-      logger.info("client.closeBlocking() failed", ex);
+      logger.info(String.format("client.closeBlocking() failed: %s", ex));
     } finally {
       client = null;
       closed = true;

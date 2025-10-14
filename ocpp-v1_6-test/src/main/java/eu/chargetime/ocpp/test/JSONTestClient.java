@@ -35,13 +35,12 @@ import java.util.concurrent.CompletionStage;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.protocols.Protocol;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
 
 /** OCA OCPP version 1.6 JSON Web Socket implementation of the client. */
 public class JSONTestClient implements IClientAPI {
 
-  private static final Logger logger = LoggerFactory.getLogger(JSONTestClient.class);
+  private static final Logger logger = Logger.getLogger(JSONTestClient.class.getName());
   private static final String identity = "testdummy";
 
   public final Draft draftOcppOnly;
@@ -67,7 +66,7 @@ public class JSONTestClient implements IClientAPI {
 
   @Override
   public void connect(String url, ClientEvents clientEvents) {
-    logger.debug("Feature repository: {}", featureRepository);
+    logger.fine(String.format("Feature repository: %s", featureRepository));
 
     String identityUrl = String.format("%s/%s", url, identity);
     client.connect(identityUrl, clientEvents);
